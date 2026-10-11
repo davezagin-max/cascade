@@ -115,6 +115,32 @@ def test_refusals_truncation_and_api_errors_are_statuses_not_exceptions() -> Non
     assert responses["id-2"].error == "Something went wrong."
 
 
+def test_an_interrupted_sync_run_stops_sending_queued_requests() -> None:
+    """Ctrl-C must stop the spending, not just the waiting.
+
+    Every request is queued on the pool at once. Before the fix, leaving the pool's
+    `with` block waited for all of them to be sent before the interrupt surfaced.
+    """
+    import time
+
+    sent: list[str] = []
+
+    def interrupted_on_the_second(params: dict) -> object:
+        prompt = params["messages"][0]["content"]
+        sent.append(prompt)
+        if len(sent) == 2:
+            raise KeyboardInterrupt
+        time.sleep(0.05)
+        return echo(params)
+
+    executor = executor_for(ScriptedClient(interrupted_on_the_second), concurrency=1)
+    with pytest.raises(KeyboardInterrupt):
+        executor.run(requests(12, "sync"), label="t")
+    assert executor.stop.is_set()
+    # One more may already have been picked up by the worker; the other nine never go out.
+    assert len(sent) <= 3
+
+
 def test_mixed_plan_submits_the_batch_and_runs_the_sample_synchronously() -> None:
     client = ScriptedClient(echo)
     mixed = requests(4, "batch")[:2] + requests(4, "sync")[2:]

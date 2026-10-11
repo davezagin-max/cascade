@@ -123,6 +123,15 @@ def test_schema_invalid_json_scores_zero_even_if_values_are_right() -> None:
     assert grade_json(JSON_SPEC, "I could not find it.").score == 0.0
 
 
+def test_a_json_answer_that_is_not_an_object_fails_instead_of_crashing() -> None:
+    # A schema with no "type" accepts a list. The list even contains an expected key as
+    # an item, which used to reach `value[key]` and raise TypeError mid-run.
+    loose = JsonSpec(schema={}, expected={"name": "Ada"})
+    graded = grade_json(loose, '["name", "Ada"]')
+    assert graded.passed is False and graded.score == 0.0
+    assert graded.details == {"schema_valid": False, "errors": ["expected a JSON object"]}
+
+
 def test_code_extraction_prefers_the_block_defining_the_entrypoint() -> None:
     answer = "Usage:\n```python\nprint(add(1, 2))\n```\nCode:\n```python\ndef add(a, b):\n    return a + b\n```"
     assert extract_code(answer, "add") == "def add(a, b):\n    return a + b"

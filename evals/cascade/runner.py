@@ -178,9 +178,18 @@ class Executor:
 
         if direct:
             self.log(f"[{label}] sending {len(direct)} requests synchronously")
-            with ThreadPoolExecutor(max_workers=max(1, self.concurrency)) as pool:
+            pool = ThreadPoolExecutor(max_workers=max(1, self.concurrency))
+            try:
                 for response in pool.map(self._guarded_sync, direct):
                     responses[response.custom_id] = response
+            except BaseException:
+                # Ctrl-C lands here. Leaving a `with` block would first wait for every queued
+                # request to be sent, so an interrupted run would go on spending. Stop handing
+                # out work, drop what has not started, and let only in-flight calls finish.
+                self.stop.set()
+                pool.shutdown(wait=True, cancel_futures=True)
+                raise
+            pool.shutdown()
 
         if batched and batch_id is not None:
             responses.update(self._collect(batch_id, batched, label))

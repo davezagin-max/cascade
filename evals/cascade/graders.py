@@ -185,6 +185,10 @@ def grade_json(spec: JsonSpec, answer: str) -> Grade:
             for error in errors[:3]
         ]
         return Grade(0.0, False, {"schema_valid": False, "errors": messages})
+    if not isinstance(value, dict):
+        # Only reachable when a task's schema forgets `"type": "object"`. Fail the answer
+        # instead of crashing the grading run on `value[key]`.
+        return Grade(0.0, False, {"schema_valid": False, "errors": ["expected a JSON object"]})
     fields = {
         key: key in value and values_match(wanted, value[key], unordered=key in spec.unordered)
         for key, wanted in spec.expected.items()
