@@ -17,8 +17,10 @@ from typing import Any
 
 import anthropic
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from . import demo
 from .claude_client import CallResult, MissingKeyError, api_error, client_for_key
@@ -102,25 +104,81 @@ class RateLimiter:
             raise HTTPException(status_code=429, detail="Too many requests. Wait a moment.")
 
 
-def create_app(title: str, *, max_body_bytes: int = 64 * 1024) -> FastAPI:
-    """A FastAPI app with CORS for the frontend, a body size cap, and the kit's error envelope."""
+class BodyLimit:
+    """ASGI middleware that caps the request body, per path.
+
+    A declared Content-Length over the limit is refused before anything is read. A body
+    sent in chunks is counted as it arrives and cut off at the limit, so an oversized
+    upload is never held in memory, whatever the client claims about its size.
+    """
+
+    def __init__(self, app: ASGIApp, *, default: int, limits: dict[str, int]):
+        self.app = app
+        self.default = default
+        self.limits = limits
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        limit = self.limits.get(scope["path"], self.default)
+        too_large = _fail(413, "too_large", "Request body is too large.")
+        declared = dict(scope["headers"]).get(b"content-length", b"")
+        if declared.isdigit() and int(declared) > limit:
+            await too_large(scope, receive, send)
+            return
+
+        received = 0
+        over = False
+
+        async def counted_receive() -> Message:
+            nonlocal received, over
+            message = await receive()
+            if message["type"] == "http.request" and not over:
+                received += len(message.get("body", b""))
+                if received > limit:
+                    # End the body here. The app sees a truncated request; whatever it
+                    # answers is replaced by the 413 below.
+                    over = True
+                    return {"type": "http.request", "body": b"", "more_body": False}
+            return message
+
+        async def guarded_send(message: Message) -> None:
+            if not over:
+                await send(message)
+
+        try:
+            await self.app(scope, counted_receive, guarded_send)
+        except Exception:
+            if not over:
+                raise  # only an error caused by our own truncation is ours to swallow
+        if over:
+            await too_large(scope, receive, send)
+
+
+def create_app(
+    title: str,
+    *,
+    max_body_bytes: int = 64 * 1024,
+    body_limits: dict[str, int] | None = None,
+    default_origins: tuple[str, ...] = ("http://localhost:3000",),
+) -> FastAPI:
+    """A FastAPI app with CORS for the frontend, a body size cap, and the kit's error envelope.
+
+    `body_limits` raises (or lowers) the cap for individual paths, so one upload endpoint
+    does not force every other endpoint to accept large bodies.
+    """
     app = FastAPI(title=title)
     origins = [o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o.strip()]
+    # Added first so CORS wraps it: a 413 from the size cap still carries CORS headers,
+    # and the browser can show the message instead of a bare network error.
+    app.add_middleware(BodyLimit, default=max_body_bytes, limits=body_limits or {})
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=origins or ["http://localhost:3000"],
+        allow_origins=origins or list(default_origins),
         allow_methods=["GET", "POST"],
         allow_headers=["content-type", "x-anthropic-key"],
     )
-
-    @app.middleware("http")
-    async def limit_body(request: Request, call_next):  # type: ignore[no-untyped-def]
-        declared = request.headers.get("content-length")
-        if declared and declared.isdigit() and int(declared) > max_body_bytes:
-            return _fail(413, "too_large", "Request body is too large.")
-        if request.method == "POST" and len(await request.body()) > max_body_bytes:
-            return _fail(413, "too_large", "Request body is too large.")
-        return await call_next(request)
 
     @app.exception_handler(HTTPException)
     async def http_error(_: Request, error: HTTPException) -> JSONResponse:
@@ -128,6 +186,11 @@ def create_app(title: str, *, max_body_bytes: int = 64 * 1024) -> FastAPI:
             error.status_code, "invalid" if error.status_code < 500 else "server"
         )
         return _fail(error.status_code, kind, str(error.detail))
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_body(_: Request, __: RequestValidationError) -> JSONResponse:
+        # Same envelope as every other error, and no echo of what was sent.
+        return _fail(400, "invalid", "Request body has an invalid shape.")
 
     @app.get("/health")
     def health() -> dict[str, str]:
@@ -221,11 +284,15 @@ def respond_stream(
     store: str,
     body: dict[str, Any],
     client: anthropic.Anthropic | None,
-    live: Callable[[anthropic.Anthropic, Callable[[Any], None]], Live],
+    live: Callable[[anthropic.Anthropic, Callable[[Any], bool]], Live],
     *,
     replay_speed: float = 4.0,
 ) -> StreamingResponse | JSONResponse:
-    """Server-sent events: `meta`, then `event` frames as work progresses, then `done` or `error`."""
+    """Server-sent events: `meta`, then `event` frames as work progresses, then `done` or `error`.
+
+    `live` gets an `emit` function that returns False once the response is no longer being
+    read (the visitor cancelled or disconnected), so long-running work can stop early.
+    """
     key = demo.request_key(body)
     fixture = None if client else demo.find_fixture(store, key)
     if client is None and fixture is None:
@@ -255,14 +322,20 @@ def respond_stream(
         frames: queue.Queue[dict[str, Any] | None] = queue.Queue()
         events: list[dict[str, Any]] = []
         started = time.monotonic()
+        gone = threading.Event()  # set when this generator is closed: nobody is reading
 
-        def emit(event: Any) -> None:
+        def emit(event: Any) -> bool:
+            if gone.is_set():
+                return False
             events.append({"at": int((time.monotonic() - started) * 1000), "event": event})
             frames.put({"type": "event", "event": event})
+            return True
 
         def work() -> None:
             try:
                 result = live(client, emit)
+                if gone.is_set():
+                    return  # a partial run: nothing to send and nothing worth recording
                 if result.refusal is not None:
                     frames.put(
                         {
@@ -286,8 +359,11 @@ def respond_stream(
                 frames.put(None)
 
         threading.Thread(target=work, daemon=True).start()
-        while (item := frames.get()) is not None:
-            yield frame(item)
+        try:
+            while (item := frames.get()) is not None:
+                yield frame(item)
+        finally:
+            gone.set()
 
     stream = replay(fixture) if fixture is not None else run_live(client)  # type: ignore[arg-type]
     return StreamingResponse(

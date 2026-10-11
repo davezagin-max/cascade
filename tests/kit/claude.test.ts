@@ -3,9 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import {
   MissingKeyError,
+  PipelineError,
   callClaude,
   clientFromRequest,
   strictTool,
+  toApiError,
   untrusted,
   withSystemNote,
 } from "@/lib/claude";
@@ -232,6 +234,22 @@ describe("helpers", () => {
     expect(next).toEqual([...history, { role: "system", content: "New evidence found." }]);
     expect(history).toHaveLength(1);
     expect(() => withSystemNote([{ role: "assistant", content: "x" }], "note")).toThrow();
+  });
+});
+
+describe("toApiError", () => {
+  it("passes a PipelineError's visitor-facing message and status through", () => {
+    expect(toApiError(new PipelineError("The draft failed validation twice.", 422))).toEqual({
+      status: 422,
+      message: "The draft failed validation twice.",
+    });
+  });
+
+  it("never leaks an unexpected error's message", () => {
+    expect(toApiError(new Error("secret internal detail"))).toEqual({
+      status: 500,
+      message: "Something went wrong.",
+    });
   });
 });
 
