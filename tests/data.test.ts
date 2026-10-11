@@ -58,6 +58,26 @@ describe("exported run", () => {
     }
   });
 
+  it("compares every threshold with a fixed arm the router could have been replaced by", () => {
+    const keys = new Set(summary.arms.map((arm) => arm.key));
+    for (const point of summary.router.sweep) {
+      const fixed = point.best_fixed;
+      if (!fixed) continue; // nothing is as cheap as the router at this threshold
+      expect(keys.has(fixed.arm)).toBe(true);
+      // "At this cost or less" is the whole point of the comparison.
+      expect(fixed.cost_per_request).toBeLessThanOrEqual(point.cost_per_request * (1 + 1e-6));
+    }
+    const { log_loss: loss, l2, l2_selection: selection, l2_by_fold: byFold, folds } = summary.router;
+    expect(loss.router).toBeGreaterThan(0);
+    expect(loss.arms_only).toBeGreaterThan(0);
+    if (selection) {
+      // The served penalty is the grid point with the lowest held-out loss.
+      const best = Math.min(...selection.grid.map((entry) => entry.loss));
+      expect(selection.grid.find((entry) => entry.l2 === l2)?.loss).toBe(best);
+      expect(byFold).toHaveLength(folds);
+    }
+  });
+
   it("has a confusion matrix that accounts for every task", () => {
     const { matrix, exact, over_routed, under_routed, predicted, oracle } = summary.router.confusion;
     expect(matrix.length).toBe(oracle.length);

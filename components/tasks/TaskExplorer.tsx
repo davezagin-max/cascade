@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArmGlyph } from "@/components/ArmGlyph";
 import { SimTag } from "@/components/SimTag";
 import { armCode, armLabel, armParts, count, duration, usd } from "@/lib/format";
+import { scrollBehavior } from "@/lib/motion";
 import type { TaskDetail, TaskIndexEntry } from "@/lib/run-schema";
 
 interface Props {
@@ -280,7 +281,7 @@ function Detail({
   const [arm, setArm] = useState<string>(task.router_pick ?? arms[0]);
   const panel = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    panel.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    panel.current?.scrollIntoView({ block: "nearest", behavior: scrollBehavior() });
   }, []);
 
   if (!loaded || loaded.state === "loading") {

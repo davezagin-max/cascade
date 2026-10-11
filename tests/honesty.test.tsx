@@ -70,4 +70,19 @@ describe("synthetic data is labelled from the run's own flag", () => {
     expect(words).not.toContain("no real run exists");
     expect(words).toContain("the router saves");
   });
+
+  it("puts the harder comparison next to the headline, in both states", async () => {
+    const fixed = summaryJson.router.headline.best_fixed;
+    for (const synthetic of [true, false]) {
+      const words = text(await renderHome(synthetic));
+      // The easy win (versus always Opus) never stands alone: the best affordable arm is named too.
+      expect(words).toContain("against the best single arm at this cost or less");
+      if (fixed) {
+        const delta = summaryJson.router.headline.quality - fixed.quality;
+        const points = Math.abs(delta * 100).toFixed(1);
+        const expected = points === "0.0" ? "level with" : `${points} points ${delta > 0 ? "ahead of" : "behind"}`;
+        expect(words).toContain(`The router is ${expected} always using`);
+      }
+    }
+  });
 });

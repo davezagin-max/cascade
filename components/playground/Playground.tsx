@@ -8,6 +8,7 @@ import { SimTag } from "@/components/SimTag";
 import type { ApiMeta } from "@/lib/api";
 import { streamApi } from "@/lib/client";
 import { armLabel as labelFromKey, armParts, pct, usd } from "@/lib/format";
+import { scrollBehavior } from "@/lib/motion";
 import type { PlaygroundEvent, PlaygroundOutput } from "@/lib/playground";
 import {
   ROUTER,
@@ -117,8 +118,7 @@ export function Playground({ presets, maxChars }: Props) {
       const { top, bottom } = node.getBoundingClientRect();
       if (top >= 0 && bottom <= window.innerHeight) return;
       const stacked = window.matchMedia("(max-width: 1023px)").matches;
-      const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      node.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: stacked ? "start" : "nearest" });
+      node.scrollIntoView({ behavior: scrollBehavior(), block: stacked ? "start" : "nearest" });
     });
   }
 
