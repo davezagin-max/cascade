@@ -66,6 +66,11 @@ describe("synthetic data is labelled from the run's own flag", () => {
     expect(tags.length).toBeGreaterThanOrEqual(summaryJson.caching ? 7 : 6);
     expect(text(html)).toContain("No real run exists yet");
     expect(text(html)).toContain("Not a measurement");
+    // Simulated numbers are never described as measured.
+    expect(text(html)).toContain("What was simulated");
+    expect(text(html)).toContain("Computed on simulated results by");
+    expect(text(html)).not.toContain("What was measured");
+    expect(text(html)).not.toContain("Measured by");
   });
 
   it("says nothing about simulation when the run is real", async () => {
@@ -76,6 +81,8 @@ describe("synthetic data is labelled from the run's own flag", () => {
     expect(words).not.toContain("synthetic");
     expect(words).not.toContain("no real run exists");
     expect(words).toContain("the router saves");
+    expect(words).toContain("what was measured");
+    expect(words).toContain("measured by");
   });
 
   it("puts the harder comparison next to the headline, in both states", async () => {

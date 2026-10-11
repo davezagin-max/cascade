@@ -57,7 +57,7 @@ export default function Home() {
       <Section
         id="run"
         label="The run"
-        title={<>What was measured {sim}</>}
+        title={<>{SYNTHETIC ? "What was simulated" : "What was measured"} {sim}</>}
         note={
           SYNTHETIC ? (
             <>

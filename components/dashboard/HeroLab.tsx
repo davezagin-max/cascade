@@ -84,8 +84,8 @@ export function HeroLab({
             Each request goes to the cheapest Claude model and effort level predicted to get it right.{" "}
             {/* The method is repeated in the router section; on a phone this line would push the control down. */}
             <span className="hidden sm:inline">
-              Measured by {folds}-fold cross-validation on {nTasks} eval tasks: every task is routed by a model that
-              never saw it.
+              {synthetic ? "Computed on simulated results" : "Measured"} by {folds}-fold cross-validation on {nTasks}{" "}
+              eval tasks: every task is routed by a model that never saw it.
             </span>
           </p>
         </div>

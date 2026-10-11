@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "smoke": "vitest run tests/kit/smoke.live.test.ts",
-    "record": "node scripts/record.mjs",
+    "record": "node scripts/record.mjs --port 3150",
     "screenshots": "node scripts/screenshot.mjs",
     "overflow": "node scripts/overflow.mjs",
     "interactions": "node scripts/interactions.mjs"
