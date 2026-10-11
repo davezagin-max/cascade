@@ -90,6 +90,12 @@ try {
     const { context, page } = await open(browser, shot);
     await perform(page, shot.actions);
     const file = path.join(out, `${shot.name}.png`);
+    if (shot.fullPage) {
+      // A sticky element is drawn where the page is scrolled to. After an action that scrolls,
+      // a full-page capture would put the banner in the middle of the page and leave the top bare.
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+      await page.waitForTimeout(150);
+    }
     await page.screenshot({ path: file, fullPage: Boolean(shot.fullPage) });
     await context.close();
     console.log(`wrote ${file}`);

@@ -1,18 +1,57 @@
 {
   "port": 3250,
   "shots": [
-    { "name": "hero", "path": "/", "theme": "light", "viewport": "desktop", "actions": [{ "wait": 400 }] },
-    { "name": "hero-dark", "path": "/", "theme": "dark", "viewport": "desktop", "actions": [{ "wait": 400 }] },
-    { "name": "mobile", "path": "/", "theme": "dark", "viewport": "mobile", "actions": [{ "wait": 400 }] },
+    {
+      "name": "hero",
+      "path": "/",
+      "theme": "light",
+      "viewport": "desktop",
+      "actions": [
+        {
+          "wait": 400
+        }
+      ]
+    },
+    {
+      "name": "hero-dark",
+      "path": "/",
+      "theme": "dark",
+      "viewport": "desktop",
+      "actions": [
+        {
+          "wait": 400
+        }
+      ]
+    },
+    {
+      "name": "mobile",
+      "path": "/",
+      "theme": "dark",
+      "viewport": "mobile",
+      "actions": [
+        {
+          "wait": 400
+        }
+      ]
+    },
     {
       "name": "playground",
       "path": "/playground",
       "theme": "dark",
       "viewport": "desktop",
       "actions": [
-        { "click": "text=Solve a probability problem" },
-        { "waitFor": "[data-testid=response]" },
-        { "wait": 300 }
+        {
+          "click": "text=Solve a probability problem"
+        },
+        {
+          "waitFor": "[data-testid=response]"
+        },
+        {
+          "scroll": 215
+        },
+        {
+          "wait": 400
+        }
       ]
     },
     {
@@ -21,9 +60,15 @@
       "theme": "light",
       "viewport": "mobile",
       "actions": [
-        { "click": "text=Classify a support ticket" },
-        { "waitFor": "[data-testid=response]" },
-        { "wait": 600 }
+        {
+          "click": "text=Classify a support ticket"
+        },
+        {
+          "waitFor": "[data-testid=response]"
+        },
+        {
+          "wait": 600
+        }
       ]
     },
     {
@@ -31,12 +76,25 @@
       "path": "/tasks",
       "theme": "light",
       "viewport": "desktop",
-      "fullPage": true,
       "actions": [
-        { "click": "text=Code 12" },
-        { "click": "text=Semantic version precedence" },
-        { "waitFor": "text=Reference answer and format contract" },
-        { "wait": 400 }
+        {
+          "click": "text=Code 12"
+        },
+        {
+          "click": "text=Semantic version precedence"
+        },
+        {
+          "waitFor": "text=Reference answer and format contract"
+        },
+        {
+          "wait": 300
+        },
+        {
+          "scroll": 640
+        },
+        {
+          "wait": 400
+        }
       ]
     }
   ],
@@ -44,31 +102,81 @@
     "path": "/",
     "theme": "dark",
     "actions": [
-      { "wait": 900 },
-      { "click": "[aria-label^=\"Lower the threshold\"]" },
-      { "wait": 500 },
-      { "click": "[aria-label^=\"Lower the threshold\"]" },
-      { "wait": 500 },
-      { "click": "[aria-label^=\"Lower the threshold\"]" },
-      { "wait": 500 },
-      { "click": "[aria-label^=\"Lower the threshold\"]" },
-      { "wait": 700 },
-      { "click": "[aria-label^=\"Raise the threshold\"]" },
-      { "wait": 400 },
-      { "click": "[aria-label^=\"Raise the threshold\"]" },
-      { "wait": 400 },
-      { "click": "[aria-label^=\"Raise the threshold\"]" },
-      { "wait": 400 },
-      { "click": "[aria-label^=\"Raise the threshold\"]" },
-      { "wait": 400 },
-      { "click": "[aria-label^=\"Raise the threshold\"]" },
-      { "wait": 900 },
-      { "click": "text=Try the router on a prompt" },
-      { "waitFor": "text=Presets: no key needed" },
-      { "wait": 500 },
-      { "click": "text=Solve a probability problem" },
-      { "waitFor": "[data-testid=response]" },
-      { "wait": 1500 }
+      {
+        "wait": 900
+      },
+      {
+        "click": "[aria-label^=\"Lower the threshold\"]"
+      },
+      {
+        "wait": 500
+      },
+      {
+        "click": "[aria-label^=\"Lower the threshold\"]"
+      },
+      {
+        "wait": 500
+      },
+      {
+        "click": "[aria-label^=\"Lower the threshold\"]"
+      },
+      {
+        "wait": 500
+      },
+      {
+        "click": "[aria-label^=\"Lower the threshold\"]"
+      },
+      {
+        "wait": 700
+      },
+      {
+        "click": "[aria-label^=\"Raise the threshold\"]"
+      },
+      {
+        "wait": 400
+      },
+      {
+        "click": "[aria-label^=\"Raise the threshold\"]"
+      },
+      {
+        "wait": 400
+      },
+      {
+        "click": "[aria-label^=\"Raise the threshold\"]"
+      },
+      {
+        "wait": 400
+      },
+      {
+        "click": "[aria-label^=\"Raise the threshold\"]"
+      },
+      {
+        "wait": 400
+      },
+      {
+        "click": "[aria-label^=\"Raise the threshold\"]"
+      },
+      {
+        "wait": 900
+      },
+      {
+        "click": "text=Try the router on a prompt"
+      },
+      {
+        "waitFor": "text=Presets: no key needed"
+      },
+      {
+        "wait": 500
+      },
+      {
+        "click": "text=Solve a probability problem"
+      },
+      {
+        "waitFor": "[data-testid=response]"
+      },
+      {
+        "wait": 1500
+      }
     ]
   }
 }
