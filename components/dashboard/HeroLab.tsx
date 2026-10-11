@@ -34,7 +34,10 @@ interface Props {
   defaultThreshold: number;
   baselineKey: string;
   baseline: { quality: number; cost_per_request: number };
+  /** Tasks the router was evaluated on. */
   nTasks: number;
+  /** Tasks in the suite, which is more when a task had to be left out of the evaluation. */
+  suiteTasks: number;
   folds: number;
 }
 
@@ -52,6 +55,7 @@ export function HeroLab({
   baselineKey,
   baseline,
   nTasks,
+  suiteTasks,
   folds,
 }: Props) {
   const initial = Math.max(
@@ -213,7 +217,7 @@ export function HeroLab({
             Try the router on a prompt
           </Link>
           <Link href="/tasks" className="border border-border px-3 py-2 hover:bg-surface">
-            Browse the {nTasks} tasks
+            Browse the {suiteTasks} tasks
           </Link>
         </div>
       </div>

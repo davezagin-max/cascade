@@ -38,7 +38,7 @@ from .config import (
     pricing_snapshot,
 )
 from .estimate import Estimate, estimate_plan, format_estimate
-from .export import REPO_ROOT, export_run, suite_hash
+from .export import REPO_ROOT, export_run, stale_fixtures_note, suite_hash
 from .graders import GraderUnavailable
 from .grading import JudgeMany, grade_rows, opus_judge
 from .plan import (
@@ -178,6 +178,9 @@ def finish(
     if export:
         paths = export_run(rows, tasks, meta=meta, router_model=model, caching=caching, out=out)
         log(f"exported dashboard data to {paths['summary'].parent} and {paths['tasks']}")
+        note = stale_fixtures_note(out, model["version"])
+        if note:
+            log(note)
 
 
 # --- commands -----------------------------------------------------------------------------
@@ -545,6 +548,9 @@ def cmd_export(args: argparse.Namespace, log: Log = print, *, root: Path = store
         rows, tasks, meta=meta, router_model=model, caching=caching, out=Path(args.out)
     )
     log(f"wrote {paths['summary']}, {paths['router']} and {paths['tasks']}/")
+    note = stale_fixtures_note(Path(args.out), model["version"])
+    if note:
+        log(note)
     return 0
 
 

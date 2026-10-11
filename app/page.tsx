@@ -17,11 +17,13 @@ import { RUN, SYNTHETIC } from "@/lib/run";
 export default function Home() {
   const { meta, arms, router, caching, categories } = RUN;
   const sim = <SimTag show={SYNTHETIC} />;
+  // Rows with no grade: requests that failed at the API, or answers the judge could not score.
+  const ungraded = arms.reduce((total, arm) => total + arm.ungraded, 0);
   const facts: [string, string][] = [
     ["tasks", count(meta.n_tasks)],
     ["arms", `${arms.length} (${meta.models.length} models x ${meta.efforts.length} efforts)`],
     ["trials per cell", count(meta.trials)],
-    ["graded rows", count(meta.n_rows)],
+    ["result rows", ungraded ? `${count(meta.n_rows)} (${count(ungraded)} ungraded)` : count(meta.n_rows)],
     ["via Batch API", `${count(meta.batch_rows)} rows at half price`],
     ["timed synchronously", `${count(meta.sync_rows)} rows`],
     ["answers billed", `${usd(meta.answers_billed_usd)} (list ${usd(meta.answers_list_usd)})`],
@@ -48,6 +50,7 @@ export default function Home() {
         baselineKey={router.baseline_arm}
         baseline={router.baseline}
         nTasks={router.n_tasks}
+        suiteTasks={meta.n_tasks}
         folds={router.folds}
       />
 
@@ -115,8 +118,9 @@ export default function Home() {
           <>
             One logistic regression: an ability per arm plus a weight per prompt feature, shared across arms. It
             scores a prompt from cheap text features (no model call) and picks the cheapest arm predicted to clear
-            the threshold. Trained on {count(meta.n_rows)} graded rows, evaluated by {router.folds}-fold
-            cross-validation grouped by task, against always using {armLabel(router.baseline_arm)}.{" "}
+            the threshold. Trained on the graded answers to {count(router.n_tasks)} tasks, evaluated by{" "}
+            {router.folds}-fold cross-validation grouped by task, against always using{" "}
+            {armLabel(router.baseline_arm)}.{" "}
             {router.l2_selection
               ? `The penalty on the weights (L2 = ${router.l2}) is not hand-picked: it is chosen by cross-validation on held-out log loss, inside each training fold.`
               : `The penalty on the weights is fixed at L2 = ${router.l2}.`}

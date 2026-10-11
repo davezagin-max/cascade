@@ -127,7 +127,7 @@ export function Playground({ presets, maxChars }: Props) {
       <div className="flex min-w-0 flex-col gap-4">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-            Presets, one per routing outcome
+            Presets: no key needed
           </p>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             {presets.map((item) => {

@@ -259,7 +259,16 @@ function GradeDetails({ details }: { details: Record<string, unknown> }) {
     );
   }
   if (typeof details.load_error === "string") rows.push(<p key="load" className="text-danger">{details.load_error}</p>);
-  if (typeof details.skipped === "string") rows.push(<p key="skip" className="text-danger">not graded: {details.skipped}</p>);
+  if (details.skipped === "refusal") {
+    rows.push(<p key="skip" className="text-danger">The model declined the task, which counts as a fail.</p>);
+  } else if (typeof details.skipped === "string") {
+    rows.push(
+      <p key="skip" className="text-danger">
+        Not graded: the request failed{typeof details.error === "string" ? ` (${details.error})` : ""}. It is left out
+        of every average.
+      </p>,
+    );
+  }
   if (typeof details.judge_error === "string") rows.push(<p key="judge" className="text-danger">{details.judge_error}</p>);
   if (rows.length === 0) return null;
   return <div className="space-y-1 font-mono text-[11px]">{rows}</div>;

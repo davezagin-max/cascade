@@ -153,3 +153,26 @@ def test_task_detail_stores_each_distinct_answer_once() -> None:
     )
     assert published["id"] == task.id and len(published["cells"]) == len(mine)
     assert {t["id"] for t in summary["tasks"]} == {row["task_id"] for row in rows}
+
+
+def test_export_says_when_playground_fixtures_predate_the_router(tmp_path: Path) -> None:
+    from cascade.export import stale_fixtures_note
+
+    assert stale_fixtures_note(tmp_path, "abc") is None  # no fixtures at all
+    store_path = tmp_path / "fixtures" / "route-and-run.json"
+    store_path.parent.mkdir()
+
+    def write(*fixtures: dict) -> None:
+        store_path.write_text(json.dumps({f"p{i}": f for i, f in enumerate(fixtures)}))
+
+    current = {"placeholder": True, "data": {"routerVersion": "abc"}}
+    older = {"placeholder": True, "data": {"routerVersion": "old"}}
+    write(current, current)
+    assert stale_fixtures_note(tmp_path, "abc") is None
+    write(current, older)
+    note = stale_fixtures_note(tmp_path, "abc")
+    assert note is not None and "1 playground fixture(s)" in note
+    assert "placeholder_fixtures.py" in note and "pnpm record" in note
+    write({**older, "placeholder": False}, current)
+    recorded = stale_fixtures_note(tmp_path, "abc")
+    assert recorded is not None and "placeholder_fixtures.py" not in recorded

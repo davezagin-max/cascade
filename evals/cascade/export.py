@@ -357,6 +357,40 @@ def build_summary(
     return round_floats(summary, 8)
 
 
+def stale_fixtures_note(out: Path, router_version: str) -> str | None:
+    """A reminder when the playground's stored answers were routed by an earlier router.
+
+    Retraining changes which arm a preset is sent to. The dashboard copes (it shows the
+    current decision and says when a recorded run used an older router), but the stored
+    answers should be refreshed, and nothing else would say so.
+    """
+    path = out / "fixtures" / "route-and-run.json"
+    if not path.exists():
+        return None
+    try:
+        fixtures = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    stale = [
+        key
+        for key, fixture in fixtures.items()
+        if (fixture.get("data") or {}).get("routerVersion") != router_version
+    ]
+    if not stale:
+        return None
+    if all(fixture.get("placeholder") for fixture in fixtures.values()):
+        remedy = (
+            "`pnpm record` replaces the hand-written samples with real runs; until then "
+            "`uv run python scripts/placeholder_fixtures.py` realigns them with this router"
+        )
+    else:
+        remedy = "`pnpm record` records them again"
+    return (
+        f"note: {len(stale)} playground fixture(s) were routed by an earlier router "
+        f"(now {router_version}). {remedy}."
+    )
+
+
 def export_run(
     rows: list[Row],
     tasks: list[Task],
