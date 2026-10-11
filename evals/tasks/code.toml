@@ -7,8 +7,7 @@ id = "code-count-vowels"
 title = "Count vowels"
 difficulty = 1
 prompt = '''
-Write a Python function `count_vowels(text: str) -> int` that returns how many characters
-of `text` are vowels (a, e, i, o, u), ignoring case.
+Write a Python function `count_vowels(text: str) -> int` that returns how many characters of `text` are vowels (a, e, i, o, u), ignoring case.
 '''
 reference = '''
 ```python
@@ -38,9 +37,7 @@ id = "code-dedupe"
 title = "Remove duplicates, keep order"
 difficulty = 1
 prompt = '''
-Write a Python function `dedupe(items: list) -> list` that returns a new list with
-duplicates removed, keeping the first occurrence of each item in its original position.
-The input list must not be modified. Items are hashable.
+Write a Python function `dedupe(items: list) -> list` that returns a new list with duplicates removed, keeping the first occurrence of each item in its original position. The input list must not be modified. Items are hashable.
 '''
 reference = '''
 ```python
@@ -76,8 +73,7 @@ id = "code-roman"
 title = "Integer to Roman numeral"
 difficulty = 2
 prompt = '''
-Write a Python function `to_roman(n: int) -> str` that converts an integer from 1 to 3999
-to a Roman numeral in standard subtractive notation (4 is IV, 9 is IX, 40 is XL, and so on).
+Write a Python function `to_roman(n: int) -> str` that converts an integer from 1 to 3999 to a Roman numeral in standard subtractive notation (4 is IV, 9 is IX, 40 is XL, and so on).
 '''
 reference = '''
 ```python
@@ -127,10 +123,7 @@ id = "code-merge-intervals"
 title = "Merge overlapping intervals"
 difficulty = 2
 prompt = '''
-Write a Python function `merge_intervals(intervals: list[list[int]]) -> list[list[int]]`.
-Each interval is `[start, end]` with start <= end. Return the merged intervals sorted by
-start. Intervals that overlap or touch (one ends where the next begins) are merged. The
-input may be in any order and must not be modified.
+Write a Python function `merge_intervals(intervals: list[list[int]]) -> list[list[int]]`. Each interval is `[start, end]` with start <= end. Return the merged intervals sorted by start. Intervals that overlap or touch (one ends where the next begins) are merged. The input may be in any order and must not be modified.
 '''
 reference = '''
 ```python
@@ -174,10 +167,7 @@ id = "code-rle-decode"
 title = "Run-length decoding"
 difficulty = 2
 prompt = '''
-Write a Python function `rle_decode(text: str) -> str` that expands a run-length encoded
-string. The input is a sequence of pairs: a positive decimal count (one or more digits)
-followed by a single non-digit character. For example "3a2b1c" becomes "aaabbc". An empty
-input gives an empty string.
+Write a Python function `rle_decode(text: str) -> str` that expands a run-length encoded string. The input is a sequence of pairs: a positive decimal count (one or more digits) followed by a single non-digit character. For example "3a2b1c" becomes "aaabbc". An empty input gives an empty string.
 '''
 reference = '''
 ```python
@@ -219,13 +209,11 @@ id = "code-parse-duration"
 title = "Strict duration parser"
 difficulty = 3
 prompt = '''
-Write a Python function `parse_duration(text: str) -> int` that converts a duration such as
-"1h30m" into a number of seconds.
+Write a Python function `parse_duration(text: str) -> int` that converts a duration such as "1h30m" into a number of seconds.
 
 - Units are d (days), h (hours), m (minutes) and s (seconds).
 - Each part is a non-negative integer followed by its unit, with no spaces.
-- Units must appear in the order d, h, m, s. Each unit may appear at most once, and at
-  least one part is required.
+- Units must appear in the order d, h, m, s. Each unit may appear at most once, and at least one part is required.
 - Anything else raises ValueError.
 
 Examples: "45s" is 45, "1h30m" is 5400, "1d2h3m4s" is 93784.
@@ -284,11 +272,8 @@ prompt = '''
 Write a Python class `LRUCache` with:
 
 - `__init__(self, capacity: int)`: capacity is at least 1.
-- `get(self, key)`: return the value for `key`, or -1 if it is absent. A hit makes the key
-  the most recently used.
-- `put(self, key, value)`: insert or update. Updating an existing key also makes it the
-  most recently used and never evicts anything. Inserting a new key into a full cache
-  first evicts the least recently used key.
+- `get(self, key)`: return the value for `key`, or -1 if it is absent. A hit makes the key the most recently used.
+- `put(self, key, value)`: insert or update. Updating an existing key also makes it the most recently used and never evicts anything. Inserting a new key into a full cache first evicts the least recently used key.
 
 Both operations should run in O(1) time on average.
 '''
@@ -349,10 +334,7 @@ id = "code-topo-order"
 title = "Smallest topological order"
 difficulty = 3
 prompt = '''
-Write a Python function `topo_order(n: int, edges: list[tuple[int, int]]) -> list[int]`.
-The nodes are 0 to n-1 and an edge `(a, b)` means a must come before b. Return the
-lexicographically smallest ordering of all nodes that respects every edge, or an empty
-list if the graph has a cycle. Edges may repeat.
+Write a Python function `topo_order(n: int, edges: list[tuple[int, int]]) -> list[int]`. The nodes are 0 to n-1 and an edge `(a, b)` means a must come before b. Return the lexicographically smallest ordering of all nodes that respects every edge, or an empty list if the graph has a cycle. Edges may repeat.
 '''
 reference = '''
 ```python
@@ -418,10 +400,7 @@ id = "code-count-inversions"
 title = "Count inversions efficiently"
 difficulty = 4
 prompt = '''
-Write a Python function `count_inversions(values: list[int]) -> int` that returns the
-number of pairs (i, j) with i < j and values[i] > values[j]. The list can hold up to 50,000
-integers and the function must finish in well under two seconds, so a quadratic scan is
-too slow. The input must not be modified.
+Write a Python function `count_inversions(values: list[int]) -> int` that returns the number of pairs (i, j) with i < j and values[i] > values[j]. The list can hold up to 50,000 integers and the function must finish in well under two seconds, so a quadratic scan is too slow. The input must not be modified.
 '''
 reference = '''
 ```python
@@ -482,16 +461,12 @@ id = "code-compare-versions"
 title = "Semantic version precedence"
 difficulty = 4
 prompt = '''
-Write a Python function `compare_versions(a: str, b: str) -> int` that returns -1, 0 or 1
-according to semantic-version precedence.
+Write a Python function `compare_versions(a: str, b: str) -> int` that returns -1, 0 or 1 according to semantic-version precedence.
 
-- A version is MAJOR.MINOR.PATCH, optionally followed by "-" and a pre-release made of
-  dot-separated identifiers, optionally followed by "+" and build metadata.
+- A version is MAJOR.MINOR.PATCH, optionally followed by "-" and a pre-release made of dot-separated identifiers, optionally followed by "+" and build metadata.
 - MAJOR, MINOR and PATCH compare numerically.
 - A version with a pre-release is lower than the same version without one.
-- Pre-releases compare identifier by identifier: numeric identifiers compare numerically,
-  others compare as ASCII strings, a numeric identifier is lower than a non-numeric one,
-  and if all shared identifiers are equal the shorter pre-release is lower.
+- Pre-releases compare identifier by identifier: numeric identifiers compare numerically, others compare as ASCII strings, a numeric identifier is lower than a non-numeric one, and if all shared identifiers are equal the shorter pre-release is lower.
 - Build metadata is ignored.
 '''
 reference = '''
@@ -567,11 +542,7 @@ id = "code-min-window"
 title = "Minimum window substring"
 difficulty = 4
 prompt = '''
-Write a Python function `min_window(s: str, t: str) -> str` that returns the shortest
-substring of `s` containing every character of `t`, counting repeats (if `t` has two b's,
-the window needs two b's). If several windows share the shortest length, return the
-leftmost. If there is no such window, or `t` is empty, return an empty string. It should
-run in O(len(s) + len(t)) time.
+Write a Python function `min_window(s: str, t: str) -> str` that returns the shortest substring of `s` containing every character of `t`, counting repeats (if `t` has two b's, the window needs two b's). If several windows share the shortest length, return the leftmost. If there is no such window, or `t` is empty, return an empty string. It should run in O(len(s) + len(t)) time.
 '''
 reference = '''
 ```python
@@ -640,17 +611,13 @@ id = "code-evaluate"
 title = "Integer expression evaluator"
 difficulty = 5
 prompt = '''
-Write a Python function `evaluate(expression: str) -> int` that evaluates an integer
-arithmetic expression without using `eval`, `exec` or `ast`.
+Write a Python function `evaluate(expression: str) -> int` that evaluates an integer arithmetic expression without using `eval`, `exec` or `ast`.
 
-- Tokens: non-negative integer literals, the binary operators + - * /, unary minus,
-  parentheses, and spaces (which are ignored between tokens).
-- Precedence is the usual one: unary minus binds tightest, then * and /, then + and -.
-  Binary operators are left-associative. Unary minus may be repeated ("--4" is 4).
+- Tokens: non-negative integer literals, the binary operators + - * /, unary minus, parentheses, and spaces (which are ignored between tokens).
+- Precedence is the usual one: unary minus binds tightest, then * and /, then + and -. Binary operators are left-associative. Unary minus may be repeated ("--4" is 4).
 - `/` is integer division that truncates toward zero: 7 / 2 is 3 and -7 / 2 is -3.
 - Dividing by zero raises ZeroDivisionError.
-- Any malformed expression, including an empty one or an unsupported operator, raises
-  ValueError.
+- Any malformed expression, including an empty one or an unsupported operator, raises ValueError.
 '''
 reference = '''
 ```python

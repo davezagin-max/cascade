@@ -8,8 +8,7 @@ difficulty = 1
 prompt = '''
 Extract the contact from this note as JSON with the keys name, email, phone, and role.
 
-"For badge access, reach Dana Whitfield (facilities lead) at dana.whitfield@northlake.example
-or on 555-0142."
+"For badge access, reach Dana Whitfield (facilities lead) at dana.whitfield@northlake.example or on 555-0142."
 '''
 wrong_patch = '{"role": "badge access"}'
 [task.grader]
@@ -30,8 +29,7 @@ id = "ext-invoice-header"
 title = "Invoice header fields"
 difficulty = 1
 prompt = '''
-Extract these fields from the invoice text as JSON: vendor, invoice_number, date (as
-YYYY-MM-DD), and total (a number, no currency symbol).
+Extract these fields from the invoice text as JSON: vendor, invoice_number, date (as YYYY-MM-DD), and total (a number, no currency symbol).
 
 BRIGHTLINE PAPER CO.
 Invoice INV-20417
@@ -59,8 +57,7 @@ id = "ext-log-line"
 title = "Structured fields from a log line"
 difficulty = 2
 prompt = '''
-Parse this log line into JSON with the keys timestamp (as written), level, service,
-status_code (integer), and duration_ms (integer).
+Parse this log line into JSON with the keys timestamp (as written), level, service, status_code (integer), and duration_ms (integer).
 
 2026-04-02T08:15:27Z WARN checkout-api POST /v2/orders 503 in 1.84s (upstream timeout)
 '''
@@ -84,12 +81,9 @@ id = "ext-meeting-move"
 title = "Rescheduled meeting details"
 difficulty = 2
 prompt = '''
-This email was sent on Monday 2026-03-09. Extract the new meeting details as JSON with the
-keys date (YYYY-MM-DD), time_24h (HH:MM), room, and attendees (a list of first names, in
-the order mentioned).
+This email was sent on Monday 2026-03-09. Extract the new meeting details as JSON with the keys date (YYYY-MM-DD), time_24h (HH:MM), room, and attendees (a list of first names, in the order mentioned).
 
-"Hi all, the vendor call ran long, so let's move our sync to this Thursday at 3:30pm.
-Room Aspen is free then (Birch is booked). Priya and Tom, please join; Marta is out."
+"Hi all, the vendor call ran long, so let's move our sync to this Thursday at 3:30pm. Room Aspen is free then (Birch is booked). Priya and Tom, please join; Marta is out."
 '''
 wrong_patch = '{"attendees": ["Priya", "Tom", "Marta"]}'
 [task.grader]
@@ -111,11 +105,9 @@ id = "ext-product-specs"
 title = "Product specs with a unit conversion"
 difficulty = 2
 prompt = '''
-Extract the product specs as JSON with the keys name, weight_kg (number), battery_hours
-(number), waterproof (boolean), and colors (list of strings, lower case, in the order given).
+Extract the product specs as JSON with the keys name, weight_kg (number), battery_hours (number), waterproof (boolean), and colors (list of strings, lower case, in the order given).
 
-"The Trailhead Mini speaker weighs just 850 g and plays for 12 hours on a charge. It is
-rated IP67, so a dunk in the lake won't hurt it. Available in Slate, Ember and Moss."
+"The Trailhead Mini speaker weighs just 850 g and plays for 12 hours on a charge. It is rated IP67, so a dunk in the lake won't hurt it. Available in Slate, Ember and Moss."
 '''
 wrong_patch = '{"weight_kg": 850}'
 [task.grader]
@@ -137,11 +129,9 @@ id = "ext-org-teams"
 title = "Nested team structure"
 difficulty = 2
 prompt = '''
-Extract the reporting structure as JSON: vp (a name) and teams, a list of objects with the
-keys name, lead, and engineers (integer), in the order the teams are mentioned.
+Extract the reporting structure as JSON: vp (a name) and teams, a list of objects with the keys name, lead, and engineers (integer), in the order the teams are mentioned.
 
-"Mara Okafor, our VP of Engineering, runs two teams. Platform is led by Jules Tan and has
-six engineers. Data is led by Wen Li and has four engineers and one analyst."
+"Mara Okafor, our VP of Engineering, runs two teams. Platform is led by Jules Tan and has six engineers. Data is led by Wen Li and has four engineers and one analyst."
 '''
 wrong_patch = '{"teams": [{"name": "Platform", "lead": "Jules Tan", "engineers": 6}, {"name": "Data", "lead": "Wen Li", "engineers": 5}]}'
 [task.grader]
@@ -165,13 +155,9 @@ id = "ext-job-posting"
 title = "Job posting with absent fields"
 difficulty = 3
 prompt = '''
-Extract this job posting as JSON with the keys title, company, location, work_mode (one of
-"remote", "hybrid", "onsite"), salary_min, and salary_max. Salaries are integers in GBP per
-year. Use null for any value the posting does not state. Do not guess.
+Extract this job posting as JSON with the keys title, company, location, work_mode (one of "remote", "hybrid", "onsite"), salary_min, and salary_max. Salaries are integers in GBP per year. Use null for any value the posting does not state. Do not guess.
 
-"Senior Data Engineer at Corvid Analytics. We offer a competitive salary and a generous
-equipment budget of 2,500 GBP. You'll be in our Leeds office three days a week and at home
-the rest. Our last three hires in this band started within a week of signing."
+"Senior Data Engineer at Corvid Analytics. We offer a competitive salary and a generous equipment budget of 2,500 GBP. You'll be in our Leeds office three days a week and at home the rest. Our last three hires in this band started within a week of signing."
 '''
 wrong_patch = '{"salary_min": 2500, "salary_max": 2500}'
 [task.grader]
@@ -195,13 +181,9 @@ id = "ext-order-lines"
 title = "Order lines with a retraction"
 difficulty = 3
 prompt = '''
-Extract the final order from this message as JSON: items, a list of objects with the keys
-sku, quantity (integer), and unit_price (number), in any order. Leave out anything the
-customer retracts, and apply any changes they make.
+Extract the final order from this message as JSON: items, a list of objects with the keys sku, quantity (integer), and unit_price (number), in any order. Leave out anything the customer retracts, and apply any changes they make.
 
-"Please send 4 of the A4 notebooks (NB-A4, 3.20 each) and two boxes of the blue pens
-(PEN-BL, 6.75 a box). Also one stapler, ST-10, at 14.00. Actually, scratch the stapler, we
-found ours. And make it 6 notebooks instead of 4."
+"Please send 4 of the A4 notebooks (NB-A4, 3.20 each) and two boxes of the blue pens (PEN-BL, 6.75 a box). Also one stapler, ST-10, at 14.00. Actually, scratch the stapler, we found ours. And make it 6 notebooks instead of 4."
 '''
 wrong_patch = '{"items": [{"sku": "NB-A4", "quantity": 4, "unit_price": 3.2}, {"sku": "PEN-BL", "quantity": 2, "unit_price": 6.75}]}'
 [task.grader]
@@ -224,11 +206,9 @@ id = "ext-german-invoice"
 title = "Invoice in German number format"
 difficulty = 3
 prompt = '''
-Extract these fields from the German invoice line as JSON: invoice_number (string), date
-(YYYY-MM-DD), net_amount (number), and vat_percent (number).
+Extract these fields from the German invoice line as JSON: invoice_number (string), date (YYYY-MM-DD), net_amount (number), and vat_percent (number).
 
-"Rechnung Nr. 2291 vom 14. März 2026. Nettobetrag: 1.234,56 € zzgl. 19 % MwSt.
-Zahlbar innerhalb von 30 Tagen."
+"Rechnung Nr. 2291 vom 14. März 2026. Nettobetrag: 1.234,56 € zzgl. 19 % MwSt. Zahlbar innerhalb von 30 Tagen."
 '''
 wrong_patch = '{"net_amount": 1.23456}'
 [task.grader]
@@ -249,13 +229,9 @@ id = "ext-server-inventory"
 title = "Inventory with mixed memory units"
 difficulty = 3
 prompt = '''
-Extract the servers that are still in service as JSON: servers, a list of objects with the
-keys host, region, and memory_gb (number), in any order.
+Extract the servers that are still in service as JSON: servers, a list of objects with the keys host, region, and memory_gb (number), in any order.
 
-"We run three boxes today. atlas-01 sits in eu-west with 64 GB of RAM. The cache node,
-brisk-02, is in us-east and only has 512 MB. cinder-03 (ap-south, 32 GB) was decommissioned
-last week and is listed here only for the audit trail. Its replacement, cinder-04, went
-live in ap-south yesterday with 128 GB."
+"We run three boxes today. atlas-01 sits in eu-west with 64 GB of RAM. The cache node, brisk-02, is in us-east and only has 512 MB. cinder-03 (ap-south, 32 GB) was decommissioned last week and is listed here only for the audit trail. Its replacement, cinder-04, went live in ap-south yesterday with 128 GB."
 '''
 wrong_patch = '{"servers": [{"host": "atlas-01", "region": "eu-west", "memory_gb": 64}, {"host": "brisk-02", "region": "us-east", "memory_gb": 512}, {"host": "cinder-04", "region": "ap-south", "memory_gb": 128}]}'
 [task.grader]
@@ -279,17 +255,12 @@ id = "ext-thread-corrections"
 title = "Final values from an email thread"
 difficulty = 4
 prompt = '''
-Read this email thread, oldest message first, and extract the plan as it stands after the
-last message. Return JSON with the keys project, owner, budget_usd (integer), and deadline
-(YYYY-MM-DD).
+Read this email thread, oldest message first, and extract the plan as it stands after the last message. Return JSON with the keys project, owner, budget_usd (integer), and deadline (YYYY-MM-DD).
 
-[1] From Ines: "Kicking off Project Lantern. Budget is $40k, Rafael owns it, and we ship
-by 30 June 2026."
+[1] From Ines: "Kicking off Project Lantern. Budget is $40k, Rafael owns it, and we ship by 30 June 2026."
 [2] From Rafael: "Happy to own it. One flag: June 30 is tight. Could we have two more weeks?"
-[3] From Ines: "No to the extension, sorry. Correction on money though: finance approved
-46, not 40."
-[4] From Rafael: "Understood. I'm on leave from the 8th, so Suki will take over as owner
-from today. I'll stay on as an advisor."
+[3] From Ines: "No to the extension, sorry. Correction on money though: finance approved 46, not 40."
+[4] From Rafael: "Understood. I'm on leave from the 8th, so Suki will take over as owner from today. I'll stay on as an advisor."
 [5] From Suki: "Confirmed, I've got it. Nothing else changes."
 '''
 wrong_patch = '{"owner": "Rafael", "deadline": "2026-07-14"}'
@@ -311,9 +282,7 @@ id = "ext-receipt-totals"
 title = "Receipt totals that must be computed"
 difficulty = 4
 prompt = '''
-The receipt below does not print every amount. Work out the missing ones and return JSON
-with the keys subtotal, discount_amount, tax_amount, and total, all numbers rounded to two
-decimal places.
+The receipt below does not print every amount. Work out the missing ones and return JSON with the keys subtotal, discount_amount, tax_amount, and total, all numbers rounded to two decimal places.
 
 FERN & FLINT GARDEN SUPPLY
 2 x Cedar planter      @ 85.00
@@ -340,13 +309,9 @@ id = "ext-lease-dates"
 title = "Lease terms with a date calculation"
 difficulty = 4
 prompt = '''
-Extract the lease terms as JSON with the keys start_date, end_date, notice_deadline (all
-YYYY-MM-DD), and monthly_rent (number). The notice deadline is the last day on which notice
-can still be given.
+Extract the lease terms as JSON with the keys start_date, end_date, notice_deadline (all YYYY-MM-DD), and monthly_rent (number). The notice deadline is the last day on which notice can still be given.
 
-"The tenancy began on the 3rd of February 2025 and ends on 31 August 2026. Rent is 1,450
-per month, reviewed annually. If the tenant does not intend to renew, written notice must
-reach the landlord no later than 60 days before the end date."
+"The tenancy began on the 3rd of February 2025 and ends on 31 August 2026. Rent is 1,450 per month, reviewed annually. If the tenant does not intend to renew, written notice must reach the landlord no later than 60 days before the end date."
 '''
 wrong_patch = '{"notice_deadline": "2026-06-30"}'
 [task.grader]
@@ -369,10 +334,7 @@ id = "ext-manifest-row"
 title = "One row from a messy shipping manifest"
 difficulty = 5
 prompt = '''
-Below is OCR text from a shipping manifest. Extract only the container MSKU 448120-7 as
-JSON with the keys container (as printed), weight_kg (integer, rounded to the nearest
-kilogram), seals (list of strings, in the order printed), eta (YYYY-MM-DD), and
-dangerous_goods (boolean). One pound is 0.45359237 kg.
+Below is OCR text from a shipping manifest. Extract only the container MSKU 448120-7 as JSON with the keys container (as printed), weight_kg (integer, rounded to the nearest kilogram), seals (list of strings, in the order printed), eta (YYYY-MM-DD), and dangerous_goods (boolean). One pound is 0.45359237 kg.
 
 MANIFEST 7731 / VESSEL: NORDIC WREN / ROTTERDAM dep. 2026-05-30
 CNTR          GROSS WT     SEALS              ETA                 DG

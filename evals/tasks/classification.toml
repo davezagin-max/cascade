@@ -51,11 +51,9 @@ id = "cls-review-mixed"
 title = "Review with pros and cons"
 difficulty = 2
 prompt = '''
-Label the sentiment of this review as positive, negative, or mixed. Use mixed only when the
-review contains at least one clear praise and at least one clear complaint.
+Label the sentiment of this review as positive, negative, or mixed. Use mixed only when the review contains at least one clear praise and at least one clear complaint.
 
-"The camera is superb and the battery lasts two full days. But the phone overheats during
-calls and the speaker crackles at any volume."
+"The camera is superb and the battery lasts two full days. But the phone overheats during calls and the speaker crackles at any volume."
 '''
 wrong = "ANSWER: negative"
 [task.grader]
@@ -68,11 +66,9 @@ id = "cls-contract-clause"
 title = "Contract clause type"
 difficulty = 2
 prompt = '''
-Classify this contract clause as one of: indemnification, limitation_of_liability,
-termination, confidentiality, governing_law.
+Classify this contract clause as one of: indemnification, limitation_of_liability, termination, confidentiality, governing_law.
 
-"In no event shall either party's aggregate liability arising out of this Agreement exceed
-the fees paid by Customer in the twelve months preceding the claim."
+"In no event shall either party's aggregate liability arising out of this Agreement exceed the fees paid by Customer in the twelve months preceding the claim."
 '''
 wrong = "ANSWER: indemnification"
 [task.grader]
@@ -85,16 +81,14 @@ id = "cls-incident-severity"
 title = "Incident severity from a rubric"
 difficulty = 2
 prompt = '''
-Assign a severity to this incident using the definitions below. Answer with sev1, sev2,
-sev3, or sev4.
+Assign a severity to this incident using the definitions below. Answer with sev1, sev2, sev3, or sev4.
 
 - sev1: a revenue-critical flow is down for all customers in at least one region.
 - sev2: a revenue-critical flow is degraded, or down for only some customers.
 - sev3: a non-critical feature is down or degraded.
 - sev4: cosmetic issue, no functional impact.
 
-Incident: "Since 09:14 UTC, checkout returns HTTP 500 for every customer in the EU region.
-US and APAC are unaffected. The marketing banner on the home page is also misaligned."
+Incident: "Since 09:14 UTC, checkout returns HTTP 500 for every customer in the EU region. US and APAC are unaffected. The marketing banner on the home page is also misaligned."
 '''
 wrong = "ANSWER: sev2"
 [task.grader]
@@ -107,8 +101,7 @@ id = "cls-off-by-one"
 title = "Bug category in a short function"
 difficulty = 2
 prompt = '''
-Classify the bug in this function as one of: off_by_one, race_condition,
-null_dereference, resource_leak, integer_overflow.
+Classify the bug in this function as one of: off_by_one, race_condition, null_dereference, resource_leak, integer_overflow.
 
 ```python
 def last_k(items, k):
@@ -127,11 +120,9 @@ id = "cls-sarcasm"
 title = "Sarcastic review sentiment"
 difficulty = 3
 prompt = '''
-Label the sentiment of this app review as positive, negative, or mixed. Use mixed only when
-the review contains at least one sincere praise and at least one sincere complaint.
+Label the sentiment of this app review as positive, negative, or mixed. Use mixed only when the review contains at least one sincere praise and at least one sincere complaint.
 
-"Oh great, another update that 'improves stability'. My app now crashes before the splash
-screen even loads. Stellar work, truly, give the whole team a raise."
+"Oh great, another update that 'improves stability'. My app now crashes before the splash screen even loads. Stellar work, truly, give the whole team a raise."
 '''
 wrong = "ANSWER: mixed"
 [task.grader]
@@ -144,12 +135,9 @@ id = "cls-intent-negation"
 title = "Intent behind a negated request"
 difficulty = 3
 prompt = '''
-Classify what this customer is asking for. Choose one of: refund_request, delivery_issue,
-product_defect, cancellation.
+Classify what this customer is asking for. Choose one of: refund_request, delivery_issue, product_defect, cancellation.
 
-"I'm not asking for a refund and I don't want to cancel. The first unit was fine, I just
-gave it to my brother. I only want the second one I ordered to actually turn up: the
-tracking page has said 'out for delivery' since last Tuesday."
+"I'm not asking for a refund and I don't want to cancel. The first unit was fine, I just gave it to my brother. I only want the second one I ordered to actually turn up: the tracking page has said 'out for delivery' since last Tuesday."
 '''
 wrong = "ANSWER: refund_request"
 [task.grader]
@@ -162,8 +150,7 @@ id = "cls-quantifier-nli"
 title = "Entailment with a quantifier"
 difficulty = 3
 prompt = '''
-Decide whether the hypothesis is entailed by the premise, contradicted by it, or neither.
-Answer with entailment, contradiction, or neutral.
+Decide whether the hypothesis is entailed by the premise, contradicted by it, or neither. Answer with entailment, contradiction, or neutral.
 
 Premise: "Fewer than half of the 40 applicants passed the screening."
 Hypothesis: "At least 21 applicants passed the screening."
@@ -179,9 +166,7 @@ id = "cls-lock-race"
 title = "Bug category in threaded code"
 difficulty = 3
 prompt = '''
-Classify the bug in this class as one of: off_by_one, race_condition, null_dereference,
-resource_leak, integer_overflow. Many threads call `incr` at the same time and the counter
-must never exceed LIMIT.
+Classify the bug in this class as one of: off_by_one, race_condition, null_dereference, resource_leak, integer_overflow. Many threads call `incr` at the same time and the counter must never exceed LIMIT.
 
 ```python
 import threading
@@ -218,8 +203,7 @@ Which category of sensitive data does this log line leak? Use these definitions:
 - email: a complete email address.
 - none: none of the above.
 
-If more than one applies, answer with the most severe, in this order:
-credential, payment_card, government_id, email, none.
+If more than one applies, answer with the most severe, in this order: credential, payment_card, government_id, email, none.
 
 Log line:
 user=jsmith action=update_profile auth="Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MiJ9.c2ln" note="card ending 4242 on file, passport check passed, contact via the address on record"
@@ -235,18 +219,15 @@ id = "cls-expense-policy"
 title = "Expense claim under a precedence policy"
 difficulty = 4
 prompt = '''
-Apply this expense policy to the claim and answer with exactly one of: approve,
-needs_manager, needs_receipt, reject.
+Apply this expense policy to the claim and answer with exactly one of: approve, needs_manager, needs_receipt, reject.
 
 Policy for meals, per person per day:
 1. Up to $60: approve.
 2. More than $60 and up to $150: needs_manager.
 3. More than $150: reject.
-4. Any claim over $25 with no receipt attached is needs_receipt. This rule overrides
-   rules 1 and 2, but a claim that rule 3 rejects is still rejected.
+4. Any claim over $25 with no receipt attached is needs_receipt. This rule overrides rules 1 and 2, but a claim that rule 3 rejects is still rejected.
 
-Claim: one dinner for one person, $142.00 including tip. The employee notes that the
-receipt was lost and attaches a card statement line instead.
+Claim: one dinner for one person, $142.00 including tip. The employee notes that the receipt was lost and attaches a card statement line instead.
 '''
 wrong = "ANSWER: needs_manager"
 [task.grader]
@@ -259,11 +240,9 @@ id = "cls-parcel-class"
 title = "Shipping class from threshold rules"
 difficulty = 4
 prompt = '''
-Assign the parcel a shipping class: standard, oversize, freight, hazmat, or reject. Apply
-the first rule that matches.
+Assign the parcel a shipping class: standard, oversize, freight, hazmat, or reject. Apply the first rule that matches.
 
-1. Contains a lithium battery over 100 Wh: hazmat, unless the parcel also weighs over
-   30 kg, in which case reject.
+1. Contains a lithium battery over 100 Wh: hazmat, unless the parcel also weighs over 30 kg, in which case reject.
 2. Longest side over 150 cm, or weight over 30 kg: freight.
 3. The three sides add up to more than 200 cm, or weight over 20 kg: oversize.
 4. Otherwise: standard.
@@ -281,17 +260,14 @@ id = "cls-subscription-state"
 title = "Subscription state on a given date"
 difficulty = 5
 prompt = '''
-Work out the state of this subscription on the date given. Answer with active,
-grace_period, expired, or cancelled.
+Work out the state of this subscription on the date given. Answer with active, grace_period, expired, or cancelled.
 
 Rules:
 - A subscription is active through its paid-through date, inclusive.
-- If a cancellation was requested, it takes effect the day after the paid-through date.
-  From then on the state is cancelled and no grace period applies.
+- If a cancellation was requested, it takes effect the day after the paid-through date. From then on the state is cancelled and no grace period applies.
 - Otherwise, the 14 days after the paid-through date are a grace_period.
 - After the grace period ends, the state is expired.
-- A successful renewal payment moves the paid-through date forward by one month and
-  withdraws any earlier cancellation request.
+- A successful renewal payment moves the paid-through date forward by one month and withdraws any earlier cancellation request.
 
 History:
 - Paid through 2026-01-27.

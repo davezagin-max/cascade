@@ -16,8 +16,7 @@ id = "rsn-average-speed"
 title = "Average speed over two legs"
 difficulty = 2
 prompt = '''
-A car covers 150 km in 2.5 hours, then 90 km in 1.5 hours. What is its average speed over
-the whole trip, in km/h?
+A car covers 150 km in 2.5 hours, then 90 km in 1.5 hours. What is its average speed over the whole trip, in km/h?
 '''
 wrong = "ANSWER: 61"
 [task.grader]
@@ -39,8 +38,7 @@ id = "rsn-ages"
 title = "Two-equation age problem"
 difficulty = 2
 prompt = '''
-Lena is three times as old as Max. In 12 years she will be twice as old as he is then.
-How old is Lena now?
+Lena is three times as old as Max. In 12 years she will be twice as old as he is then. How old is Lena now?
 '''
 wrong = "ANSWER: 12"
 [task.grader]
@@ -52,8 +50,7 @@ id = "rsn-pen-notebook"
 title = "Intuition trap with a sum and a difference"
 difficulty = 3
 prompt = '''
-A notebook and a pen cost $2.60 together. The notebook costs $2.00 more than the pen. How
-many cents does the pen cost?
+A notebook and a pen cost $2.60 together. The notebook costs $2.00 more than the pen. How many cents does the pen cost?
 '''
 wrong = "ANSWER: 60"
 [task.grader]
@@ -75,9 +72,7 @@ id = "rsn-two-pumps"
 title = "Work rates with a switch-off"
 difficulty = 3
 prompt = '''
-Pump A fills an empty tank in 6 hours and pump B fills it in 4 hours. Both run together
-for one hour, then pump A is switched off. How many more minutes does pump B need to finish
-filling the tank?
+Pump A fills an empty tank in 6 hours and pump B fills it in 4 hours. Both run together for one hour, then pump A is switched off. How many more minutes does pump B need to finish filling the tank?
 '''
 wrong = "ANSWER: 84"
 [task.grader]
@@ -89,8 +84,7 @@ id = "rsn-weekday"
 title = "Weekday three months later"
 difficulty = 3
 prompt = '''
-In a certain year, 1 March falls on a Monday. On which day of the week does 1 June fall in
-the same year?
+In a certain year, 1 March falls on a Monday. On which day of the week does 1 June fall in the same year?
 '''
 wrong = "ANSWER: Monday"
 [task.grader]
@@ -102,8 +96,7 @@ id = "rsn-market-stall"
 title = "Profit with losses and a fixed fee"
 difficulty = 3
 prompt = '''
-A trader buys 120 mugs at $3.50 each. 15 of them break on the way to the market. She sells
-all the others at $6 each and pays a $45 stall fee. What is her profit in dollars?
+A trader buys 120 mugs at $3.50 each. 15 of them break on the way to the market. She sells all the others at $6 each and pays a $45 stall fee. What is her profit in dollars?
 '''
 wrong = "ANSWER: 255"
 [task.grader]
@@ -125,8 +118,7 @@ id = "rsn-dice-product"
 title = "Probability that a product is a multiple of 6"
 difficulty = 4
 prompt = '''
-Two fair six-sided dice are rolled. What is the probability that the product of the two
-numbers is a multiple of 6? Give the answer as a fraction in lowest terms.
+Two fair six-sided dice are rolled. What is the probability that the product of the two numbers is a multiple of 6? Give the answer as a fraction in lowest terms.
 '''
 wrong = "ANSWER: 11/36"
 [task.grader]
@@ -159,8 +151,7 @@ id = "rsn-round-table"
 title = "Circular seating with a restriction"
 difficulty = 4
 prompt = '''
-Six people sit around a round table. Two of them refuse to sit next to each other. How
-many seatings are possible, if two seatings that differ only by a rotation count as the same?
+Six people sit around a round table. Two of them refuse to sit next to each other. How many seatings are possible, if two seatings that differ only by a rotation count as the same?
 '''
 wrong = "ANSWER: 96"
 [task.grader]
@@ -184,8 +175,7 @@ id = "rsn-coin-pattern"
 title = "Expected flips until a pattern"
 difficulty = 5
 prompt = '''
-A fair coin is flipped repeatedly until the three most recent flips read heads, tails,
-heads, in that order. What is the expected number of flips?
+A fair coin is flipped repeatedly until the three most recent flips read heads, tails, heads, in that order. What is the expected number of flips?
 '''
 wrong = "ANSWER: 8"
 [task.grader]

@@ -10,6 +10,10 @@ tested against the real suite. The simulator also uses them as its stand-in answ
 
 `difficulty` (1 easy to 5 hard) is the author's guess. Only the simulator reads it:
 the router never sees it, and a real run ignores it.
+
+Prompts are written the way a user would type them: a paragraph is one line, with
+no hard wrapping. Line breaks are one of the router's features, so wrapping the
+source files at 90 columns would teach it something that is false of real prompts.
 """
 
 from __future__ import annotations

@@ -9,15 +9,12 @@ id = "open-incident-summary"
 title = "Incident summary for executives"
 difficulty = 2
 prompt = '''
-Summarize this incident for a non-technical executive audience in at most 80 words. Cover
-what happened, the customer impact, the fix, and one follow-up action.
+Summarize this incident for a non-technical executive audience in at most 80 words. Cover what happened, the customer impact, the fix, and one follow-up action.
 
 Timeline (UTC):
 09:14 Deploy of checkout-api v412 begins in the EU region.
-09:16 Error rate on EU checkout rises to 100%. v412 reads a config key that was never
-      set in EU.
-09:31 On-call engineer paged by a customer-support escalation; the automated alert had
-      been muted during last week's migration and never re-enabled.
+09:16 Error rate on EU checkout rises to 100%. v412 reads a config key that was never set in EU.
+09:31 On-call engineer paged by a customer-support escalation; the automated alert had been muted during last week's migration and never re-enabled.
 09:43 Rollback to v411 completes. Error rate returns to normal.
 Impact: 27 minutes of failed EU checkouts, about 1,900 failed orders. US and APAC unaffected.
 '''
@@ -52,10 +49,7 @@ id = "open-decline-vendor"
 title = "Polite decline email"
 difficulty = 2
 prompt = '''
-Write an email to Jordan at Lumen Analytics declining their proposal for a customer-churn
-dashboard. Facts to use: our budget for new tools is frozen until the next fiscal year,
-which starts in July; we liked their demo; we would be open to talking again in June.
-Keep it under 120 words, warm but direct, and do not apologize for the decision.
+Write an email to Jordan at Lumen Analytics declining their proposal for a customer-churn dashboard. Facts to use: our budget for new tools is frozen until the next fiscal year, which starts in July; we liked their demo; we would be open to talking again in June. Keep it under 120 words, warm but direct, and do not apologize for the decision.
 '''
 reference = '''
 Subject: Lumen proposal
@@ -101,9 +95,7 @@ id = "open-explain-consistency"
 title = "Explain a concept to a non-engineer"
 difficulty = 3
 prompt = '''
-Explain eventual consistency to a product manager in at most 150 words. Include exactly one
-concrete analogy and one practical implication for a feature they might be designing.
-Avoid jargon such as "replica", "quorum" or "CAP".
+Explain eventual consistency to a product manager in at most 150 words. Include exactly one concrete analogy and one practical implication for a feature they might be designing. Avoid jargon such as "replica", "quorum" or "CAP".
 '''
 reference = '''
 Eventual consistency means that after a change is saved, different parts of the system may
@@ -142,8 +134,7 @@ id = "open-code-review"
 title = "Review a risky function"
 difficulty = 4
 prompt = '''
-Review this function as you would in a pull request. List the problems that matter, most
-serious first, with a concrete fix for each. Do not pad the review with style nits.
+Review this function as you would in a pull request. List the problems that matter, most serious first, with a concrete fix for each. Do not pad the review with style nits.
 
 ```python
 def transfer(conn, from_id, to_id, amount):
@@ -205,18 +196,12 @@ id = "open-queue-decision"
 title = "Build-versus-buy recommendation"
 difficulty = 4
 prompt = '''
-Write a recommendation of at most 180 words for the engineering director. Choose between
-the two options using only the facts given, state the main risk of your choice, and say
-what would change your mind.
+Write a recommendation of at most 180 words for the engineering director. Choose between the two options using only the facts given, state the main risk of your choice, and say what would change your mind.
 
 Context: we need a job queue for sending about 2 million emails a day, with retries.
-- Option A, managed queue service: $1,400 a month at our volume, 99.9% SLA, live in about
-  one week. The vendor caps messages at 256 KB.
-- Option B, run our own on the existing Postgres cluster: no new spend, about six weeks
-  of one engineer to build and harden, and that team is already carrying on-call for two
-  other systems.
-- Our largest email payload is 40 KB. The launch date for the feature that needs this is
-  in four weeks.
+- Option A, managed queue service: $1,400 a month at our volume, 99.9% SLA, live in about one week. The vendor caps messages at 256 KB.
+- Option B, run our own on the existing Postgres cluster: no new spend, about six weeks of one engineer to build and harden, and that team is already carrying on-call for two other systems.
+- Our largest email payload is 40 KB. The launch date for the feature that needs this is in four weeks.
 '''
 reference = '''
 Recommendation: Option A, the managed queue.
@@ -259,8 +244,7 @@ id = "open-ab-paradox"
 title = "Interpret an A/B test with a segment reversal"
 difficulty = 5
 prompt = '''
-A teammate says "Variant B won, ship it." Using only the table below, explain in at most
-170 words whether that conclusion holds and what you would do next.
+A teammate says "Variant B won, ship it." Using only the table below, explain in at most 170 words whether that conclusion holds and what you would do next.
 
 Checkout conversion by device:
 
