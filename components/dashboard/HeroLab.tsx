@@ -90,6 +90,18 @@ export function HeroLab({
           </p>
         </div>
 
+        <div className="flex flex-wrap gap-2 text-sm">
+          <Link
+            href="/playground"
+            className="bg-accent px-3 py-2 font-medium text-accent-fg hover:opacity-90"
+          >
+            Try the router on a prompt
+          </Link>
+          <Link href="/tasks" className="border border-border px-3 py-2 hover:bg-surface">
+            Browse the {suiteTasks} tasks
+          </Link>
+        </div>
+
         <div className="border border-border bg-surface p-3">
           <div className="flex items-baseline justify-between gap-3">
             <label htmlFor="threshold" className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
@@ -209,17 +221,6 @@ export function HeroLab({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 text-sm">
-          <Link
-            href="/playground"
-            className="bg-accent px-3 py-2 font-medium text-accent-fg hover:opacity-90"
-          >
-            Try the router on a prompt
-          </Link>
-          <Link href="/tasks" className="border border-border px-3 py-2 hover:bg-surface">
-            Browse the {suiteTasks} tasks
-          </Link>
-        </div>
       </div>
 
       <div className="min-w-0">
