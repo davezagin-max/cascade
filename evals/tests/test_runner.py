@@ -224,6 +224,31 @@ def test_run_matrix_keeps_rows_from_a_resumed_run() -> None:
     }  # Haiku was not re-sent
 
 
+def test_resume_retries_failed_rows_synchronously_and_only_those() -> None:
+    tasks = TASKS[:3]
+    plan = build_plan(
+        tasks, [Arm(HAIKU, "low")], trials=1, mode="batch", latency_sample_per_category=0
+    )
+    broken = plan[1].custom_id
+    first = ScriptedClient(echo, batch_outcomes={broken: "errored"})
+    rows = run_matrix(executor_for(first), tasks, plan, run_id="r", guard=BudgetGuard(5.0))
+    assert [row["status"] for row in rows].count("error") == 1
+
+    again = ScriptedClient(echo)
+    resumed = run_matrix(
+        executor_for(again, batch_ids={"answers-haiku": "batch_1"}),
+        tasks,
+        plan,
+        run_id="r",
+        guard=BudgetGuard(5.0),
+        done_rows=rows,
+    )
+    assert again.batches == {} and len(again.sync_requests) == 1  # one retry, no new batch
+    assert len(resumed) == 3 and all(row["status"] == "ok" for row in resumed)
+    retried = next(row for row in resumed if row["custom_id"] == broken)
+    assert retried["mode"] == "sync" and retried["latency_ms"] is not None
+
+
 def test_rows_record_list_price_and_billed_price_separately() -> None:
     task = TASKS[0]
     plan = build_plan(

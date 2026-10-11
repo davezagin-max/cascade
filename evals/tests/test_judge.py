@@ -96,10 +96,18 @@ def test_an_unjudgeable_answer_is_left_ungraded_not_scored_zero() -> None:
     assert "judge_error" in graded[0]["grader_details"]
 
 
-def test_refusals_and_errors_score_zero_without_calling_any_grader() -> None:
-    row = _rows(1)[0]
-    row["status"] = "refusal"
-    graded = grade_rows([row], [TASK], judge_many=None, log=lambda _m: None)
+def test_a_refusal_scores_zero_and_a_failed_request_is_left_ungraded() -> None:
+    refused, failed = _rows(2)
+    refused["status"] = "refusal"
+    failed["status"] = "error"
+    failed["grader_details"] = json.dumps({"error": "overloaded_error"})
+    graded = grade_rows([refused, failed], [TASK], judge_many=None, log=lambda _m: None)
     assert graded[0]["score"] == 0.0 and graded[0]["passed"] is False
     assert json.loads(graded[0]["grader_details"]) == {"skipped": "refusal"}
-    assert judge_id(row).startswith("j__")
+    # An API failure is not evidence about the model, so it must not count as a wrong answer.
+    assert graded[1]["score"] is None and graded[1]["passed"] is None
+    assert json.loads(graded[1]["grader_details"]) == {
+        "skipped": "error",
+        "error": "overloaded_error",
+    }
+    assert judge_id(refused).startswith("j__")

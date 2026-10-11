@@ -144,6 +144,10 @@ def test_full_run_with_a_fake_client_produces_a_real_non_synthetic_dashboard(
     assert len(rows) == 2 * len(TASKS)
     assert meta["synthetic"] is False and meta["status"] == "complete" and meta["spent_usd"] > 0
     assert set(meta["batches"]) == {"answers-haiku", "answers-opus"}
+    assert meta["matrix"] == {
+        "models": ["haiku", "opus"], "efforts": ["low"], "trials": 1,
+        "mode": "batch", "latency_sample": 1,
+    }  # fmt: skip
     assert all(row["synthetic"] is False and row["passed"] is not None for row in rows)
     assert sum(1 for row in rows if row["mode"] == "sync") == 10
     assert all((row["latency_ms"] is not None) == (row["mode"] == "sync") for row in rows)
@@ -169,6 +173,26 @@ def test_full_run_with_a_fake_client_produces_a_real_non_synthetic_dashboard(
         "run_id": "run-test", "synthetic": False, "n_tasks": len(TASKS), "n_rows": len(rows),
     }  # fmt: skip
     assert any("run run-test complete" in line for line in lines)
+
+    # Resuming a finished run sends nothing new, and keeps its own matrix whatever is passed.
+    sent = (len(client.sync_requests), len(client.batches))
+    resume = parse(
+        "run", "--resume", "run-test", "--models", "sonnet", "--no-caching", "--no-export"
+    )
+    assert (
+        cli.execute_run(
+            resume,
+            client,
+            log=lambda _m: None,
+            root=root,
+            out=out,
+            sleep=lambda _s: None,  # type: ignore[arg-type]
+        )
+        == 0
+    )
+    assert (len(client.sync_requests), len(client.batches)) == sent  # not even the judge
+    rows = store.read_rows(store.results_path("run-test", root))
+    assert len(rows) == 2 * len(TASKS) and {row["model"] for row in rows} == {HAIKU, OPUS}
 
     # Re-grading the stored answers gives the same grades without calling the judge again.
     before = len(client.sync_requests)
@@ -216,3 +240,18 @@ def test_tasks_and_estimate_commands() -> None:
     assert "haiku-low" in lines[0] and "TOTAL (est.)" in lines[0]
     with pytest.raises(SystemExit):
         parse("estimate", "--models", "gpt")
+
+
+def test_regrading_a_synthetic_run_changes_nothing(tmp_path: Path) -> None:
+    """`cascade grade` is idempotent: same answers, same graders, same rows."""
+    root = tmp_path / "runs"
+    args = parse("simulate", "--trials", "1", "--run-id", "sim-regrade", "--no-export")
+    assert cli.cmd_simulate(args, log=lambda _m: None, root=root, out=tmp_path) == 0
+    before = store.read_rows(store.results_path("sim-regrade", root))
+    assert cli.cmd_grade(parse("grade", "sim-regrade"), log=lambda _m: None, root=root) == 0
+    assert store.read_rows(store.results_path("sim-regrade", root)) == before
+    assert (
+        cli.cmd_grade(parse("grade", "sim-regrade", "--rejudge"), log=lambda _m: None, root=root)
+        == 0
+    )
+    assert store.read_rows(store.results_path("sim-regrade", root)) == before

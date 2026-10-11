@@ -39,13 +39,21 @@ def _apply(row: Row, grade: Grade | None, judge_usd: float = 0.0) -> None:
 
 
 def grade_rows(
-    rows: list[Row], tasks: list[Task], *, judge_many: JudgeMany | None = None, log: Log = print
+    rows: list[Row],
+    tasks: list[Task],
+    *,
+    judge_many: JudgeMany | None = None,
+    keep_judged: bool = False,
+    log: Log = print,
 ) -> list[Row]:
     """Return graded copies of `rows`.
 
-    Refusals and failed requests score zero without being graded. Identical answers
-    to the same task are graded once: the graders are deterministic, and different
-    arms often give the same answer.
+    A refusal scores zero. A request that failed (API error, expired batch item) is
+    left ungraded and excluded from averages. Identical answers to the same task are
+    graded once: the graders are deterministic, and arms often give the same answer.
+
+    With `keep_judged`, open-ended rows that already carry a verdict are not sent to
+    the judge again. Deterministic graders always run again; they are free.
     """
     index = task_index(tasks)
     cache: dict[tuple[str, str], Grade] = {}
@@ -57,9 +65,19 @@ def grade_rows(
         task = index.get(row["task_id"])
         if task is None:
             raise KeyError(f"Result row for unknown task {row['task_id']!r}")
-        if row["status"] in ("refusal", "error"):
-            _apply(row, Grade(0.0, False, {"skipped": row["status"]}))
+        if row["status"] == "refusal":
+            # Declining the task is the arm's answer, so it counts against the arm.
+            _apply(row, Grade(0.0, False, {"skipped": "refusal"}))
+        elif row["status"] == "error":
+            # A failed request says nothing about the model. Leave it ungraded, so it is
+            # excluded from every average and reported as an error instead.
+            row["score"] = None
+            row["passed"] = None
+            earlier = json.loads(row["grader_details"] or "{}")
+            row["grader_details"] = json.dumps({"skipped": "error", **earlier})
         elif task.grader.type == "judge":
+            if keep_judged and row["score"] is not None:
+                continue  # already judged: keep the verdict and what it cost
             to_judge.append((row, task))
         else:
             key = (task.id, row["answer"] or "")

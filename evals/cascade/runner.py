@@ -24,7 +24,7 @@ import threading
 import time
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 import anthropic
@@ -324,13 +324,28 @@ def run_matrix(
     done_rows: list[Row] | None = None,
     on_wave: Callable[[list[Row]], None] | None = None,
 ) -> list[Row]:
-    """Run every wave of the plan. Rows already present (a resumed run) are kept, not re-sent."""
+    """Run every wave of the plan.
+
+    On a resumed run, rows that already hold an answer are kept and not re-sent.
+    Rows whose request failed last time are sent again, synchronously: there are
+    few of them, and the batch they belonged to has already ended.
+    """
     index = task_index(tasks)
-    rows: list[Row] = list(done_rows or [])
+    earlier = list(done_rows or [])
+    rows: list[Row] = [row for row in earlier if row["status"] != "error"]
+    failed = {row["custom_id"] for row in earlier if row["status"] == "error"}
     have = {row["custom_id"] for row in rows}
-    guard.record(sum(row["billed_usd"] for row in rows), 0.0)
+    guard.record(sum(row["billed_usd"] for row in earlier), 0.0)
     pending = [
-        (name, [r for r in requests if r.custom_id not in have]) for name, requests in waves(plan)
+        (
+            name,
+            [
+                replace(request, mode="sync") if request.custom_id in failed else request
+                for request in requests
+                if request.custom_id not in have
+            ],
+        )
+        for name, requests in waves(plan)
     ]
     pending = [(name, requests) for name, requests in pending if requests]
 

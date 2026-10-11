@@ -29,7 +29,14 @@ import anthropic
 from . import store
 from .caching import DEFAULT_CALLS, estimate_caching_usd, run_caching, simulate_caching
 from .claude_client import client_for_key, count_tokens
-from .config import DEFAULT_EFFORTS, EFFORTS, MODEL_BY_SHORT, MODELS, pricing_snapshot
+from .config import (
+    DEFAULT_EFFORTS,
+    EFFORTS,
+    MODEL_BY_SHORT,
+    MODELS,
+    SHORT_NAMES,
+    pricing_snapshot,
+)
 from .estimate import Estimate, estimate_plan, format_estimate
 from .export import REPO_ROOT, export_run, suite_hash
 from .graders import GraderUnavailable
@@ -39,6 +46,7 @@ from .plan import (
     DEFAULT_TRIALS,
     Arm,
     PlannedRequest,
+    arm_from_key,
     build_arms,
     build_plan,
 )
@@ -258,6 +266,14 @@ def execute_run(
             return 1
         if store.results_path(run_id, root).exists():
             done = store.read_rows(store.results_path(run_id, root))
+        # A resumed run keeps the matrix it started with, whatever flags are passed now.
+        matrix = resumed.get("matrix")
+        if matrix:
+            args.models = tuple(MODEL_BY_SHORT[name] for name in matrix["models"])
+            args.efforts = tuple(matrix["efforts"])
+            args.trials = matrix["trials"]
+            args.mode = matrix["mode"]
+            args.latency_sample = matrix["latency_sample"]
 
     arms, plan = _plan_from(args, tasks)
     estimate = _estimate(args, tasks, plan)
@@ -280,6 +296,14 @@ def execute_run(
         "budget_usd": args.budget,
         "estimate_usd": round(estimate.total_usd, 4),
         "batches": dict(resumed.get("batches", {})),
+        "matrix": {
+            "models": [SHORT_NAMES[model] for model in args.models],
+            "efforts": list(args.efforts),
+            "trials": args.trials,
+            # The resolved mode, so a resumed run cannot flip between batch and sync.
+            "mode": "batch" if any(request.mode == "batch" for request in plan) else "sync",
+            "latency_sample": args.latency_sample,
+        },
     }
     if resumed.get("created_at"):
         meta["created_at"] = resumed["created_at"]
@@ -309,7 +333,9 @@ def execute_run(
             executor, tasks, plan, run_id=run_id, guard=guard, done_rows=done, on_wave=checkpoint
         )
         guard.require(estimate.judge_usd, "the judge")
-        rows = grade_rows(rows, tasks, judge_many=opus_judge(executor), log=log)
+        rows = grade_rows(
+            rows, tasks, judge_many=opus_judge(executor), keep_judged=bool(args.resume), log=log
+        )
         guard.record(sum(row["judge_usd"] or 0.0 for row in rows), estimate.judge_usd)
         caching = None
         if not args.no_caching:
@@ -398,40 +424,33 @@ def _load_run(run_id: str, root: Path) -> tuple[list[store.Row], dict[str, Any],
 
 
 def cmd_grade(args: argparse.Namespace, log: Log = print, *, root: Path = store.RUNS_DIR) -> int:
+    """Re-run the deterministic graders. The judge's verdicts are kept unless --rejudge is given."""
     rows, meta, tasks = _load_run(args.run, root)
-    judged = {row["custom_id"]: row for row in rows if row["grader"] == "judge"}
-    judge: JudgeMany
-    if args.rejudge:
-        if meta.get("synthetic"):
-            seed = (meta.get("generator") or {}).get("seed", DEFAULT_SEED)
-            judge = simulated_judge(seed)
-        else:
-            client = _client()
-            if client is None:
-                log("--rejudge needs ANTHROPIC_API_KEY.")
-                return 2
-            judge = opus_judge(Executor(client, log=log))
-    else:
-        # Keep the judge's earlier verdicts; only the deterministic graders run again.
-        def judge(items: list[tuple[store.Row, Task]]) -> dict[str, Any]:
-            from .graders import Grade
-
-            kept: dict[str, Any] = {}
-            for row, _task in items:
-                old = judged[row["custom_id"]]
-                grade = None
-                if old["score"] is not None:
-                    grade = Grade(
-                        old["score"], bool(old["passed"]), json.loads(old["grader_details"])
-                    )
-                kept[row["custom_id"]] = (grade, old["judge_usd"] or 0.0)
-            return kept
-
+    needs_judge = args.rejudge or any(
+        row["grader"] == "judge"
+        and row["score"] is None
+        and row["status"] not in ("refusal", "error")
+        for row in rows
+    )
+    judge: JudgeMany | None = None
+    if needs_judge and meta.get("synthetic"):
+        judge = simulated_judge((meta.get("generator") or {}).get("seed", DEFAULT_SEED))
+    elif needs_judge:
+        client = _client()
+        if client is None:
+            log("Open-ended answers need the Opus judge, and ANTHROPIC_API_KEY is not set.")
+            return 2
+        judge = opus_judge(Executor(client, log=log))
     try:
-        graded = grade_rows(rows, tasks, judge_many=judge, log=log)
+        graded = grade_rows(rows, tasks, judge_many=judge, keep_judged=not args.rejudge, log=log)
     except GraderUnavailable as missing:
         log(str(missing))
         return 2
+    if meta.get("synthetic"):
+        # Re-grading drops the simulator's note from each row; put it back.
+        arms = [arm_from_key(key) for key in meta["arms"]]
+        plan = build_plan(tasks, arms, trials=meta["trials"])
+        annotate(graded, plan, tasks, (meta.get("generator") or {}).get("seed", DEFAULT_SEED))
     store.write_rows(store.results_path(args.run, root), graded)
     passed = sum(1 for row in graded if row["passed"])
     log(f"graded {len(graded)} rows: {passed} passed")
