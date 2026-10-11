@@ -59,6 +59,17 @@ describe("POST /api/route-and-run in demo mode", () => {
     });
   }, 30_000);
 
+  it("copes with a visitor who leaves in the middle of a replay", async () => {
+    const res = await POST(post(preset.body));
+    const reader = res.body!.getReader();
+    const first = await reader.read();
+    expect(new TextDecoder().decode(first.value)).toContain('"type":"meta"');
+    // Closing the tab cancels the stream, so the route's next write fails. The replay must end
+    // there without an unhandled error, which would fail this test run.
+    await reader.cancel();
+    await new Promise((resolve) => setTimeout(resolve, 700));
+  });
+
   it("explains that a free-form prompt needs a key, without calling anything", async () => {
     const res = await POST(post({ prompt: "What is the capital of Australia?" }));
     expect(res.status).toBe(404);

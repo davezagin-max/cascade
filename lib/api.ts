@@ -294,15 +294,23 @@ export function streamRoute<B, D, E>(config: StreamRouteConfig<B, D, E>) {
           }
         } catch (error) {
           const mapped = toApiError(error);
-          send({
-            type: "error",
-            error: {
-              kind: mapped.status === 401 ? "auth" : mapped.status === 429 ? "rate_limit" : "server",
-              message: mapped.message,
-            },
-          });
+          try {
+            send({
+              type: "error",
+              error: {
+                kind: mapped.status === 401 ? "auth" : mapped.status === 429 ? "rate_limit" : "server",
+                message: mapped.message,
+              },
+            });
+          } catch {
+            // The visitor disconnected (that is usually what aborted the run): nobody to tell.
+          }
         } finally {
-          controller.close();
+          try {
+            controller.close();
+          } catch {
+            // Already closed by the disconnect.
+          }
         }
       },
     });
