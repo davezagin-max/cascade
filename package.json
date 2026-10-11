@@ -14,7 +14,8 @@
     "smoke": "vitest run tests/kit/smoke.live.test.ts",
     "record": "node scripts/record.mjs",
     "screenshots": "node scripts/screenshot.mjs",
-    "overflow": "node scripts/overflow.mjs"
+    "overflow": "node scripts/overflow.mjs",
+    "interactions": "node scripts/interactions.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",

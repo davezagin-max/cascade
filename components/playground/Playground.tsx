@@ -173,12 +173,27 @@ export function Playground({ presets, maxChars }: Props) {
             className="min-w-0 resize-y border border-border bg-surface p-2.5 font-mono text-[13px] leading-relaxed outline-none focus-visible:border-fg"
           />
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            {/*
+              The two buttons have different keys on purpose. Without them React would reuse one
+              DOM node, turn it from type="button" into type="submit" while the click on Stop is
+              still being dispatched, and the browser would then submit the form: Stop would
+              cancel the request and immediately send it again.
+            */}
             {busy ? (
-              <button type="button" onClick={stop} className="border border-fg px-3 py-2 text-sm font-medium hover:bg-surface">
+              <button
+                key="stop"
+                type="button"
+                onClick={(event) => {
+                  event.preventDefault();
+                  stop();
+                }}
+                className="border border-fg px-3 py-2 text-sm font-medium hover:bg-surface"
+              >
                 Stop
               </button>
             ) : (
               <button
+                key="run"
                 type="submit"
                 disabled={!canRun}
                 className="bg-accent px-3 py-2 text-sm font-medium text-accent-fg hover:opacity-90 disabled:opacity-40"
