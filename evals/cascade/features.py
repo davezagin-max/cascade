@@ -13,7 +13,7 @@ shapes every choice in this file:
   (`n / (n + k)`), all of which are exact in IEEE 754. There is no `log` or `exp`,
   whose last bit can differ between a C library and a JavaScript engine.
 
-`tests/test_features.py` and `tests/router-parity.test.ts` check both
+`evals/tests/test_router.py` and `tests/router-parity.test.ts` check both
 implementations against the same exported vectors.
 """
 

@@ -51,7 +51,7 @@ from .plan import (
     build_plan,
 )
 from .prompts import messages_for, system_prompt
-from .router import DEFAULT_FOLDS, DEFAULT_L2, DEFAULT_THRESHOLD, train_router
+from .router import DEFAULT_FOLDS, DEFAULT_THRESHOLD, train_router
 from .runner import BudgetExceeded, BudgetGuard, Executor, run_matrix
 from .simulate import DEFAULT_SEED, SIMULATOR_NOTE, annotate, simulate_rows, simulated_judge
 from .tasks import Task, load_tasks
@@ -373,7 +373,7 @@ def cmd_run(args: argparse.Namespace, log: Log = print) -> int:
     client = _client()
     if client is None:
         log(
-            "ANTHROPIC_API_KEY is not set. Add it to the environment or to ~/portfolio/.env.\n"
+            "ANTHROPIC_API_KEY is not set. Add it to the environment or to evals/.env.\n"
             "To exercise the pipeline without a key, use `cascade simulate`."
         )
         return 2
@@ -473,7 +473,15 @@ def cmd_train_router(
     store.write_json(store.run_dir(args.run, root) / "router.json", model)
     cv = model["cv"]
     tag = " (SIMULATED DATA)" if meta["synthetic"] else ""
-    log(f"router {model['version']}{tag}, threshold {model['threshold']}")
+    chosen = "selected by cross-validation" if model["l2_selection"] else "fixed"
+    log(
+        f"router {model['version']}{tag}, threshold {model['threshold']}, "
+        f"L2 penalty {model['l2']:g} ({chosen})"
+    )
+    log(
+        f"  held-out log loss: {cv['log_loss']['router']:.4f} with prompt features, "
+        f"{cv['log_loss']['arms_only']:.4f} with arm abilities alone"
+    )
     log(
         f"  cost saved versus {cv['baseline_arm']}: {cv['router']['cost_saved']:.1%}   "
         f"quality retained: {cv['router']['quality_retained']:.1%}"
@@ -484,10 +492,17 @@ def cmd_train_router(
         f"{confusion['over_routed']} over-routed, {confusion['under_routed']} under-routed "
         f"of {cv['n_tasks']} tasks"
     )
-    log("  threshold sweep (threshold, cost saved, quality retained):")
+    log("  threshold sweep (threshold, cost saved, quality retained, best fixed arm at that cost):")
     for point in cv["sweep"]:
+        fixed = point["best_fixed"]
+        versus = (
+            f"{fixed['arm']} {point['quality'] - fixed['quality']:+.1%}"
+            if fixed
+            else "none cheaper"
+        )
         log(
-            f"    {point['threshold']:.2f}  {point['cost_saved']:>7.1%}  {point['quality_retained']:>7.1%}"
+            f"    {point['threshold']:.2f}  {point['cost_saved']:>7.1%}  "
+            f"{point['quality_retained']:>7.1%}  {versus}"
         )
     return 0
 
@@ -581,7 +596,12 @@ def build_parser() -> argparse.ArgumentParser:
     train = commands.add_parser("train-router", help="fit and cross-validate the router")
     train.add_argument("run")
     train.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD)
-    train.add_argument("--l2", type=float, default=DEFAULT_L2)
+    train.add_argument(
+        "--l2",
+        type=float,
+        default=None,
+        help="fix the L2 penalty (default: selected by cross-validation)",
+    )
     train.add_argument("--folds", type=int, default=DEFAULT_FOLDS)
     train.set_defaults(handler=cmd_train_router)
 

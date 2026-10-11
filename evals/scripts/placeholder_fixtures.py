@@ -32,12 +32,11 @@ SAMPLES: list[dict[str, str]] = [
         "label": "Classify a support ticket",
         "prompt": (
             "Classify this support message as one of: billing, shipping, technical, account.\n\n"
-            '"My order says delivered but nothing has arrived, and the tracking link is dead."'
+            '"My order says delivered but nothing has arrived."'
         ),
         "answer": (
             "**shipping**\n\nThe customer is reporting a parcel marked delivered that never "
-            "arrived, plus a broken tracking link. Both are delivery problems, not a charge, a "
-            "product fault, or a login issue."
+            "arrived. That is a delivery problem, not a charge, a product fault, or a login issue."
         ),
     },
     {

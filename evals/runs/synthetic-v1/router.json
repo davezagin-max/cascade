@@ -1,14 +1,48 @@
 {
-  "version": "1206d2c22b6f",
+  "version": "dbf4c281996f",
   "trained_on": {
     "run_id": "synthetic-v1",
     "synthetic": true,
     "n_tasks": 63,
-    "n_rows": 1701
+    "n_rows": 1701,
+    "skipped_tasks": []
   },
   "threshold": 0.9,
   "threshold_logit": 2.197225,
-  "l2": 1.0,
+  "l2": 30.0,
+  "l2_selection": {
+    "method": "grouped 4-fold cross-validation on held-out log loss",
+    "grid": [
+      {
+        "l2": 0.3,
+        "loss": 0.64214343
+      },
+      {
+        "l2": 1.0,
+        "loss": 0.60115037
+      },
+      {
+        "l2": 3.0,
+        "loss": 0.54781053
+      },
+      {
+        "l2": 10.0,
+        "loss": 0.49531158
+      },
+      {
+        "l2": 30.0,
+        "loss": 0.47486336
+      },
+      {
+        "l2": 100.0,
+        "loss": 0.48143342
+      },
+      {
+        "l2": 300.0,
+        "loss": 0.50203674
+      }
+    ]
+  },
   "baseline_arm": "opus-high",
   "features": [
     {
@@ -358,31 +392,31 @@
     0.130213
   ],
   "weights": [
-    -1.462717,
-    -0.402361,
-    0.422594,
-    -0.84436,
-    0.941018,
-    -0.382778,
-    0.06244,
-    0.633711,
-    0.728977,
-    -0.27722,
-    -0.551228,
-    -0.030517,
-    -0.453351,
-    0.305092,
-    0.271475,
-    -0.798308,
-    0.343299,
-    -0.099344
+    -0.220312,
+    -0.228748,
+    0.134602,
+    -0.197725,
+    0.034128,
+    -0.190451,
+    -0.034299,
+    0.280842,
+    0.306366,
+    -0.305722,
+    -0.365374,
+    -0.12721,
+    -0.243463,
+    -0.017443,
+    0.038662,
+    -0.354375,
+    0.1715,
+    -0.029267
   ],
   "arms": [
     {
       "key": "haiku-low",
       "model": "claude-haiku-5-5",
       "effort": "low",
-      "bias": -0.001517,
+      "bias": 0.011878,
       "cost_per_request": 0.00010449,
       "pass_rate": 0.502646
     },
@@ -390,7 +424,7 @@
       "key": "haiku-medium",
       "model": "claude-haiku-5-5",
       "effort": "medium",
-      "bias": 0.622359,
+      "bias": 0.532144,
       "cost_per_request": 0.00021597,
       "pass_rate": 0.608466
     },
@@ -398,7 +432,7 @@
       "key": "haiku-high",
       "model": "claude-haiku-5-5",
       "effort": "high",
-      "bias": 1.159781,
+      "bias": 0.979423,
       "cost_per_request": 0.00043947,
       "pass_rate": 0.693122
     },
@@ -406,7 +440,7 @@
       "key": "sonnet-low",
       "model": "claude-sonnet-5-5",
       "effort": "low",
-      "bias": 1.020274,
+      "bias": 0.863184,
       "cost_per_request": 0.00250201,
       "pass_rate": 0.671958
     },
@@ -414,7 +448,7 @@
       "key": "sonnet-medium",
       "model": "claude-sonnet-5-5",
       "effort": "medium",
-      "bias": 1.491727,
+      "bias": 1.256822,
       "cost_per_request": 0.00510974,
       "pass_rate": 0.740741
     },
@@ -422,7 +456,7 @@
       "key": "opus-low",
       "model": "claude-opus-5-5",
       "effort": "low",
-      "bias": 1.902336,
+      "bias": 1.60238,
       "cost_per_request": 0.00574815,
       "pass_rate": 0.793651
     },
@@ -430,7 +464,7 @@
       "key": "sonnet-high",
       "model": "claude-sonnet-5-5",
       "effort": "high",
-      "bias": 2.49368,
+      "bias": 2.107336,
       "cost_per_request": 0.01120185,
       "pass_rate": 0.857143
     },
@@ -438,7 +472,7 @@
       "key": "opus-medium",
       "model": "claude-opus-5-5",
       "effort": "medium",
-      "bias": 3.230602,
+      "bias": 2.754242,
       "cost_per_request": 0.01213873,
       "pass_rate": 0.915344
     },
@@ -446,7 +480,7 @@
       "key": "opus-high",
       "model": "claude-opus-5-5",
       "effort": "high",
-      "bias": 3.404203,
+      "bias": 2.910099,
       "cost_per_request": 0.02618751,
       "pass_rate": 0.925926
     }
@@ -461,19 +495,24 @@
       "cost_per_request": 0.02618751
     },
     "router": {
-      "quality": 0.84126984,
-      "cost_per_request": 0.01211665,
-      "cost_saved": 0.53731194,
-      "quality_retained": 0.90857143,
+      "quality": 0.86772487,
+      "cost_per_request": 0.01464841,
+      "cost_saved": 0.44063365,
+      "quality_retained": 0.93714286,
       "mix": {
-        "haiku-low": 4,
-        "haiku-medium": 4,
-        "haiku-high": 13,
+        "haiku-low": 2,
+        "haiku-medium": 1,
+        "haiku-high": 3,
         "sonnet-medium": 2,
-        "opus-low": 7,
-        "sonnet-high": 7,
-        "opus-medium": 18,
-        "opus-high": 8
+        "opus-low": 5,
+        "sonnet-high": 16,
+        "opus-medium": 24,
+        "opus-high": 10
+      },
+      "best_fixed": {
+        "arm": "opus-medium",
+        "quality": 0.91534392,
+        "cost_per_request": 0.01213873
       }
     },
     "oracle": {
@@ -491,174 +530,224 @@
         "sonnet-high": 7,
         "opus-medium": 4,
         "opus-high": 3
+      },
+      "best_fixed": {
+        "arm": "sonnet-medium",
+        "quality": 0.74074074,
+        "cost_per_request": 0.00510974
       }
     },
     "sweep": [
       {
         "threshold": 0.5,
-        "quality": 0.66137566,
-        "cost_per_request": 0.00331327,
-        "cost_saved": 0.87347886,
-        "quality_retained": 0.71428571,
+        "quality": 0.6031746,
+        "cost_per_request": 0.00191161,
+        "cost_saved": 0.92700295,
+        "quality_retained": 0.65142857,
         "mix": {
-          "haiku-low": 35,
-          "haiku-medium": 5,
+          "haiku-low": 33,
+          "haiku-medium": 10,
           "haiku-high": 8,
-          "sonnet-medium": 2,
-          "opus-low": 4,
-          "sonnet-high": 3,
-          "opus-medium": 6
+          "sonnet-medium": 6,
+          "opus-low": 2,
+          "sonnet-high": 2,
+          "opus-medium": 2
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.55,
-        "quality": 0.71957672,
-        "cost_per_request": 0.00398293,
-        "cost_saved": 0.8479073,
-        "quality_retained": 0.77714286,
+        "quality": 0.65079365,
+        "cost_per_request": 0.00249543,
+        "cost_saved": 0.90470918,
+        "quality_retained": 0.70285714,
         "mix": {
-          "haiku-low": 33,
-          "haiku-medium": 5,
-          "haiku-high": 5,
-          "sonnet-medium": 6,
+          "haiku-low": 26,
+          "haiku-medium": 14,
+          "haiku-high": 9,
+          "sonnet-medium": 5,
           "opus-low": 4,
-          "sonnet-high": 2,
-          "opus-medium": 8
+          "sonnet-high": 3,
+          "opus-medium": 2
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.6,
         "quality": 0.6984127,
-        "cost_per_request": 0.00456199,
-        "cost_saved": 0.82579526,
+        "cost_per_request": 0.00309438,
+        "cost_saved": 0.88183774,
         "quality_retained": 0.75428571,
         "mix": {
-          "haiku-low": 29,
-          "haiku-medium": 6,
-          "haiku-high": 6,
-          "sonnet-medium": 6,
+          "haiku-low": 19,
+          "haiku-medium": 15,
+          "haiku-high": 12,
+          "sonnet-medium": 4,
           "opus-low": 6,
-          "sonnet-high": 2,
-          "opus-medium": 7,
-          "opus-high": 1
+          "sonnet-high": 3,
+          "opus-medium": 4
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.65,
-        "quality": 0.68783069,
-        "cost_per_request": 0.00666423,
-        "cost_saved": 0.74551873,
-        "quality_retained": 0.74285714,
+        "quality": 0.71957672,
+        "cost_per_request": 0.00401349,
+        "cost_saved": 0.84674014,
+        "quality_retained": 0.77714286,
         "mix": {
-          "haiku-low": 25,
-          "haiku-medium": 10,
-          "haiku-high": 3,
-          "sonnet-medium": 5,
-          "opus-low": 6,
+          "haiku-low": 14,
+          "haiku-medium": 15,
+          "haiku-high": 10,
+          "sonnet-medium": 8,
+          "opus-low": 7,
           "sonnet-high": 4,
-          "opus-medium": 6,
-          "opus-high": 4
+          "opus-medium": 5
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.7,
-        "quality": 0.72486772,
-        "cost_per_request": 0.00707539,
-        "cost_saved": 0.72981836,
-        "quality_retained": 0.78285714,
+        "quality": 0.77777778,
+        "cost_per_request": 0.00513537,
+        "cost_saved": 0.80390002,
+        "quality_retained": 0.84,
         "mix": {
-          "haiku-low": 23,
-          "haiku-medium": 7,
-          "haiku-high": 7,
-          "sonnet-medium": 2,
-          "opus-low": 7,
-          "sonnet-high": 7,
-          "opus-medium": 6,
-          "opus-high": 4
+          "haiku-low": 9,
+          "haiku-medium": 11,
+          "haiku-high": 16,
+          "sonnet-medium": 3,
+          "opus-low": 9,
+          "sonnet-high": 8,
+          "opus-medium": 7
+        },
+        "best_fixed": {
+          "arm": "sonnet-medium",
+          "quality": 0.74074074,
+          "cost_per_request": 0.00510974
         }
       },
       {
         "threshold": 0.75,
-        "quality": 0.74603175,
-        "cost_per_request": 0.00763656,
-        "cost_saved": 0.70838909,
-        "quality_retained": 0.80571429,
+        "quality": 0.81481481,
+        "cost_per_request": 0.00651196,
+        "cost_saved": 0.7513333,
+        "quality_retained": 0.88,
         "mix": {
-          "haiku-low": 21,
+          "haiku-low": 7,
           "haiku-medium": 6,
-          "haiku-high": 8,
-          "sonnet-medium": 3,
-          "opus-low": 5,
-          "sonnet-high": 7,
-          "opus-medium": 9,
-          "opus-high": 4
+          "haiku-high": 16,
+          "sonnet-medium": 9,
+          "opus-low": 3,
+          "sonnet-high": 12,
+          "opus-medium": 10
+        },
+        "best_fixed": {
+          "arm": "opus-low",
+          "quality": 0.79365079,
+          "cost_per_request": 0.00574815
         }
       },
       {
         "threshold": 0.8,
-        "quality": 0.79365079,
-        "cost_per_request": 0.0086443,
-        "cost_saved": 0.66990763,
-        "quality_retained": 0.85714286,
+        "quality": 0.7989418,
+        "cost_per_request": 0.0086279,
+        "cost_saved": 0.67053386,
+        "quality_retained": 0.86285714,
         "mix": {
-          "haiku-low": 9,
-          "haiku-medium": 15,
-          "haiku-high": 7,
-          "sonnet-medium": 4,
-          "opus-low": 3,
-          "sonnet-high": 10,
-          "opus-medium": 11,
-          "opus-high": 4
+          "haiku-low": 4,
+          "haiku-medium": 4,
+          "haiku-high": 9,
+          "sonnet-medium": 13,
+          "opus-low": 9,
+          "sonnet-high": 7,
+          "opus-medium": 16,
+          "opus-high": 1
+        },
+        "best_fixed": {
+          "arm": "opus-low",
+          "quality": 0.79365079,
+          "cost_per_request": 0.00574815
         }
       },
       {
         "threshold": 0.85,
-        "quality": 0.8042328,
-        "cost_per_request": 0.00976627,
-        "cost_saved": 0.62706399,
-        "quality_retained": 0.86857143,
+        "quality": 0.86772487,
+        "cost_per_request": 0.0109334,
+        "cost_saved": 0.58249549,
+        "quality_retained": 0.93714286,
         "mix": {
-          "haiku-low": 6,
-          "haiku-medium": 8,
-          "haiku-high": 12,
-          "sonnet-medium": 6,
-          "opus-low": 4,
-          "sonnet-high": 5,
-          "opus-medium": 17,
-          "opus-high": 5
+          "haiku-low": 2,
+          "haiku-medium": 4,
+          "haiku-high": 5,
+          "sonnet-medium": 5,
+          "opus-low": 13,
+          "sonnet-high": 10,
+          "opus-medium": 20,
+          "opus-high": 4
+        },
+        "best_fixed": {
+          "arm": "opus-low",
+          "quality": 0.79365079,
+          "cost_per_request": 0.00574815
         }
       },
       {
         "threshold": 0.9,
-        "quality": 0.84126984,
-        "cost_per_request": 0.01211665,
-        "cost_saved": 0.53731194,
-        "quality_retained": 0.90857143,
+        "quality": 0.86772487,
+        "cost_per_request": 0.01464841,
+        "cost_saved": 0.44063365,
+        "quality_retained": 0.93714286,
         "mix": {
-          "haiku-low": 4,
-          "haiku-medium": 4,
-          "haiku-high": 13,
+          "haiku-low": 2,
+          "haiku-medium": 1,
+          "haiku-high": 3,
           "sonnet-medium": 2,
-          "opus-low": 7,
-          "sonnet-high": 7,
-          "opus-medium": 18,
-          "opus-high": 8
+          "opus-low": 5,
+          "sonnet-high": 16,
+          "opus-medium": 24,
+          "opus-high": 10
+        },
+        "best_fixed": {
+          "arm": "opus-medium",
+          "quality": 0.91534392,
+          "cost_per_request": 0.01213873
         }
       },
       {
         "threshold": 0.95,
-        "quality": 0.86772487,
-        "cost_per_request": 0.01548279,
-        "cost_saved": 0.40877218,
-        "quality_retained": 0.93714286,
+        "quality": 0.88888889,
+        "cost_per_request": 0.01781059,
+        "cost_saved": 0.31988219,
+        "quality_retained": 0.96,
         "mix": {
-          "haiku-low": 2,
-          "haiku-medium": 3,
-          "sonnet-medium": 4,
-          "opus-low": 11,
-          "sonnet-high": 9,
-          "opus-medium": 21,
-          "opus-high": 13
+          "haiku-low": 1,
+          "haiku-medium": 1,
+          "opus-low": 3,
+          "sonnet-high": 4,
+          "opus-medium": 32,
+          "opus-high": 22
+        },
+        "best_fixed": {
+          "arm": "opus-medium",
+          "quality": 0.91534392,
+          "cost_per_request": 0.01213873
         }
       }
     ],
@@ -688,81 +777,26 @@
       ],
       "matrix": [
         [
-          2,
           1,
-          7,
           0,
-          0,
-          3,
-          2,
-          4,
-          1
-        ],
-        [
-          1,
-          1,
           3,
           0,
           1,
-          3,
           2,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          2,
-          3,
-          0
-        ],
-        [
-          1,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          1
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
+          5,
+          6,
           2
         ],
         [
           0,
+          0,
+          0,
+          0,
           1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          4,
-          1
+          3,
+          5,
+          3,
+          0
         ],
         [
           0,
@@ -771,8 +805,30 @@
           0,
           0,
           0,
+          3,
+          3,
+          0
+        ],
+        [
+          1,
           0,
-          2,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
           2
         ],
         [
@@ -782,8 +838,41 @@
           0,
           0,
           0,
-          1,
+          0,
           2,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          3,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
           0
         ],
         [
@@ -798,149 +887,154 @@
           1
         ]
       ],
-      "exact": 6,
-      "over_routed": 47,
-      "under_routed": 10
+      "exact": 5,
+      "over_routed": 53,
+      "under_routed": 5
     },
     "by_category": {
       "classification": {
         "n_tasks": 15,
-        "quality": 0.84444444,
-        "cost_per_request": 0.00147091,
+        "quality": 0.91111111,
+        "cost_per_request": 0.00272284,
         "baseline_quality": 0.97777778,
         "baseline_cost_per_request": 0.00639529,
         "mix": {
-          "haiku-low": 4,
-          "haiku-medium": 2,
-          "haiku-high": 4,
+          "haiku-low": 2,
+          "haiku-high": 2,
+          "sonnet-medium": 2,
           "opus-low": 2,
-          "opus-medium": 2,
-          "opus-high": 1
+          "sonnet-high": 1,
+          "opus-medium": 4,
+          "opus-high": 2
         }
       },
       "extraction": {
         "n_tasks": 14,
-        "quality": 0.83333333,
-        "cost_per_request": 0.002624,
+        "quality": 0.85714286,
+        "cost_per_request": 0.00500858,
         "baseline_quality": 0.95238095,
         "baseline_cost_per_request": 0.01362057,
         "mix": {
           "haiku-medium": 1,
-          "haiku-high": 5,
-          "sonnet-medium": 2,
+          "haiku-high": 1,
           "opus-low": 3,
-          "sonnet-high": 1,
-          "opus-medium": 2
+          "sonnet-high": 4,
+          "opus-medium": 5
         }
       },
       "reasoning": {
         "n_tasks": 16,
         "quality": 0.8125,
-        "cost_per_request": 0.02627022,
+        "cost_per_request": 0.02730242,
         "baseline_quality": 0.89583333,
         "baseline_cost_per_request": 0.04117908,
         "mix": {
-          "haiku-high": 1,
-          "opus-low": 1,
           "sonnet-high": 4,
-          "opus-medium": 4,
+          "opus-medium": 6,
           "opus-high": 6
         }
       },
       "code": {
         "n_tasks": 12,
-        "quality": 0.86111111,
-        "cost_per_request": 0.01915651,
+        "quality": 0.88888889,
+        "cost_per_request": 0.02440978,
         "baseline_quality": 0.91666667,
         "baseline_cost_per_request": 0.04356122,
         "mix": {
-          "haiku-medium": 1,
-          "haiku-high": 1,
-          "opus-low": 1,
-          "sonnet-high": 1,
-          "opus-medium": 7,
-          "opus-high": 1
+          "sonnet-high": 5,
+          "opus-medium": 5,
+          "opus-high": 2
         }
       },
       "open_ended": {
         "n_tasks": 6,
         "quality": 0.88888889,
-        "cost_per_request": 0.00905794,
+        "cost_per_request": 0.01368856,
         "baseline_quality": 0.83333333,
         "baseline_cost_per_request": 0.030266,
         "mix": {
-          "haiku-high": 2,
-          "sonnet-high": 1,
-          "opus-medium": 3
+          "sonnet-high": 2,
+          "opus-medium": 4
         }
       }
     },
     "calibration": {
-      "predicted": 0.87488838,
-      "realized": 0.84126984
+      "predicted": 0.88743595,
+      "realized": 0.86772487
     },
+    "log_loss": {
+      "router": 0.49594806,
+      "arms_only": 0.52823414
+    },
+    "l2_by_fold": [
+      30.0,
+      3.0,
+      30.0,
+      30.0,
+      100.0
+    ],
     "picks": {
-      "cls-ticket-billing": "haiku-high",
+      "cls-ticket-billing": "sonnet-medium",
       "cls-review-positive": "haiku-low",
-      "cls-language-id": "haiku-medium",
-      "cls-review-mixed": "haiku-medium",
+      "cls-language-id": "haiku-high",
+      "cls-review-mixed": "opus-low",
       "cls-contract-clause": "haiku-high",
-      "cls-incident-severity": "opus-low",
-      "cls-off-by-one": "haiku-low",
-      "cls-sarcasm": "opus-low",
+      "cls-incident-severity": "opus-high",
+      "cls-off-by-one": "sonnet-medium",
+      "cls-sarcasm": "sonnet-high",
       "cls-intent-negation": "haiku-low",
-      "cls-quantifier-nli": "haiku-high",
-      "cls-lock-race": "haiku-low",
+      "cls-quantifier-nli": "opus-low",
+      "cls-lock-race": "opus-medium",
       "cls-log-leak": "opus-high",
       "cls-expense-policy": "opus-medium",
-      "cls-parcel-class": "haiku-high",
+      "cls-parcel-class": "opus-medium",
       "cls-subscription-state": "opus-medium",
-      "ext-contact-card": "haiku-high",
+      "ext-contact-card": "opus-low",
       "ext-invoice-header": "opus-medium",
-      "ext-log-line": "sonnet-high",
-      "ext-meeting-move": "haiku-high",
-      "ext-product-specs": "haiku-high",
-      "ext-org-teams": "opus-low",
+      "ext-log-line": "opus-medium",
+      "ext-meeting-move": "sonnet-high",
+      "ext-product-specs": "opus-low",
+      "ext-org-teams": "haiku-high",
       "ext-job-posting": "haiku-medium",
-      "ext-order-lines": "haiku-high",
-      "ext-german-invoice": "sonnet-medium",
+      "ext-order-lines": "sonnet-high",
+      "ext-german-invoice": "sonnet-high",
       "ext-server-inventory": "opus-low",
-      "ext-thread-corrections": "opus-low",
-      "ext-receipt-totals": "sonnet-medium",
-      "ext-lease-dates": "haiku-high",
+      "ext-thread-corrections": "opus-medium",
+      "ext-receipt-totals": "opus-medium",
+      "ext-lease-dates": "sonnet-high",
       "ext-manifest-row": "opus-medium",
       "rsn-crates": "opus-medium",
       "rsn-average-speed": "opus-high",
-      "rsn-original-price": "opus-low",
+      "rsn-original-price": "opus-medium",
       "rsn-ages": "sonnet-high",
       "rsn-pen-notebook": "opus-medium",
       "rsn-level-anagrams": "opus-medium",
       "rsn-two-pumps": "sonnet-high",
-      "rsn-weekday": "haiku-high",
+      "rsn-weekday": "sonnet-high",
       "rsn-market-stall": "opus-high",
       "rsn-power-mod": "opus-high",
-      "rsn-dice-product": "opus-high",
-      "rsn-talk-schedule": "opus-medium",
+      "rsn-dice-product": "opus-medium",
+      "rsn-talk-schedule": "opus-high",
       "rsn-round-table": "opus-high",
       "rsn-inclusion-exclusion": "opus-high",
       "rsn-coin-pattern": "sonnet-high",
-      "rsn-digit-sum": "sonnet-high",
-      "code-count-vowels": "opus-low",
-      "code-dedupe": "haiku-high",
+      "rsn-digit-sum": "opus-medium",
+      "code-count-vowels": "sonnet-high",
+      "code-dedupe": "sonnet-high",
       "code-roman": "sonnet-high",
-      "code-merge-intervals": "opus-medium",
+      "code-merge-intervals": "sonnet-high",
       "code-rle-decode": "opus-medium",
       "code-parse-duration": "opus-medium",
       "code-lru-cache": "opus-medium",
-      "code-topo-order": "opus-medium",
-      "code-count-inversions": "opus-medium",
+      "code-topo-order": "opus-high",
+      "code-count-inversions": "sonnet-high",
       "code-compare-versions": "opus-high",
       "code-min-window": "opus-medium",
-      "code-evaluate": "haiku-medium",
+      "code-evaluate": "opus-medium",
       "open-incident-summary": "opus-medium",
       "open-decline-vendor": "sonnet-high",
-      "open-explain-consistency": "haiku-high",
-      "open-code-review": "haiku-high",
+      "open-explain-consistency": "sonnet-high",
+      "open-code-review": "opus-medium",
       "open-queue-decision": "opus-medium",
       "open-ab-paradox": "opus-medium"
     },
@@ -1010,69 +1104,69 @@
       "open-ab-paradox": "opus-medium"
     },
     "predicted_pass": {
-      "cls-ticket-billing": 0.93397809,
-      "cls-quantifier-nli": 0.91135185,
-      "cls-parcel-class": 0.90579126,
-      "ext-german-invoice": 0.92009001,
-      "ext-thread-corrections": 0.90143519,
-      "ext-lease-dates": 0.91280903,
-      "rsn-original-price": 0.91801096,
-      "rsn-dice-product": 0.88993919,
-      "rsn-talk-schedule": 0.90847387,
-      "rsn-inclusion-exclusion": 0.70886165,
-      "code-dedupe": 0.90708418,
-      "code-count-inversions": 0.94240515,
-      "code-evaluate": 0.90084448,
-      "open-incident-summary": 0.95751533,
-      "open-explain-consistency": 0.91087227,
-      "cls-review-positive": 0.97427439,
-      "cls-intent-negation": 0.92608596,
-      "cls-expense-policy": 0.62013736,
-      "ext-invoice-header": 0.9016115,
-      "ext-server-inventory": 0.92385651,
-      "ext-manifest-row": 0.32393751,
-      "rsn-ages": 0.94785644,
-      "rsn-two-pumps": 0.95664885,
-      "rsn-coin-pattern": 0.93287183,
-      "code-roman": 0.95509513,
-      "code-parse-duration": 0.34692247,
-      "code-min-window": 0.87964526,
-      "open-ab-paradox": 0.63870473,
-      "cls-language-id": 0.95276268,
-      "cls-review-mixed": 0.90581292,
-      "cls-subscription-state": 0.92461744,
-      "ext-meeting-move": 0.92730629,
-      "ext-org-teams": 0.93625087,
-      "ext-job-posting": 0.92175759,
-      "rsn-crates": 0.93020018,
-      "rsn-pen-notebook": 0.87885974,
-      "rsn-level-anagrams": 0.90134221,
-      "code-count-vowels": 0.91791188,
-      "code-lru-cache": 0.8487864,
-      "open-queue-decision": 0.78391954,
-      "cls-contract-clause": 0.93445668,
-      "cls-sarcasm": 0.93388173,
-      "cls-log-leak": 0.70174826,
-      "ext-contact-card": 0.92045289,
-      "ext-log-line": 0.91143282,
-      "ext-receipt-totals": 0.93119543,
-      "rsn-average-speed": 0.88866062,
-      "rsn-weekday": 0.90354958,
-      "rsn-power-mod": 0.89277709,
-      "code-rle-decode": 0.934827,
-      "code-topo-order": 0.92021524,
-      "open-decline-vendor": 0.93581127,
-      "cls-incident-severity": 0.91426227,
-      "cls-off-by-one": 0.98334235,
-      "cls-lock-race": 0.91649462,
-      "ext-product-specs": 0.91092861,
-      "ext-order-lines": 0.91387893,
-      "rsn-market-stall": 0.91639751,
-      "rsn-round-table": 0.61658128,
-      "rsn-digit-sum": 0.94330927,
-      "code-merge-intervals": 0.90975217,
-      "code-compare-versions": 0.68610976,
-      "open-code-review": 0.91126453
+      "cls-ticket-billing": 0.91751373,
+      "cls-quantifier-nli": 0.9211045,
+      "cls-parcel-class": 0.94620068,
+      "ext-german-invoice": 0.92280138,
+      "ext-thread-corrections": 0.95643094,
+      "ext-lease-dates": 0.91090579,
+      "rsn-original-price": 0.93607714,
+      "rsn-dice-product": 0.90695209,
+      "rsn-talk-schedule": 0.88957438,
+      "rsn-inclusion-exclusion": 0.84899391,
+      "code-dedupe": 0.91942976,
+      "code-count-inversions": 0.90218762,
+      "code-evaluate": 0.95657545,
+      "open-incident-summary": 0.90103054,
+      "open-explain-consistency": 0.91082672,
+      "cls-review-positive": 0.95821512,
+      "cls-intent-negation": 0.91940891,
+      "cls-expense-policy": 0.66908182,
+      "ext-invoice-header": 0.92188905,
+      "ext-server-inventory": 0.91982406,
+      "ext-manifest-row": 0.42313434,
+      "rsn-ages": 0.94137202,
+      "rsn-two-pumps": 0.94936916,
+      "rsn-coin-pattern": 0.92914903,
+      "code-roman": 0.93837622,
+      "code-parse-duration": 0.38755026,
+      "code-min-window": 0.88387402,
+      "open-ab-paradox": 0.71093856,
+      "cls-language-id": 0.92106354,
+      "cls-review-mixed": 0.91282021,
+      "cls-subscription-state": 0.82245208,
+      "ext-meeting-move": 0.91261298,
+      "ext-org-teams": 0.90828876,
+      "ext-job-posting": 0.90864911,
+      "rsn-crates": 0.91287564,
+      "rsn-pen-notebook": 0.90398601,
+      "rsn-level-anagrams": 0.88409357,
+      "code-count-vowels": 0.9079531,
+      "code-lru-cache": 0.83821309,
+      "open-queue-decision": 0.8617761,
+      "cls-contract-clause": 0.91953551,
+      "cls-sarcasm": 0.91480507,
+      "cls-log-leak": 0.87044167,
+      "ext-contact-card": 0.91024318,
+      "ext-log-line": 0.92388916,
+      "ext-receipt-totals": 0.93044199,
+      "rsn-average-speed": 0.88551674,
+      "rsn-weekday": 0.928441,
+      "rsn-power-mod": 0.88026357,
+      "code-rle-decode": 0.9307973,
+      "code-topo-order": 0.89814546,
+      "open-decline-vendor": 0.91554136,
+      "cls-incident-severity": 0.91066009,
+      "cls-off-by-one": 0.90106897,
+      "cls-lock-race": 0.93429878,
+      "ext-product-specs": 0.90268956,
+      "ext-order-lines": 0.90687104,
+      "rsn-market-stall": 0.90780069,
+      "rsn-round-table": 0.88573631,
+      "rsn-digit-sum": 0.92076594,
+      "code-merge-intervals": 0.90310051,
+      "code-compare-versions": 0.90087869,
+      "open-code-review": 0.93296079
     }
   }
 }

@@ -17,7 +17,7 @@
         "model": "claude-opus-5-5",
         "effort": "high"
       },
-      "routerVersion": "1206d2c22b6f",
+      "routerVersion": "dbf4c281996f",
       "answer": "Count the ordered outcomes out of 6^3 = 216.\n\n- Sum 18: (6,6,6), 1 way.\n- Sum 17: one 5 and two 6s, 3 ways.\n- Sum 16: one 4 and two 6s (3 ways), or two 5s and one 6 (3 ways), 6 ways.\n\nThat is 1 + 3 + 6 = 10 outcomes, so the probability is 10/216 = **5/108**.",
       "stopReason": "end_turn",
       "comparison": null
@@ -32,7 +32,7 @@
             "model": "claude-opus-5-5",
             "effort": "high"
           },
-          "routerVersion": "1206d2c22b6f"
+          "routerVersion": "dbf4c281996f"
         }
       },
       {
@@ -475,7 +475,7 @@
     "label": "Explain a concept with one analogy",
     "placeholder": true,
     "recordedAt": null,
-    "model": "claude-haiku-5-5",
+    "model": "claude-sonnet-5-5",
     "usage": {
       "input_tokens": 0,
       "output_tokens": 0,
@@ -485,11 +485,11 @@
     "costUsd": 0,
     "data": {
       "arm": {
-        "key": "haiku-high",
-        "model": "claude-haiku-5-5",
+        "key": "sonnet-high",
+        "model": "claude-sonnet-5-5",
         "effort": "high"
       },
-      "routerVersion": "1206d2c22b6f",
+      "routerVersion": "dbf4c281996f",
       "answer": "A race condition is a bug where the result depends on the unlucky timing of two things happening at once.\n\nPicture two cashiers selling the last concert ticket. Each checks the system, sees one ticket left, and sells it. Both checks were correct when they were made, yet two customers now hold the same seat.\n\nIn code the cashiers are threads or requests, and the ticket is shared data. Each one reads a value, decides, then writes, and another slips in between the read and the write. The fix is to make check-and-update a single indivisible step, with a lock, a transaction, or an atomic operation.",
       "stopReason": "end_turn",
       "comparison": null
@@ -500,11 +500,11 @@
         "event": {
           "type": "decision",
           "arm": {
-            "key": "haiku-high",
-            "model": "claude-haiku-5-5",
+            "key": "sonnet-high",
+            "model": "claude-sonnet-5-5",
             "effort": "high"
           },
-          "routerVersion": "1206d2c22b6f"
+          "routerVersion": "dbf4c281996f"
         }
       },
       {
@@ -1255,7 +1255,7 @@
     "label": "Extract a meeting as JSON",
     "placeholder": true,
     "recordedAt": null,
-    "model": "claude-sonnet-5-5",
+    "model": "claude-opus-5-5",
     "usage": {
       "input_tokens": 0,
       "output_tokens": 0,
@@ -1265,11 +1265,11 @@
     "costUsd": 0,
     "data": {
       "arm": {
-        "key": "sonnet-high",
-        "model": "claude-sonnet-5-5",
-        "effort": "high"
+        "key": "opus-medium",
+        "model": "claude-opus-5-5",
+        "effort": "medium"
       },
-      "routerVersion": "1206d2c22b6f",
+      "routerVersion": "dbf4c281996f",
       "answer": "```json\n{\n  \"date\": \"2026-06-03\",\n  \"time_24h\": \"16:00\",\n  \"attendees\": [\"Ana\", \"Raj\"]\n}\n```\n\nThe message was sent on Monday 1 June 2026, so the Wednesday it refers to is 3 June.",
       "stopReason": "end_turn",
       "comparison": null
@@ -1280,11 +1280,11 @@
         "event": {
           "type": "decision",
           "arm": {
-            "key": "sonnet-high",
-            "model": "claude-sonnet-5-5",
-            "effort": "high"
+            "key": "opus-medium",
+            "model": "claude-opus-5-5",
+            "effort": "medium"
           },
-          "routerVersion": "1206d2c22b6f"
+          "routerVersion": "dbf4c281996f"
         }
       },
       {
@@ -1496,7 +1496,7 @@
     "label": "Write a linear-time merge",
     "placeholder": true,
     "recordedAt": null,
-    "model": "claude-sonnet-5-5",
+    "model": "claude-opus-5-5",
     "usage": {
       "input_tokens": 0,
       "output_tokens": 0,
@@ -1506,11 +1506,11 @@
     "costUsd": 0,
     "data": {
       "arm": {
-        "key": "sonnet-medium",
-        "model": "claude-sonnet-5-5",
-        "effort": "medium"
+        "key": "opus-low",
+        "model": "claude-opus-5-5",
+        "effort": "low"
       },
-      "routerVersion": "1206d2c22b6f",
+      "routerVersion": "dbf4c281996f",
       "answer": "```python\ndef merge_sorted(a: list[int], b: list[int]) -> list[int]:\n    merged: list[int] = []\n    i = j = 0\n    while i < len(a) and j < len(b):\n        if a[i] <= b[j]:\n            merged.append(a[i])\n            i += 1\n        else:\n            merged.append(b[j])\n            j += 1\n    merged.extend(a[i:])\n    merged.extend(b[j:])\n    return merged\n```\n\nTwo indices walk the lists once each, so the work is O(len(a) + len(b)). Using `<=` keeps equal elements from `a` ahead of those from `b`, which makes the merge stable. Neither input is modified.",
       "stopReason": "end_turn",
       "comparison": null
@@ -1521,11 +1521,11 @@
         "event": {
           "type": "decision",
           "arm": {
-            "key": "sonnet-medium",
-            "model": "claude-sonnet-5-5",
-            "effort": "medium"
+            "key": "opus-low",
+            "model": "claude-opus-5-5",
+            "effort": "low"
           },
-          "routerVersion": "1206d2c22b6f"
+          "routerVersion": "dbf4c281996f"
         }
       },
       {
@@ -2080,7 +2080,7 @@
     "label": "Write a short customer email",
     "placeholder": true,
     "recordedAt": null,
-    "model": "claude-haiku-5-5",
+    "model": "claude-opus-5-5",
     "usage": {
       "input_tokens": 0,
       "output_tokens": 0,
@@ -2090,11 +2090,11 @@
     "costUsd": 0,
     "data": {
       "arm": {
-        "key": "haiku-medium",
-        "model": "claude-haiku-5-5",
-        "effort": "medium"
+        "key": "opus-low",
+        "model": "claude-opus-5-5",
+        "effort": "low"
       },
-      "routerVersion": "1206d2c22b6f",
+      "routerVersion": "dbf4c281996f",
       "answer": "Subject: Your refund is on its way\n\nHi Maya,\n\nThanks for your patience. Your refund has been approved and is now with our payments team. It will reach your original payment method within five working days, and your bank may take another day to show it.\n\nI'm sorry for the wait. If the money has not arrived by next Friday, reply to this email and I will chase it personally.\n\nWarm regards,\nJo\nCustomer Support",
       "stopReason": "end_turn",
       "comparison": null
@@ -2105,11 +2105,11 @@
         "event": {
           "type": "decision",
           "arm": {
-            "key": "haiku-medium",
-            "model": "claude-haiku-5-5",
-            "effort": "medium"
+            "key": "opus-low",
+            "model": "claude-opus-5-5",
+            "effort": "low"
           },
-          "routerVersion": "1206d2c22b6f"
+          "routerVersion": "dbf4c281996f"
         }
       },
       {
@@ -2657,8 +2657,8 @@
         "model": "claude-haiku-5-5",
         "effort": "low"
       },
-      "routerVersion": "1206d2c22b6f",
-      "answer": "**shipping**\n\nThe customer is reporting a parcel marked delivered that never arrived, plus a broken tracking link. Both are delivery problems, not a charge, a product fault, or a login issue.",
+      "routerVersion": "dbf4c281996f",
+      "answer": "**shipping**\n\nThe customer is reporting a parcel marked delivered that never arrived. That is a delivery problem, not a charge, a product fault, or a login issue.",
       "stopReason": "end_turn",
       "comparison": null
     },
@@ -2672,7 +2672,7 @@
             "model": "claude-haiku-5-5",
             "effort": "low"
           },
-          "routerVersion": "1206d2c22b6f"
+          "routerVersion": "dbf4c281996f"
         }
       },
       {
@@ -2756,91 +2756,91 @@
         "at": 1305,
         "event": {
           "type": "text",
-          "delta": "arrived, "
+          "delta": "arrived. "
         }
       },
       {
         "at": 1360,
         "event": {
           "type": "text",
-          "delta": "plus "
+          "delta": "That "
         }
       },
       {
         "at": 1415,
         "event": {
           "type": "text",
-          "delta": "a "
+          "delta": "is "
         }
       },
       {
         "at": 1470,
         "event": {
           "type": "text",
-          "delta": "broken "
+          "delta": "a "
         }
       },
       {
         "at": 1525,
         "event": {
           "type": "text",
-          "delta": "tracking "
+          "delta": "delivery "
         }
       },
       {
         "at": 1580,
         "event": {
           "type": "text",
-          "delta": "link. "
+          "delta": "problem, "
         }
       },
       {
         "at": 1635,
         "event": {
           "type": "text",
-          "delta": "Both "
+          "delta": "not "
         }
       },
       {
         "at": 1690,
         "event": {
           "type": "text",
-          "delta": "are "
+          "delta": "a "
         }
       },
       {
         "at": 1745,
         "event": {
           "type": "text",
-          "delta": "delivery "
+          "delta": "charge, "
         }
       },
       {
         "at": 1800,
         "event": {
           "type": "text",
-          "delta": "problems, "
+          "delta": "a "
         }
       },
       {
         "at": 1855,
         "event": {
           "type": "text",
-          "delta": "not "
+          "delta": "product "
         }
       },
       {
         "at": 1910,
         "event": {
           "type": "text",
-          "delta": "a "
+          "delta": "fault, "
         }
       },
       {
         "at": 1965,
         "event": {
           "type": "text",
-          "delta": "charge, "
+          "delta": "or "
         }
       },
       {
@@ -2854,39 +2854,11 @@
         "at": 2075,
         "event": {
           "type": "text",
-          "delta": "product "
-        }
-      },
-      {
-        "at": 2130,
-        "event": {
-          "type": "text",
-          "delta": "fault, "
-        }
-      },
-      {
-        "at": 2185,
-        "event": {
-          "type": "text",
-          "delta": "or "
-        }
-      },
-      {
-        "at": 2240,
-        "event": {
-          "type": "text",
-          "delta": "a "
-        }
-      },
-      {
-        "at": 2295,
-        "event": {
-          "type": "text",
           "delta": "login "
         }
       },
       {
-        "at": 2350,
+        "at": 2130,
         "event": {
           "type": "text",
           "delta": "issue."

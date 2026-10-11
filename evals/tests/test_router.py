@@ -8,18 +8,25 @@ import pytest
 from cascade.export import REPO_ROOT
 from cascade.features import ascii_lower, extract_features, load_spec, normalize
 from cascade.router import (
+    ARMS_ONLY_L2,
+    L2_GRID,
     NONE,
     TaskStats,
     arms_by_cost,
     baseline_arm,
+    best_fixed_arm,
     choose_arm,
     cross_validate,
     fit,
     fold_of,
+    held_out_loss,
     logit,
     oracle_arm,
     route,
+    select_l2,
+    train_router,
 )
+from cascade.tasks import load_tasks
 
 SPEC = load_spec()
 NAMES = [feature["name"] for feature in SPEC]
@@ -151,6 +158,122 @@ def test_cross_validation_routes_unseen_tasks_and_reports_the_headline() -> None
     assert 0 < result["calibration"]["predicted"] <= 1
 
 
+def noise_stats(n: int = 60) -> list[TaskStats]:
+    """Tasks whose outcome has nothing to do with either feature."""
+    stats = []
+    for i in range(n):
+        lucky = (i * 7919) % 5  # unrelated to the features below
+        stats.append(
+            TaskStats(
+                task_id=f"n{i:02d}",
+                category=("classification", "reasoning", "code")[i % 3],
+                features=[((i * 37) % 11) / 11, ((i * 53) % 13) / 13],
+                pass_rate={
+                    "haiku-low": 1.0 if lucky < 2 else 0.0,
+                    "sonnet-low": 1.0 if lucky < 3 else 0.0,
+                    "opus-high": 1.0 if lucky < 4 else 0.0,
+                },
+                cost={"haiku-low": 0.001, "sonnet-low": 0.01, "opus-high": 0.1},
+            )
+        )
+    return stats
+
+
+def test_the_penalty_is_selected_by_held_out_loss_and_follows_the_signal() -> None:
+    # A clean signal wants a weak penalty; pure noise wants the strongest one on offer.
+    clean, clean_curve = select_l2(synthetic_stats())
+    noisy, noisy_curve = select_l2(noise_stats())
+    assert clean <= 1.0
+    assert noisy == L2_GRID[-1]
+    assert [point["l2"] for point in clean_curve] == list(L2_GRID)
+    assert min(point["loss"] for point in clean_curve) == held_out_loss(synthetic_stats(), l2=clean)
+    # On noise the selected model is no worse than having no features at all (to within a hair).
+    assert (
+        held_out_loss(noise_stats(), l2=noisy)
+        <= held_out_loss(noise_stats(), l2=ARMS_ONLY_L2) + 0.01
+    )
+    assert noisy_curve == select_l2(noise_stats())[1]  # deterministic
+
+
+def test_with_no_signal_the_router_collapses_to_one_arm_instead_of_routing_on_noise() -> None:
+    stats = noise_stats()
+    spec = [{"name": "a"}, {"name": "b"}]
+    result = cross_validate(stats, spec, threshold=0.7, folds=5)  # nested penalty selection
+    assert (
+        len(result["l2_by_fold"]) == 5 and min(result["l2_by_fold"]) >= 100.0
+    )  # strong, every fold
+    # Nearly every task goes to the same arm, so the router cannot fall far below it.
+    assert max(result["router"]["mix"].values()) >= 54
+    fixed = result["router"]["best_fixed"]
+    assert fixed is not None
+    assert result["router"]["quality"] >= fixed["quality"] - 0.05
+    # The features add nothing, and the report says so.
+    assert result["log_loss"]["router"] == pytest.approx(result["log_loss"]["arms_only"], abs=0.02)
+
+    informative = cross_validate(synthetic_stats(), spec, threshold=0.8, folds=5)
+    assert informative["log_loss"]["router"] < informative["log_loss"]["arms_only"] - 0.1
+    best = informative["router"]["best_fixed"]
+    assert best is not None and informative["router"]["quality"] > best["quality"] + 0.1
+
+
+def test_best_fixed_arm_is_the_strongest_arm_within_the_budget() -> None:
+    arms = ["cheap", "mid", "dear"]
+    fixed = {"cheap": (0.5, 1.0), "mid": (0.8, 5.0), "dear": (0.9, 20.0)}
+    assert best_fixed_arm(fixed, arms, 0.5) is None  # nothing is affordable
+    assert best_fixed_arm(fixed, arms, 1.0) == {
+        "arm": "cheap", "quality": 0.5, "cost_per_request": 1.0,
+    }  # fmt: skip
+    cheaper_mid = best_fixed_arm(fixed, arms, 19.99)
+    assert cheaper_mid is not None and cheaper_mid["arm"] == "mid"
+    dear = best_fixed_arm(fixed, arms, 20.0)
+    assert dear is not None and dear["arm"] == "dear"
+    # On equal quality the cheaper arm wins: it is the harder baseline to beat.
+    tied = best_fixed_arm({**fixed, "dear": (0.8, 20.0)}, arms, 50.0)
+    assert tied is not None and tied["arm"] == "mid"
+
+
+def _rows_for(task_ids: list[str], *, drop: tuple[str, str] | None = None) -> list[dict]:
+    """Graded rows for three arms; `drop` leaves one (task, model) cell with no graded answer."""
+    rows = []
+    for position, task_id in enumerate(task_ids):
+        for model, effort, cost in (
+            ("claude-haiku-5-5", "low", 0.001),
+            ("claude-sonnet-5-5", "low", 0.01),
+            ("claude-opus-5-5", "high", 0.1),
+        ):
+            ungraded = drop == (task_id, model)
+            strong = model != "claude-haiku-5-5" or position % 2 == 0
+            rows.append(
+                {
+                    "task_id": task_id,
+                    "model": model,
+                    "effort": effort,
+                    "passed": None if ungraded else strong,
+                    "cost_usd": cost,
+                }
+            )
+    return rows
+
+
+def test_a_task_with_an_ungraded_cell_is_left_out_instead_of_crashing_training() -> None:
+    tasks = load_tasks()[:24]
+    ids = [task.id for task in tasks]
+    complete = train_router(_rows_for(ids), tasks, run_id="r", synthetic=False, l2=1.0)
+    assert complete["trained_on"]["n_tasks"] == 24 and complete["trained_on"]["skipped_tasks"] == []
+    assert complete["l2"] == 1.0 and complete["l2_selection"] is None  # a fixed penalty is honoured
+
+    holed = train_router(
+        _rows_for(ids, drop=(ids[3], "claude-opus-5-5")),
+        tasks,
+        run_id="r",
+        synthetic=False,
+        l2=1.0,
+    )
+    assert holed["trained_on"]["skipped_tasks"] == [ids[3]]
+    assert holed["trained_on"]["n_tasks"] == 23 and holed["cv"]["n_tasks"] == 23
+    assert ids[3] not in holed["cv"]["picks"]
+
+
 def test_folds_are_deterministic_stratified_and_complete() -> None:
     stats = synthetic_stats(30)
     folds = fold_of(stats, 5)
@@ -185,3 +308,18 @@ def test_exported_model_is_self_describing_and_consistent() -> None:
     assert costs == sorted(costs)  # cheapest first, by measured cost
     assert model["baseline_arm"] in {arm["key"] for arm in model["arms"]}
     assert all(scale > 0 for scale in model["scale"])
+
+
+def test_the_committed_run_reports_how_its_penalty_was_chosen() -> None:
+    summary = json.loads((DATA / "summary.json").read_text(encoding="utf-8"))["router"]
+    selection = summary["l2_selection"]
+    if selection is None:
+        return  # the penalty was fixed on the command line
+    losses = {point["l2"]: point["loss"] for point in selection["grid"]}
+    assert summary["l2"] in losses and losses[summary["l2"]] == min(losses.values())
+    assert len(summary["l2_by_fold"]) == summary["folds"]
+    assert set(summary["l2_by_fold"]) <= set(L2_GRID)
+    for point in summary["sweep"]:
+        fixed = point["best_fixed"]
+        # The comparison arm really is affordable at the router's cost.
+        assert fixed is None or fixed["cost_per_request"] <= point["cost_per_request"] * (1 + 1e-6)

@@ -17,10 +17,20 @@ most able arm when none does. The comparison is done on logits against a
 precomputed `threshold_logit`, so serving needs no `exp` and the TypeScript port
 makes bit-identical decisions.
 
+Regularisation. `w` carries an L2 penalty whose strength is not a guess: it is
+picked from a small grid by grouped cross-validation on held-out log loss. When
+the features say little about difficulty the selection picks a strong penalty,
+`w` shrinks toward zero, and the router degrades into "always use the one arm that
+clears the threshold" instead of routing on noise.
+
 Evaluation. Grouped k-fold cross-validation over tasks: every task is routed by a
-model that never saw any row of that task, and the features are standardised with
-training-fold statistics only. The headline compares the routed mix with sending
-everything to the baseline arm (Opus at high effort).
+model that never saw any row of that task, the features are standardised with
+training-fold statistics only, and the penalty is selected inside each training
+fold (nested cross-validation), so nothing about a held-out task leaks into the
+model that routes it. Two comparisons are reported: the headline against sending
+everything to the baseline arm (Opus at high effort), and, because that baseline
+is easy to beat, the harder one against the best single arm that costs no more
+than the router does.
 
 Training uses numpy. Inference (`route`) is plain Python on purpose: it is the
 reference the TypeScript implementation is tested against.
@@ -44,8 +54,12 @@ from .store import Row, round_floats
 from .tasks import CATEGORIES, Task
 
 DEFAULT_THRESHOLD = 0.9
-DEFAULT_L2 = 1.0
 DEFAULT_FOLDS = 5
+# Candidate penalties, weakest first. Spaced by about 3x: finer steps would be fitting noise.
+L2_GRID: tuple[float, ...] = (0.3, 1.0, 3.0, 10.0, 30.0, 100.0, 300.0)
+INNER_FOLDS = 4
+# A penalty this strong leaves only the per-arm abilities: the "no prompt features" model.
+ARMS_ONLY_L2 = 1e9
 SWEEP = (0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95)
 BIAS_L2 = 1e-3  # keeps an arm that passed everything from running off to infinity
 NONE = "none"
@@ -149,11 +163,12 @@ def _sigmoid(values: np.ndarray) -> np.ndarray:
     return 1.0 / (1.0 + np.exp(-np.clip(values, -35, 35)))
 
 
-def fit(stats: list[TaskStats], arms: list[str], *, l2: float = DEFAULT_L2) -> Fit:
+def fit(stats: list[TaskStats], arms: list[str], *, l2: float) -> Fit:
     """Regularised logistic regression by Newton's method (IRLS).
 
-    Each (task, arm) cell is one observation weighted by its number of trials; the
-    target is the cell's pass rate, which gives the same likelihood as one row per trial.
+    Each (task, arm) cell is one observation whose target is the cell's pass rate.
+    With the same number of trials in every cell that is the per-trial likelihood
+    divided by the number of trials, so `l2` is a penalty per cell, not per row.
     """
     features = np.array([task.features for task in stats], dtype=float)
     mean = features.mean(axis=0)
@@ -212,6 +227,64 @@ def fit(stats: list[TaskStats], arms: list[str], *, l2: float = DEFAULT_L2) -> F
         weights=[float(v) for v in beta[:n_features]],
         bias={arm: float(beta[n_features + i]) for i, arm in enumerate(arms)},
     )
+
+
+def _score(fitted: Fit, features: list[float]) -> float:
+    """The prompt's predicted easiness under a fit: the weighted sum of its z-scores."""
+    total = 0.0
+    for weight, value, mean, scale in zip(
+        fitted.weights, features, fitted.mean, fitted.scale, strict=True
+    ):
+        total += weight * ((value - mean) / scale)  # same order of operations as `score_prompt`
+    return total
+
+
+def _cell_loss(fitted: Fit, task: TaskStats, arms: list[str]) -> tuple[float, int]:
+    """Summed log loss over one task's cells, and how many cells that was."""
+    score = _score(fitted, task.features)
+    total = 0.0
+    cells = 0
+    for arm in arms:
+        if arm not in task.pass_rate:
+            continue
+        p = 1 / (1 + math.exp(-max(-35.0, min(35.0, fitted.bias[arm] + score))))
+        p = min(max(p, 1e-12), 1 - 1e-12)
+        rate = task.pass_rate[arm]
+        total -= rate * math.log(p) + (1 - rate) * math.log(1 - p)
+        cells += 1
+    return total, cells
+
+
+def held_out_loss(stats: list[TaskStats], *, l2: float, folds: int = INNER_FOLDS) -> float:
+    """Mean log loss per cell on tasks the fit never saw (grouped k-fold over tasks)."""
+    assignment = fold_of(stats, folds)
+    total = 0.0
+    cells = 0
+    for fold in range(folds):
+        train = [task for task in stats if assignment[task.task_id] != fold]
+        held_out = [task for task in stats if assignment[task.task_id] == fold]
+        if not train or not held_out:
+            continue
+        arms = arms_by_cost(train)
+        fitted = fit(train, arms, l2=l2)
+        for task in held_out:
+            loss, n = _cell_loss(fitted, task, arms)
+            total += loss
+            cells += n
+    return total / cells if cells else math.inf
+
+
+def select_l2(
+    stats: list[TaskStats], *, grid: tuple[float, ...] = L2_GRID, folds: int = INNER_FOLDS
+) -> tuple[float, list[dict[str, float]]]:
+    """The penalty with the lowest held-out log loss, and the loss at every grid value.
+
+    A tie goes to the stronger penalty: the simpler model.
+    """
+    curve = [{"l2": value, "loss": held_out_loss(stats, l2=value, folds=folds)} for value in grid]
+    best = min(point["loss"] for point in curve)
+    chosen = max(point["l2"] for point in curve if point["loss"] <= best + 1e-12)
+    return chosen, curve
 
 
 # --- inference (plain Python: the reference for the TypeScript port) ------------------------
@@ -279,21 +352,45 @@ def _mix_outcome(stats: list[TaskStats], chosen: dict[str, str]) -> tuple[float,
     return quality, cost
 
 
+def best_fixed_arm(
+    fixed: dict[str, tuple[float, float]], arms: list[str], budget: float
+) -> dict[str, Any] | None:
+    """The single arm with the highest pass rate among those costing no more than `budget`.
+
+    `fixed` maps each arm to its (pass rate, cost per request) on the same tasks. This
+    is the baseline a router has to beat to be worth having: "always Opus" is easy to
+    undercut, "always the best arm you can afford" is not. None when nothing is affordable.
+    """
+    affordable = [arm for arm in arms if fixed[arm][1] <= budget * (1 + 1e-9)]
+    if not affordable:
+        return None
+    # `arms` is cheapest first, so on equal quality `max` keeps the cheaper arm.
+    best = max(affordable, key=lambda arm: (fixed[arm][0], -arms.index(arm)))
+    return {"arm": best, "quality": fixed[best][0], "cost_per_request": fixed[best][1]}
+
+
 def cross_validate(
     stats: list[TaskStats],
     spec: list[FeatureSpec],
     *,
     threshold: float = DEFAULT_THRESHOLD,
-    l2: float = DEFAULT_L2,
+    l2: float | None = None,
     folds: int = DEFAULT_FOLDS,
 ) -> dict[str, Any]:
-    """Out-of-fold routing for every task, at the default threshold and across the sweep."""
+    """Out-of-fold routing for every task, at the default threshold and across the sweep.
+
+    With `l2=None` the penalty is selected inside each training fold, so the reported
+    numbers include the cost of having to choose it from data.
+    """
     assignment = fold_of(stats, folds)
     all_arms = arms_by_cost(stats)
     baseline = baseline_arm(all_arms)
     thresholds = sorted({*SWEEP, threshold})
     picks: dict[float, dict[str, str]] = {t: {} for t in thresholds}
     probability: dict[str, float] = {}
+    fold_l2: list[float] = []
+    loss = {"router": 0.0, "arms_only": 0.0}
+    cells = 0
 
     for fold in range(folds):
         train = [task for task in stats if assignment[task.task_id] != fold]
@@ -301,21 +398,25 @@ def cross_validate(
         if not train or not held_out:
             continue
         train_arms = arms_by_cost(train)  # cost order as seen by this fold only
-        fitted = fit(train, train_arms, l2=l2)
+        penalty = l2 if l2 is not None else select_l2(train)[0]
+        fold_l2.append(penalty)
+        fitted = fit(train, train_arms, l2=penalty)
+        arms_only = fit(train, train_arms, l2=ARMS_ONLY_L2)
         for task in held_out:
-            z = [
-                (value - m) / s
-                for value, m, s in zip(task.features, fitted.mean, fitted.scale, strict=True)
-            ]
-            score = sum(w * v for w, v in zip(fitted.weights, z, strict=True))
+            score = _score(fitted, task.features)
             ranked = [{"key": arm, "bias": fitted.bias[arm]} for arm in train_arms]
             for t in thresholds:
                 picks[t][task.task_id] = choose_arm(ranked, score, logit(t))["key"]
             chosen_bias = fitted.bias[picks[threshold][task.task_id]]
             probability[task.task_id] = 1 / (1 + math.exp(-(chosen_bias + score)))
+            task_loss, n = _cell_loss(fitted, task, train_arms)
+            loss["router"] += task_loss
+            loss["arms_only"] += _cell_loss(arms_only, task, train_arms)[0]
+            cells += n
 
     routed = [task for task in stats if task.task_id in picks[threshold]]
     base_quality, base_cost = _mix_outcome(routed, {t.task_id: baseline for t in routed})
+    fixed = {arm: _mix_outcome(routed, {t.task_id: arm for t in routed}) for arm in all_arms}
 
     def summarize(chosen: dict[str, str]) -> dict[str, Any]:
         quality, cost = _mix_outcome(routed, chosen)
@@ -328,6 +429,7 @@ def cross_validate(
             "cost_saved": 1 - cost / base_cost if base_cost else 0.0,
             "quality_retained": quality / base_quality if base_quality else 0.0,
             "mix": {arm: mix[arm] for arm in all_arms if mix[arm]},
+            "best_fixed": best_fixed_arm(fixed, all_arms, cost),
         }
 
     oracle = {task.task_id: oracle_arm(task, all_arms) for task in routed}
@@ -394,6 +496,13 @@ def cross_validate(
             "predicted": sum(probability.values()) / len(probability),
             "realized": _mix_outcome(routed, picks[threshold])[0],
         },
+        # Do the prompt features help at all? Held-out log loss per cell with them, and
+        # with the per-arm abilities alone. Lower is better; equal means no signal.
+        "log_loss": {
+            "router": loss["router"] / cells if cells else 0.0,
+            "arms_only": loss["arms_only"] / cells if cells else 0.0,
+        },
+        "l2_by_fold": fold_l2,
         "picks": {task.task_id: picks[threshold][task.task_id] for task in routed},
         "oracle_arms": oracle,
         "predicted_pass": probability,
@@ -414,18 +523,32 @@ def train_router(
     run_id: str,
     synthetic: bool,
     threshold: float = DEFAULT_THRESHOLD,
-    l2: float = DEFAULT_L2,
+    l2: float | None = None,
     folds: int = DEFAULT_FOLDS,
 ) -> dict[str, Any]:
-    """Cross-validate, then fit on everything and return the self-describing model JSON."""
+    """Cross-validate, then fit on everything and return the self-describing model JSON.
+
+    `l2=None` (the default) selects the penalty by cross-validation; a number fixes it.
+    """
     if not 0.5 <= threshold < 1:
         raise ValueError("threshold must be in [0.5, 1)")
     spec = load_spec()
-    stats = collect(rows, tasks, spec)
+    collected = collect(rows, tasks, spec)
+    arms = arms_by_cost(collected)
+    # A task with no graded answer from some arm (every trial of that cell failed at the
+    # API) cannot be compared across arms, so it is left out of training and evaluation.
+    stats = [task for task in collected if all(arm in task.pass_rate for arm in arms)]
+    skipped = sorted(task.task_id for task in collected if task not in stats)
     if len(stats) < folds * 2:
         raise ValueError("Not enough graded tasks to train a router.")
-    arms = arms_by_cost(stats)
     evaluation = cross_validate(stats, spec, threshold=threshold, l2=l2, folds=folds)
+    selection = None
+    if l2 is None:
+        l2, curve = select_l2(stats)
+        selection = {
+            "method": f"grouped {INNER_FOLDS}-fold cross-validation on held-out log loss",
+            "grid": curve,
+        }
     fitted = fit(stats, arms, l2=l2)
 
     arm_entries = []
@@ -450,10 +573,12 @@ def train_router(
             "synthetic": synthetic,
             "n_tasks": len(stats),
             "n_rows": sum(1 for row in rows if row["passed"] is not None),
+            "skipped_tasks": skipped,
         },
         "threshold": threshold,
         "threshold_logit": round(logit(threshold), 6),
         "l2": l2,
+        "l2_selection": round_floats(selection, 8),
         "baseline_arm": baseline_arm(arms),
         "features": spec,
         "mean": _round(fitted.mean),

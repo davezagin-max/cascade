@@ -57,15 +57,25 @@ describe("playground fixtures", () => {
     },
   );
 
-  it("covers several routing outcomes while it matches the current router", () => {
-    const current = Object.values(store).filter(
-      (fixture) => Output.parse(fixture.data).routerVersion === ROUTER.version,
-    );
-    if (current.length < presets.length) return; // recorded under an older router: coverage is historical
-    const arms = new Set(presets.map((preset) => route(ROUTER, preset.body.prompt).arm.key));
+  // The presets were chosen to show a spread of decisions from the router that ships with
+  // the placeholder demo. A router retrained on a real run routes them however it routes
+  // them, so this only holds (and only runs) while the committed demo is still the sample.
+  const sampleDemo =
+    ROUTER.trained_on.synthetic &&
+    Object.values(store).every((fixture) => fixture.placeholder) &&
+    Object.values(store).every((fixture) => Output.parse(fixture.data).routerVersion === ROUTER.version);
+
+  it.skipIf(!sampleDemo)("covers a spread of routing outcomes in the sample demo", () => {
+    const decisions = presets.map((preset) => route(ROUTER, preset.body.prompt));
+    const arms = new Set(decisions.map((decision) => decision.arm.key));
     expect(arms.size).toBeGreaterThanOrEqual(4);
+    // Every model tier answers at least one preset.
+    expect(new Set(decisions.map((decision) => decision.arm.model)).size).toBe(3);
     const costs = [...arms].map((key) => ROUTER.arms.findIndex((arm) => arm.key === key));
     expect(Math.min(...costs)).toBe(0); // the cheapest arm...
     expect(Math.max(...costs)).toBe(ROUTER.arms.length - 1); // ...and the most expensive are both shown
+    // One preset shows the fallback: nothing clears the threshold, so the most able arm is used.
+    expect(decisions.some((decision) => decision.fallback)).toBe(true);
+    expect(decisions.some((decision) => !decision.fallback)).toBe(true);
   });
 });

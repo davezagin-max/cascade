@@ -49,12 +49,25 @@ const Outcome = z.object({
   cost_saved: z.number(),
   quality_retained: z.number(),
   mix: Mix,
+  /**
+   * The strongest single arm that costs no more than this outcome does, measured on
+   * the same tasks: the baseline a router has to beat. Null when no arm is that cheap.
+   */
+  best_fixed: z.object({ arm: z.string(), quality: z.number(), cost_per_request: z.number() }).nullable(),
 });
 
 export const RouterSummary = z.object({
   version: z.string(),
   threshold: z.number(),
+  /** The L2 penalty on the feature weights, and how it was chosen (null: fixed by hand). */
   l2: z.number(),
+  l2_selection: z
+    .object({ method: z.string(), grid: z.array(z.object({ l2: z.number(), loss: z.number() })) })
+    .nullable(),
+  /** The penalty each cross-validation fold selected for itself. */
+  l2_by_fold: z.array(z.number()),
+  /** Held-out log loss per cell with the prompt features, and with arm abilities alone. */
+  log_loss: z.object({ router: z.number(), arms_only: z.number() }),
   folds: z.number(),
   n_tasks: z.number(),
   baseline_arm: z.string(),

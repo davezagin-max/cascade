@@ -4,7 +4,7 @@
     "label": "Classify a support ticket",
     "body": {
       "demoId": "support-ticket",
-      "prompt": "Classify this support message as one of: billing, shipping, technical, account.\n\n\"My order says delivered but nothing has arrived, and the tracking link is dead.\""
+      "prompt": "Classify this support message as one of: billing, shipping, technical, account.\n\n\"My order says delivered but nothing has arrived.\""
     }
   },
   {

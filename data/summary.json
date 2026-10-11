@@ -2,7 +2,7 @@
   "meta": {
     "run_id": "synthetic-v1",
     "synthetic": true,
-    "created_at": "2026-10-11T20:44:33+00:00",
+    "created_at": "2026-10-11T22:26:29+00:00",
     "generator": {
       "name": "cascade simulate",
       "seed": 7,
@@ -606,9 +606,53 @@
     }
   ],
   "router": {
-    "version": "1206d2c22b6f",
+    "version": "dbf4c281996f",
     "threshold": 0.9,
-    "l2": 1.0,
+    "l2": 30.0,
+    "l2_selection": {
+      "method": "grouped 4-fold cross-validation on held-out log loss",
+      "grid": [
+        {
+          "l2": 0.3,
+          "loss": 0.64214343
+        },
+        {
+          "l2": 1.0,
+          "loss": 0.60115037
+        },
+        {
+          "l2": 3.0,
+          "loss": 0.54781053
+        },
+        {
+          "l2": 10.0,
+          "loss": 0.49531158
+        },
+        {
+          "l2": 30.0,
+          "loss": 0.47486336
+        },
+        {
+          "l2": 100.0,
+          "loss": 0.48143342
+        },
+        {
+          "l2": 300.0,
+          "loss": 0.50203674
+        }
+      ]
+    },
+    "l2_by_fold": [
+      30.0,
+      3.0,
+      30.0,
+      30.0,
+      100.0
+    ],
+    "log_loss": {
+      "router": 0.49594806,
+      "arms_only": 0.52823414
+    },
     "folds": 5,
     "n_tasks": 63,
     "baseline_arm": "opus-high",
@@ -617,19 +661,24 @@
       "cost_per_request": 0.02618751
     },
     "headline": {
-      "quality": 0.84126984,
-      "cost_per_request": 0.01211665,
-      "cost_saved": 0.53731194,
-      "quality_retained": 0.90857143,
+      "quality": 0.86772487,
+      "cost_per_request": 0.01464841,
+      "cost_saved": 0.44063365,
+      "quality_retained": 0.93714286,
       "mix": {
-        "haiku-low": 4,
-        "haiku-medium": 4,
-        "haiku-high": 13,
+        "haiku-low": 2,
+        "haiku-medium": 1,
+        "haiku-high": 3,
         "sonnet-medium": 2,
-        "opus-low": 7,
-        "sonnet-high": 7,
-        "opus-medium": 18,
-        "opus-high": 8
+        "opus-low": 5,
+        "sonnet-high": 16,
+        "opus-medium": 24,
+        "opus-high": 10
+      },
+      "best_fixed": {
+        "arm": "opus-medium",
+        "quality": 0.91534392,
+        "cost_per_request": 0.01213873
       }
     },
     "oracle": {
@@ -647,174 +696,224 @@
         "sonnet-high": 7,
         "opus-medium": 4,
         "opus-high": 3
+      },
+      "best_fixed": {
+        "arm": "sonnet-medium",
+        "quality": 0.74074074,
+        "cost_per_request": 0.00510974
       }
     },
     "sweep": [
       {
         "threshold": 0.5,
-        "quality": 0.66137566,
-        "cost_per_request": 0.00331327,
-        "cost_saved": 0.87347886,
-        "quality_retained": 0.71428571,
+        "quality": 0.6031746,
+        "cost_per_request": 0.00191161,
+        "cost_saved": 0.92700295,
+        "quality_retained": 0.65142857,
         "mix": {
-          "haiku-low": 35,
-          "haiku-medium": 5,
+          "haiku-low": 33,
+          "haiku-medium": 10,
           "haiku-high": 8,
-          "sonnet-medium": 2,
-          "opus-low": 4,
-          "sonnet-high": 3,
-          "opus-medium": 6
+          "sonnet-medium": 6,
+          "opus-low": 2,
+          "sonnet-high": 2,
+          "opus-medium": 2
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.55,
-        "quality": 0.71957672,
-        "cost_per_request": 0.00398293,
-        "cost_saved": 0.8479073,
-        "quality_retained": 0.77714286,
+        "quality": 0.65079365,
+        "cost_per_request": 0.00249543,
+        "cost_saved": 0.90470918,
+        "quality_retained": 0.70285714,
         "mix": {
-          "haiku-low": 33,
-          "haiku-medium": 5,
-          "haiku-high": 5,
-          "sonnet-medium": 6,
+          "haiku-low": 26,
+          "haiku-medium": 14,
+          "haiku-high": 9,
+          "sonnet-medium": 5,
           "opus-low": 4,
-          "sonnet-high": 2,
-          "opus-medium": 8
+          "sonnet-high": 3,
+          "opus-medium": 2
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.6,
         "quality": 0.6984127,
-        "cost_per_request": 0.00456199,
-        "cost_saved": 0.82579526,
+        "cost_per_request": 0.00309438,
+        "cost_saved": 0.88183774,
         "quality_retained": 0.75428571,
         "mix": {
-          "haiku-low": 29,
-          "haiku-medium": 6,
-          "haiku-high": 6,
-          "sonnet-medium": 6,
+          "haiku-low": 19,
+          "haiku-medium": 15,
+          "haiku-high": 12,
+          "sonnet-medium": 4,
           "opus-low": 6,
-          "sonnet-high": 2,
-          "opus-medium": 7,
-          "opus-high": 1
+          "sonnet-high": 3,
+          "opus-medium": 4
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.65,
-        "quality": 0.68783069,
-        "cost_per_request": 0.00666423,
-        "cost_saved": 0.74551873,
-        "quality_retained": 0.74285714,
+        "quality": 0.71957672,
+        "cost_per_request": 0.00401349,
+        "cost_saved": 0.84674014,
+        "quality_retained": 0.77714286,
         "mix": {
-          "haiku-low": 25,
-          "haiku-medium": 10,
-          "haiku-high": 3,
-          "sonnet-medium": 5,
-          "opus-low": 6,
+          "haiku-low": 14,
+          "haiku-medium": 15,
+          "haiku-high": 10,
+          "sonnet-medium": 8,
+          "opus-low": 7,
           "sonnet-high": 4,
-          "opus-medium": 6,
-          "opus-high": 4
+          "opus-medium": 5
+        },
+        "best_fixed": {
+          "arm": "haiku-high",
+          "quality": 0.69312169,
+          "cost_per_request": 0.00043947
         }
       },
       {
         "threshold": 0.7,
-        "quality": 0.72486772,
-        "cost_per_request": 0.00707539,
-        "cost_saved": 0.72981836,
-        "quality_retained": 0.78285714,
+        "quality": 0.77777778,
+        "cost_per_request": 0.00513537,
+        "cost_saved": 0.80390002,
+        "quality_retained": 0.84,
         "mix": {
-          "haiku-low": 23,
-          "haiku-medium": 7,
-          "haiku-high": 7,
-          "sonnet-medium": 2,
-          "opus-low": 7,
-          "sonnet-high": 7,
-          "opus-medium": 6,
-          "opus-high": 4
+          "haiku-low": 9,
+          "haiku-medium": 11,
+          "haiku-high": 16,
+          "sonnet-medium": 3,
+          "opus-low": 9,
+          "sonnet-high": 8,
+          "opus-medium": 7
+        },
+        "best_fixed": {
+          "arm": "sonnet-medium",
+          "quality": 0.74074074,
+          "cost_per_request": 0.00510974
         }
       },
       {
         "threshold": 0.75,
-        "quality": 0.74603175,
-        "cost_per_request": 0.00763656,
-        "cost_saved": 0.70838909,
-        "quality_retained": 0.80571429,
+        "quality": 0.81481481,
+        "cost_per_request": 0.00651196,
+        "cost_saved": 0.7513333,
+        "quality_retained": 0.88,
         "mix": {
-          "haiku-low": 21,
+          "haiku-low": 7,
           "haiku-medium": 6,
-          "haiku-high": 8,
-          "sonnet-medium": 3,
-          "opus-low": 5,
-          "sonnet-high": 7,
-          "opus-medium": 9,
-          "opus-high": 4
+          "haiku-high": 16,
+          "sonnet-medium": 9,
+          "opus-low": 3,
+          "sonnet-high": 12,
+          "opus-medium": 10
+        },
+        "best_fixed": {
+          "arm": "opus-low",
+          "quality": 0.79365079,
+          "cost_per_request": 0.00574815
         }
       },
       {
         "threshold": 0.8,
-        "quality": 0.79365079,
-        "cost_per_request": 0.0086443,
-        "cost_saved": 0.66990763,
-        "quality_retained": 0.85714286,
+        "quality": 0.7989418,
+        "cost_per_request": 0.0086279,
+        "cost_saved": 0.67053386,
+        "quality_retained": 0.86285714,
         "mix": {
-          "haiku-low": 9,
-          "haiku-medium": 15,
-          "haiku-high": 7,
-          "sonnet-medium": 4,
-          "opus-low": 3,
-          "sonnet-high": 10,
-          "opus-medium": 11,
-          "opus-high": 4
+          "haiku-low": 4,
+          "haiku-medium": 4,
+          "haiku-high": 9,
+          "sonnet-medium": 13,
+          "opus-low": 9,
+          "sonnet-high": 7,
+          "opus-medium": 16,
+          "opus-high": 1
+        },
+        "best_fixed": {
+          "arm": "opus-low",
+          "quality": 0.79365079,
+          "cost_per_request": 0.00574815
         }
       },
       {
         "threshold": 0.85,
-        "quality": 0.8042328,
-        "cost_per_request": 0.00976627,
-        "cost_saved": 0.62706399,
-        "quality_retained": 0.86857143,
+        "quality": 0.86772487,
+        "cost_per_request": 0.0109334,
+        "cost_saved": 0.58249549,
+        "quality_retained": 0.93714286,
         "mix": {
-          "haiku-low": 6,
-          "haiku-medium": 8,
-          "haiku-high": 12,
-          "sonnet-medium": 6,
-          "opus-low": 4,
-          "sonnet-high": 5,
-          "opus-medium": 17,
-          "opus-high": 5
+          "haiku-low": 2,
+          "haiku-medium": 4,
+          "haiku-high": 5,
+          "sonnet-medium": 5,
+          "opus-low": 13,
+          "sonnet-high": 10,
+          "opus-medium": 20,
+          "opus-high": 4
+        },
+        "best_fixed": {
+          "arm": "opus-low",
+          "quality": 0.79365079,
+          "cost_per_request": 0.00574815
         }
       },
       {
         "threshold": 0.9,
-        "quality": 0.84126984,
-        "cost_per_request": 0.01211665,
-        "cost_saved": 0.53731194,
-        "quality_retained": 0.90857143,
+        "quality": 0.86772487,
+        "cost_per_request": 0.01464841,
+        "cost_saved": 0.44063365,
+        "quality_retained": 0.93714286,
         "mix": {
-          "haiku-low": 4,
-          "haiku-medium": 4,
-          "haiku-high": 13,
+          "haiku-low": 2,
+          "haiku-medium": 1,
+          "haiku-high": 3,
           "sonnet-medium": 2,
-          "opus-low": 7,
-          "sonnet-high": 7,
-          "opus-medium": 18,
-          "opus-high": 8
+          "opus-low": 5,
+          "sonnet-high": 16,
+          "opus-medium": 24,
+          "opus-high": 10
+        },
+        "best_fixed": {
+          "arm": "opus-medium",
+          "quality": 0.91534392,
+          "cost_per_request": 0.01213873
         }
       },
       {
         "threshold": 0.95,
-        "quality": 0.86772487,
-        "cost_per_request": 0.01548279,
-        "cost_saved": 0.40877218,
-        "quality_retained": 0.93714286,
+        "quality": 0.88888889,
+        "cost_per_request": 0.01781059,
+        "cost_saved": 0.31988219,
+        "quality_retained": 0.96,
         "mix": {
-          "haiku-low": 2,
-          "haiku-medium": 3,
-          "sonnet-medium": 4,
-          "opus-low": 11,
-          "sonnet-high": 9,
-          "opus-medium": 21,
-          "opus-high": 13
+          "haiku-low": 1,
+          "haiku-medium": 1,
+          "opus-low": 3,
+          "sonnet-high": 4,
+          "opus-medium": 32,
+          "opus-high": 22
+        },
+        "best_fixed": {
+          "arm": "opus-medium",
+          "quality": 0.91534392,
+          "cost_per_request": 0.01213873
         }
       }
     ],
@@ -844,81 +943,26 @@
       ],
       "matrix": [
         [
-          2,
           1,
-          7,
           0,
-          0,
-          3,
-          2,
-          4,
-          1
-        ],
-        [
-          1,
-          1,
           3,
           0,
           1,
-          3,
           2,
-          1,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          2,
-          3,
-          0
-        ],
-        [
-          1,
-          0,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0
-        ],
-        [
-          0,
-          1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          1,
-          1
-        ],
-        [
-          0,
-          0,
-          0,
-          0,
-          0,
-          1,
-          0,
-          0,
+          5,
+          6,
           2
         ],
         [
           0,
+          0,
+          0,
+          0,
           1,
-          1,
-          0,
-          0,
-          0,
-          0,
-          4,
-          1
+          3,
+          5,
+          3,
+          0
         ],
         [
           0,
@@ -927,8 +971,30 @@
           0,
           0,
           0,
+          3,
+          3,
+          0
+        ],
+        [
+          1,
           0,
-          2,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
           2
         ],
         [
@@ -938,8 +1004,41 @@
           0,
           0,
           0,
-          1,
+          0,
           2,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          3,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3,
           0
         ],
         [
@@ -954,215 +1053,209 @@
           1
         ]
       ],
-      "exact": 6,
-      "over_routed": 47,
-      "under_routed": 10
+      "exact": 5,
+      "over_routed": 53,
+      "under_routed": 5
     },
     "by_category": {
       "classification": {
         "n_tasks": 15,
-        "quality": 0.84444444,
-        "cost_per_request": 0.00147091,
+        "quality": 0.91111111,
+        "cost_per_request": 0.00272284,
         "baseline_quality": 0.97777778,
         "baseline_cost_per_request": 0.00639529,
         "mix": {
-          "haiku-low": 4,
-          "haiku-medium": 2,
-          "haiku-high": 4,
+          "haiku-low": 2,
+          "haiku-high": 2,
+          "sonnet-medium": 2,
           "opus-low": 2,
-          "opus-medium": 2,
-          "opus-high": 1
+          "sonnet-high": 1,
+          "opus-medium": 4,
+          "opus-high": 2
         }
       },
       "extraction": {
         "n_tasks": 14,
-        "quality": 0.83333333,
-        "cost_per_request": 0.002624,
+        "quality": 0.85714286,
+        "cost_per_request": 0.00500858,
         "baseline_quality": 0.95238095,
         "baseline_cost_per_request": 0.01362057,
         "mix": {
           "haiku-medium": 1,
-          "haiku-high": 5,
-          "sonnet-medium": 2,
+          "haiku-high": 1,
           "opus-low": 3,
-          "sonnet-high": 1,
-          "opus-medium": 2
+          "sonnet-high": 4,
+          "opus-medium": 5
         }
       },
       "reasoning": {
         "n_tasks": 16,
         "quality": 0.8125,
-        "cost_per_request": 0.02627022,
+        "cost_per_request": 0.02730242,
         "baseline_quality": 0.89583333,
         "baseline_cost_per_request": 0.04117908,
         "mix": {
-          "haiku-high": 1,
-          "opus-low": 1,
           "sonnet-high": 4,
-          "opus-medium": 4,
+          "opus-medium": 6,
           "opus-high": 6
         }
       },
       "code": {
         "n_tasks": 12,
-        "quality": 0.86111111,
-        "cost_per_request": 0.01915651,
+        "quality": 0.88888889,
+        "cost_per_request": 0.02440978,
         "baseline_quality": 0.91666667,
         "baseline_cost_per_request": 0.04356122,
         "mix": {
-          "haiku-medium": 1,
-          "haiku-high": 1,
-          "opus-low": 1,
-          "sonnet-high": 1,
-          "opus-medium": 7,
-          "opus-high": 1
+          "sonnet-high": 5,
+          "opus-medium": 5,
+          "opus-high": 2
         }
       },
       "open_ended": {
         "n_tasks": 6,
         "quality": 0.88888889,
-        "cost_per_request": 0.00905794,
+        "cost_per_request": 0.01368856,
         "baseline_quality": 0.83333333,
         "baseline_cost_per_request": 0.030266,
         "mix": {
-          "haiku-high": 2,
-          "sonnet-high": 1,
-          "opus-medium": 3
+          "sonnet-high": 2,
+          "opus-medium": 4
         }
       }
     },
     "calibration": {
-      "predicted": 0.87488838,
-      "realized": 0.84126984
+      "predicted": 0.88743595,
+      "realized": 0.86772487
     },
     "weights": [
       {
-        "name": "length",
-        "label": "Prompt length",
-        "weight": -1.462717
-      },
-      {
-        "name": "numbers",
-        "label": "Numbers in the prompt",
-        "weight": 0.941018
-      },
-      {
-        "name": "digit_density",
-        "label": "Digit density",
-        "weight": -0.84436
+        "name": "hard_cues",
+        "label": "Hard-reasoning cues",
+        "weight": -0.365374
       },
       {
         "name": "questions",
         "label": "Question marks",
-        "weight": -0.798308
+        "weight": -0.354375
       },
       {
         "name": "label_cues",
         "label": "Classification cues",
-        "weight": 0.728977
-      },
-      {
-        "name": "structure_cues",
-        "label": "Structured-output cues",
-        "weight": 0.633711
-      },
-      {
-        "name": "hard_cues",
-        "label": "Hard-reasoning cues",
-        "weight": -0.551228
-      },
-      {
-        "name": "list_items",
-        "label": "Bulleted or numbered lines",
-        "weight": -0.453351
-      },
-      {
-        "name": "line_breaks",
-        "label": "Line breaks",
-        "weight": 0.422594
-      },
-      {
-        "name": "words",
-        "label": "Word count",
-        "weight": -0.402361
-      },
-      {
-        "name": "big_numbers",
-        "label": "Large numbers or powers",
-        "weight": -0.382778
-      },
-      {
-        "name": "quoted_text",
-        "label": "Quoted source text",
-        "weight": 0.343299
-      },
-      {
-        "name": "conditionals",
-        "label": "Conditional and ordering words",
-        "weight": 0.305092
+        "weight": 0.306366
       },
       {
         "name": "math_cues",
         "label": "Math cues",
-        "weight": -0.27722
+        "weight": -0.305722
       },
       {
-        "name": "writing_cues",
-        "label": "Open-ended writing cues",
-        "weight": 0.271475
+        "name": "structure_cues",
+        "label": "Structured-output cues",
+        "weight": 0.280842
       },
       {
-        "name": "proper_nouns",
-        "label": "Capitalized words",
-        "weight": -0.099344
+        "name": "list_items",
+        "label": "Bulleted or numbered lines",
+        "weight": -0.243463
       },
       {
-        "name": "code_cues",
-        "label": "Code cues",
-        "weight": 0.06244
+        "name": "words",
+        "label": "Word count",
+        "weight": -0.228748
+      },
+      {
+        "name": "length",
+        "label": "Prompt length",
+        "weight": -0.220312
+      },
+      {
+        "name": "digit_density",
+        "label": "Digit density",
+        "weight": -0.197725
+      },
+      {
+        "name": "big_numbers",
+        "label": "Large numbers or powers",
+        "weight": -0.190451
+      },
+      {
+        "name": "quoted_text",
+        "label": "Quoted source text",
+        "weight": 0.1715
+      },
+      {
+        "name": "line_breaks",
+        "label": "Line breaks",
+        "weight": 0.134602
       },
       {
         "name": "constraint_words",
         "label": "Constraint words",
-        "weight": -0.030517
+        "weight": -0.12721
+      },
+      {
+        "name": "writing_cues",
+        "label": "Open-ended writing cues",
+        "weight": 0.038662
+      },
+      {
+        "name": "code_cues",
+        "label": "Code cues",
+        "weight": -0.034299
+      },
+      {
+        "name": "numbers",
+        "label": "Numbers in the prompt",
+        "weight": 0.034128
+      },
+      {
+        "name": "proper_nouns",
+        "label": "Capitalized words",
+        "weight": -0.029267
+      },
+      {
+        "name": "conditionals",
+        "label": "Conditional and ordering words",
+        "weight": -0.017443
       }
     ],
     "arm_bias": [
       {
         "key": "haiku-low",
-        "bias": -0.001517
+        "bias": 0.011878
       },
       {
         "key": "haiku-medium",
-        "bias": 0.622359
+        "bias": 0.532144
       },
       {
         "key": "haiku-high",
-        "bias": 1.159781
+        "bias": 0.979423
       },
       {
         "key": "sonnet-low",
-        "bias": 1.020274
+        "bias": 0.863184
       },
       {
         "key": "sonnet-medium",
-        "bias": 1.491727
+        "bias": 1.256822
       },
       {
         "key": "opus-low",
-        "bias": 1.902336
+        "bias": 1.60238
       },
       {
         "key": "sonnet-high",
-        "bias": 2.49368
+        "bias": 2.107336
       },
       {
         "key": "opus-medium",
-        "bias": 3.230602
+        "bias": 2.754242
       },
       {
         "key": "opus-high",
-        "bias": 3.404203
+        "bias": 2.910099
       }
     ]
   },
@@ -1504,7 +1597,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "sonnet-medium",
       "oracle_arm": "haiku-low"
     },
     {
@@ -1598,7 +1691,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-medium",
+      "router_pick": "haiku-high",
       "oracle_arm": "haiku-low"
     },
     {
@@ -1645,7 +1738,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-medium",
+      "router_pick": "opus-low",
       "oracle_arm": "haiku-medium"
     },
     {
@@ -1739,7 +1832,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-low",
+      "router_pick": "opus-high",
       "oracle_arm": "haiku-low"
     },
     {
@@ -1786,7 +1879,7 @@
           "mean_score": 0.66666667
         }
       },
-      "router_pick": "haiku-low",
+      "router_pick": "sonnet-medium",
       "oracle_arm": "haiku-medium"
     },
     {
@@ -1833,7 +1926,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-low",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-medium"
     },
     {
@@ -1927,7 +2020,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "opus-low",
       "oracle_arm": "haiku-medium"
     },
     {
@@ -1974,7 +2067,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-low",
+      "router_pick": "opus-medium",
       "oracle_arm": "haiku-low"
     },
     {
@@ -2115,7 +2208,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "opus-medium",
       "oracle_arm": "sonnet-medium"
     },
     {
@@ -2209,7 +2302,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "opus-low",
       "oracle_arm": "haiku-low"
     },
     {
@@ -2303,7 +2396,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "sonnet-high",
+      "router_pick": "opus-medium",
       "oracle_arm": "haiku-low"
     },
     {
@@ -2350,7 +2443,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-low"
     },
     {
@@ -2397,7 +2490,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "opus-low",
       "oracle_arm": "haiku-low"
     },
     {
@@ -2444,7 +2537,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-low",
+      "router_pick": "haiku-high",
       "oracle_arm": "haiku-low"
     },
     {
@@ -2538,7 +2631,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-low"
     },
     {
@@ -2585,7 +2678,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "sonnet-medium",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-medium"
     },
     {
@@ -2679,7 +2772,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-low",
+      "router_pick": "opus-medium",
       "oracle_arm": "opus-low"
     },
     {
@@ -2726,7 +2819,7 @@
           "mean_score": 0.66666667
         }
       },
-      "router_pick": "sonnet-medium",
+      "router_pick": "opus-medium",
       "oracle_arm": "haiku-high"
     },
     {
@@ -2773,7 +2866,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "sonnet-high",
       "oracle_arm": "sonnet-low"
     },
     {
@@ -2961,7 +3054,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-low",
+      "router_pick": "opus-medium",
       "oracle_arm": "haiku-medium"
     },
     {
@@ -3196,7 +3289,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "sonnet-high",
       "oracle_arm": "sonnet-high"
     },
     {
@@ -3337,7 +3430,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-high",
+      "router_pick": "opus-medium",
       "oracle_arm": "opus-low"
     },
     {
@@ -3384,7 +3477,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-medium",
+      "router_pick": "opus-high",
       "oracle_arm": "sonnet-high"
     },
     {
@@ -3572,7 +3665,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "sonnet-high",
+      "router_pick": "opus-medium",
       "oracle_arm": "opus-high"
     },
     {
@@ -3619,7 +3712,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-low",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-low"
     },
     {
@@ -3666,7 +3759,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-low"
     },
     {
@@ -3760,7 +3853,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-medium",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-high"
     },
     {
@@ -3948,7 +4041,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-medium",
+      "router_pick": "opus-high",
       "oracle_arm": "sonnet-medium"
     },
     {
@@ -3995,7 +4088,7 @@
           "mean_score": 1.0
         }
       },
-      "router_pick": "opus-medium",
+      "router_pick": "sonnet-high",
       "oracle_arm": "sonnet-high"
     },
     {
@@ -4136,7 +4229,7 @@
           "mean_score": 0.9
         }
       },
-      "router_pick": "haiku-medium",
+      "router_pick": "opus-medium",
       "oracle_arm": "sonnet-high"
     },
     {
@@ -4277,7 +4370,7 @@
           "mean_score": 0.85
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "sonnet-high",
       "oracle_arm": "haiku-medium"
     },
     {
@@ -4324,7 +4417,7 @@
           "mean_score": 0.9
         }
       },
-      "router_pick": "haiku-high",
+      "router_pick": "opus-medium",
       "oracle_arm": "haiku-medium"
     },
     {

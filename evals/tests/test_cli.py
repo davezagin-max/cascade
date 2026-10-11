@@ -171,7 +171,11 @@ def test_full_run_with_a_fake_client_produces_a_real_non_synthetic_dashboard(
     router = json.loads((out / "data" / "router.json").read_text())
     assert router["trained_on"] == {
         "run_id": "run-test", "synthetic": False, "n_tasks": len(TASKS), "n_rows": len(rows),
+        "skipped_tasks": [],
     }  # fmt: skip
+    # The penalty was selected from the grid, and the harder baseline is reported.
+    assert summary["router"]["l2_selection"]["grid"] and len(summary["router"]["l2_by_fold"]) == 5
+    assert summary["router"]["headline"]["best_fixed"]["arm"] in ("haiku-low", "opus-low")
     assert any("run run-test complete" in line for line in lines)
 
     # Resuming a finished run sends nothing new, and keeps its own matrix whatever is passed.
