@@ -116,7 +116,7 @@ uv run cascade run                # the real matrix: needs ANTHROPIC_API_KEY, ab
 
 `run` prints the estimate, asks before spending more than $5, refuses to start above `--budget` (default $12), and stops between model tiers if measured spend projects past the budget. It then grades, trains the router, and exports, so the dashboard shows the real run with no code change. Other commands: `grade`, `train-router`, `caching`, `export`. Results are one Parquet row per task, model, effort and trial in `evals/runs/<run-id>/`.
 
-After a real run, `pnpm record` replaces the six hand-written playground answers with recorded ones.
+After a real run, `pnpm record` replaces the six hand-written playground answers with recorded ones. It starts its own dev server on port 3150, so stop `pnpm dev` first.
 
 ## Tests & quality
 
@@ -125,7 +125,7 @@ pnpm check                                    # lint, typecheck, unit tests, pro
 cd evals && uv run ruff check . && uv run mypy && uv run pytest -q
 ```
 
-221 tests pass: 93 in Vitest and 128 in pytest. Four more are live smoke tests that are skipped when no key is set.
+222 tests pass: 94 in Vitest and 128 in pytest. Four more are live smoke tests that are skipped when no key is set.
 
 - **Graders are tested against the suite itself.** For all 57 deterministic tasks the reference answer must score full marks and a hand-written plausible mistake must fail, which catches a wrong answer key, a bad hidden test, and a grader that is too lenient.
 - **Parity.** Both suites assert exact equality with the 80 exported router vectors.
