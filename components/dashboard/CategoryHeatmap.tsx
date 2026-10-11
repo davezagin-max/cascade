@@ -8,13 +8,21 @@ interface Props {
   router: RouterSummary;
 }
 
+const SHORT: Record<string, string> = {
+  classification: "Class",
+  extraction: "Extr",
+  reasoning: "Math",
+  code: "Code",
+  open_ended: "Open",
+};
+
 /** A cell shaded by pass rate; the text flips colour once the shade gets dark. */
 function Cell({ value }: { value: number | undefined }) {
-  if (value === undefined) return <td className="px-2 py-1.5 text-right text-muted">n/a</td>;
+  if (value === undefined) return <td className="px-1.5 py-1.5 text-right text-muted sm:px-2">n/a</td>;
   const strong = value >= 0.6;
   return (
     <td
-      className="tabular px-2 py-1.5 text-right"
+      className="tabular px-1.5 py-1.5 text-right sm:px-2"
       style={{
         background: `color-mix(in srgb, var(--fg) ${Math.round(value * 88)}%, transparent)`,
         color: strong ? "var(--bg)" : "var(--fg)",
@@ -36,9 +44,11 @@ export function CategoryHeatmap({ arms, categories, router }: Props) {
               arm
             </th>
             {categories.map((category) => (
-              <th key={category.key} scope="col" className="px-2 py-1.5 text-right font-normal">
+              <th key={category.key} scope="col" className="px-1.5 py-1.5 text-right font-normal sm:px-2">
                 <span className="hidden sm:inline">{category.label}</span>
-                <span className="sm:hidden">{category.label.split(" ")[0].slice(0, 5)}.</span>
+                <span className="sm:hidden" title={category.label}>
+                  {SHORT[category.key] ?? category.label.slice(0, 4)}
+                </span>
                 <span className="ml-1 hidden text-[10px] lg:inline">n={category.n_tasks}</span>
               </th>
             ))}

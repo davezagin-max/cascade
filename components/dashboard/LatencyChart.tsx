@@ -1,5 +1,5 @@
 import { ArmGlyph } from "@/components/ArmGlyph";
-import { armLabel, duration } from "@/lib/format";
+import { armCode, armLabel, duration } from "@/lib/format";
 import type { ArmSummary } from "@/lib/run-schema";
 
 const TICKS_MS = [500, 1000, 2000, 5000, 10_000, 20_000, 50_000, 100_000, 200_000];
@@ -17,11 +17,15 @@ export function LatencyChart({ arms }: { arms: ArmSummary[] }) {
 
   return (
     <div className="font-mono text-xs">
-      <div className="grid grid-cols-[7.5rem_minmax(0,1fr)_5.5rem] items-end gap-x-2 text-[10px] text-muted sm:grid-cols-[9rem_minmax(0,1fr)_9rem]">
+      <div className="grid grid-cols-[4.25rem_minmax(0,1fr)_6.75rem] items-end gap-x-2 text-[10px] text-muted sm:grid-cols-[9rem_minmax(0,1fr)_9rem]">
         <span />
         <div className="relative h-4">
           {ticks.map((t) => (
-            <span key={t} className="absolute -translate-x-1/2" style={{ left: `${at(t)}%` }}>
+            <span
+              key={t}
+              className={`absolute -translate-x-1/2 whitespace-nowrap ${/^1/.test(String(t)) ? "" : "hidden sm:inline"}`}
+              style={{ left: `${at(t)}%` }}
+            >
               {duration(t)}
             </span>
           ))}
@@ -35,10 +39,12 @@ export function LatencyChart({ arms }: { arms: ArmSummary[] }) {
           return (
             <li
               key={arm.key}
-              className="grid grid-cols-[7.5rem_minmax(0,1fr)_5.5rem] items-center gap-x-2 border-t border-grid py-1 sm:grid-cols-[9rem_minmax(0,1fr)_9rem]"
+              className="grid grid-cols-[4.25rem_minmax(0,1fr)_6.75rem] items-center gap-x-2 border-t border-grid py-1 sm:grid-cols-[9rem_minmax(0,1fr)_9rem]"
             >
-              <span className="whitespace-nowrap">
-                <ArmGlyph model={arm.model_short} effort={arm.effort} /> {armLabel(arm.key)}
+              <span className="whitespace-nowrap" title={armLabel(arm.key)}>
+                <ArmGlyph model={arm.model_short} effort={arm.effort} />{" "}
+                <span className="sm:hidden">{armCode(arm.key)}</span>
+                <span className="hidden sm:inline">{armLabel(arm.key)}</span>
               </span>
               <div className="relative h-3" aria-hidden>
                 {ticks.map((t) => (
@@ -51,7 +57,7 @@ export function LatencyChart({ arms }: { arms: ArmSummary[] }) {
                 <span className="absolute top-0 h-3 w-0.5 bg-fg" style={{ left: `${at(p50)}%` }} />
                 <span className="absolute top-0.5 h-2 w-px bg-fg" style={{ left: `${at(p95)}%` }} />
               </div>
-              <span className="tabular text-right">
+              <span className="tabular whitespace-nowrap text-right">
                 {duration(p50)} <span className="text-muted">/ {duration(p95)}</span>
               </span>
             </li>

@@ -4,18 +4,19 @@ import type { ArmSummary } from "@/lib/run-schema";
 
 /** One row per arm: the numbers behind the chart. */
 export function ArmsTable({ arms, baselineKey }: { arms: ArmSummary[]; baselineKey: string }) {
-  const th = "px-2 py-1.5 text-right font-normal";
-  const td = "tabular px-2 py-1.5 text-right";
+  const th = "whitespace-nowrap px-1.5 py-1.5 text-right font-normal sm:px-2";
+  const td = "tabular whitespace-nowrap px-1.5 py-1.5 text-right sm:px-2";
   return (
     <div className="overflow-x-auto border border-border">
       <table className="w-full border-collapse font-mono text-xs">
         <thead className="border-b border-border bg-surface text-muted">
           <tr>
-            <th scope="col" className="px-2 py-1.5 text-left font-normal">
+            <th scope="col" className="px-1.5 py-1.5 text-left font-normal sm:px-2">
               arm
             </th>
             <th scope="col" className={th}>
-              pass rate
+              <span className="sm:hidden">pass</span>
+              <span className="hidden sm:inline">pass rate</span>
             </th>
             <th scope="col" className={`${th} hidden sm:table-cell`}>
               95% interval
@@ -24,7 +25,8 @@ export function ArmsTable({ arms, baselineKey }: { arms: ArmSummary[]; baselineK
               mean grade
             </th>
             <th scope="col" className={th}>
-              $ / 1k req
+              <span className="sm:hidden">$/1k</span>
+              <span className="hidden sm:inline">$ / 1k req</span>
             </th>
             <th scope="col" className={`${th} hidden md:table-cell`}>
               $ / 1k batch
@@ -46,10 +48,12 @@ export function ArmsTable({ arms, baselineKey }: { arms: ArmSummary[]; baselineK
         <tbody>
           {arms.map((arm) => (
             <tr key={arm.key} className="border-b border-grid last:border-b-0">
-              <th scope="row" className="whitespace-nowrap px-2 py-1.5 text-left font-normal">
+              <th scope="row" className="whitespace-nowrap px-1.5 py-1.5 text-left font-normal sm:px-2">
                 <ArmGlyph model={arm.model_short} effort={arm.effort} muted={!arm.on_frontier} />{" "}
                 <span className={arm.on_frontier ? "" : "text-muted"}>{armLabel(arm.key)}</span>
-                {arm.key === baselineKey && <span className="ml-1.5 text-[10px] text-muted">baseline</span>}
+                {arm.key === baselineKey && (
+                  <span className="ml-1.5 hidden text-[10px] text-muted sm:inline">baseline</span>
+                )}
               </th>
               <td className={td}>
                 <span className="inline-flex items-center justify-end gap-2">

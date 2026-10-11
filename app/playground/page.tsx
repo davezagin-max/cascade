@@ -32,7 +32,10 @@ const presets: Preset[] = (presetList as PresetEntry[])
 export default function PlaygroundPage() {
   return (
     <>
-      <DemoBanner placeholder={anyPlaceholder} />
+      <DemoBanner
+        placeholder={anyPlaceholder}
+        liveLabel="Live: the model the router picks answers with your key."
+      />
       <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 pb-4 pt-6 sm:pt-8">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Playground</p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight">Route a prompt, then run it</h1>
