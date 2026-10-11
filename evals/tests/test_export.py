@@ -35,6 +35,10 @@ def test_pareto_frontier_keeps_only_undominated_arms() -> None:
     ]
     assert pareto_frontier(points) == ["cheap-good", "mid", "best"]
     assert pareto_frontier([]) == []
+    # An exact tie on both axes dominates in neither direction, so both arms stay. (Efforts
+    # that happen to cost and score the same must not have one dropped by name order.)
+    tied = [("a-low", 1.0, 0.7), ("a-high", 1.0, 0.7), ("b", 2.0, 0.9), ("c", 2.0, 0.6)]
+    assert pareto_frontier(tied) == ["a-high", "a-low", "b"]
 
 
 def test_percentile_interpolates() -> None:

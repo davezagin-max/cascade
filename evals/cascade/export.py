@@ -92,14 +92,21 @@ def bootstrap_ci(per_task: list[float], label: str) -> tuple[float, float]:
 
 
 def pareto_frontier(points: list[tuple[str, float, float]]) -> list[str]:
-    """Keys of the points no other point beats on both cost (lower) and quality (higher)."""
-    frontier: list[str] = []
-    best = -1.0
-    for key, _cost, quality in sorted(points, key=lambda p: (p[1], -p[2], p[0])):
-        if quality > best:
-            frontier.append(key)
-            best = quality
-    return frontier
+    """Keys of the points no other point dominates, cheapest first.
+
+    A point is dominated when another costs no more and scores no less, and is strictly
+    better on one of the two. Two arms with exactly the same cost and quality do not
+    dominate each other, so both stay: dropping one of them by name order would be arbitrary.
+    """
+    frontier = [
+        (cost, -quality, key)
+        for key, cost, quality in points
+        if not any(
+            other != key and c <= cost and q >= quality and (c < cost or q > quality)
+            for other, c, q in points
+        )
+    ]
+    return [key for _cost, _quality, key in sorted(frontier)]
 
 
 def _arm_order(rows: list[Row]) -> list[Arm]:

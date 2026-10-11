@@ -96,7 +96,9 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
       const options: Box[] = p.arm.frontier
         ? [belowRight, right, left, below, above]
         : [right, left, below, above];
-      const inside = (b: Box) => b.x >= margin.left && b.x + b.w <= width - 2;
+      // Vertical bounds matter for an arm at or near 100%: a label above it would be cut off.
+      const inside = (b: Box) =>
+        b.x >= margin.left && b.x + b.w <= width - 2 && b.y >= 0 && b.y + b.h <= height - margin.bottom;
       const chosen =
         options.find((b) => inside(b) && !taken.some((t) => t !== taken[points.indexOf(p)] && overlaps(b, t))) ??
         options[0];
