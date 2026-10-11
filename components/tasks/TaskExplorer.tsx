@@ -33,6 +33,19 @@ function PassCell({ rate }: { rate: number | undefined }) {
   );
 }
 
+/**
+ * What a synthetic cell really is, in words. The draw is read from the simulator's own record,
+ * not from the grade: on an open-ended task the simulator can draw a pass and its drawn rubric
+ * scores can still fall short of the pass mark.
+ */
+export function simulatedNote(grader: string, simulated: { pass_probability: number; answer: string }): string {
+  const drew = simulated.answer === "reference" ? "pass" : "fail";
+  const start = `No model wrote this. The simulator drew a ${drew} (pass probability ${simulated.pass_probability.toFixed(2)})`;
+  return grader === "judge"
+    ? `${start} and scored the task's ${simulated.answer} answer with rubric scores it drew itself. No judge was called.`
+    : `${start} and submitted the task's ${simulated.answer} answer to the real grader.`;
+}
+
 type Loaded = { state: "loading" } | { state: "error" } | { state: "ready"; detail: TaskDetail };
 
 export function TaskExplorer({ tasks, arms, categories, synthetic }: Props) {
@@ -386,9 +399,7 @@ function Detail({
                   <div className="space-y-2 p-2">
                     {simulated && (
                       <p className="text-[11px] text-muted">
-                        No model wrote this. The simulator drew a {cell.passed ? "pass" : "fail"} (pass probability{" "}
-                        <span className="font-mono">{simulated.pass_probability.toFixed(2)}</span>) and submitted the
-                        task&apos;s {simulated.answer} answer to the real grader.
+                        {simulatedNote(task.grader, simulated)}
                       </p>
                     )}
                     <pre className={`${pre} max-h-48`}>{detail.answers[cell.answer] || "(empty)"}</pre>

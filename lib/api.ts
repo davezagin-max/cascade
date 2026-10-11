@@ -104,7 +104,7 @@ function liveMeta(result: LiveResult<unknown>): ApiMeta {
 }
 
 const MISS_MESSAGE =
-  "Demo mode only replays recorded runs. Pick one of the presets, or add your Anthropic key to run this live.";
+  "Demo mode only answers the presets. Pick one of them, or add your Anthropic key to run this live.";
 
 /** Shared front half of every route: rate limit, size cap, parse, validate. */
 function createGate<B>(config: RouteConfig<B>) {

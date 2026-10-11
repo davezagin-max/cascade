@@ -38,7 +38,7 @@ type Run =
   | { state: "idle" }
   | { state: "running"; text: string; meta: Pick<ApiMeta, "mode" | "placeholder" | "recordedAt"> | null }
   | { state: "done"; data: PlaygroundOutput; meta: ApiMeta }
-  | { state: "stopped"; text: string }
+  | { state: "stopped"; text: string; live: boolean }
   | { state: "error"; kind: string; message: string; meta: ApiMeta | null };
 
 const short = (model: string) => model.replace("claude-", "").replace("-5-5", "");
@@ -105,7 +105,10 @@ export function Playground({ presets, maxChars }: Props) {
 
   function stop() {
     controller.current?.abort();
-    setRun((r) => (r.state === "running" ? { state: "stopped", text: r.text } : r));
+    // Only a live run was costing anything; a replayed preset has no tokens to stop paying for.
+    setRun((r) =>
+      r.state === "running" ? { state: "stopped", text: r.text, live: r.meta ? r.meta.mode === "live" : isLive } : r,
+    );
   }
 
   function choose(item: Preset) {
@@ -271,7 +274,11 @@ function Response({
   if (run.state === "stopped") {
     return (
       <div className={box} aria-live="polite">
-        <p className={bar}>Stopped. The request was cancelled, so no further tokens are billed.</p>
+        <p className={bar}>
+          {run.live
+            ? "Stopped. The request was cancelled, so no further tokens are billed."
+            : "Stopped. The replay was cancelled; nothing was being billed."}
+        </p>
         <AnswerText text={run.text || "(nothing had arrived yet)"} />
       </div>
     );

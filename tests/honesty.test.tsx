@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SimTag } from "@/components/SimTag";
+import { simulatedNote } from "@/components/tasks/TaskExplorer";
 import { SyntheticBanner } from "@/components/SiteChrome";
 import summaryJson from "@/data/summary.json";
 
@@ -71,6 +72,21 @@ describe("synthetic data is labelled from the run's own flag", () => {
     expect(text(html)).toContain("Computed on simulated results by");
     expect(text(html)).not.toContain("What was measured");
     expect(text(html)).not.toContain("Measured by");
+    // The one grader the simulator cannot run for real is named as such.
+    expect(text(html)).toContain("rubric scores are drawn without calling the judge");
+    expect(text(html)).toContain("In this synthetic run the judge was not called");
+  });
+
+  it("describes a simulated cell by what the simulator did, not by the grade it ended with", () => {
+    const reference = { pass_probability: 0.92, answer: "reference" };
+    expect(simulatedNote("code", reference)).toBe(
+      "No model wrote this. The simulator drew a pass (pass probability 0.92) and submitted the task's reference answer to the real grader.",
+    );
+    expect(simulatedNote("exact", { pass_probability: 0.3, answer: "known-wrong" })).toContain("drew a fail");
+    // Open-ended tasks never reach a real grader in a synthetic run, and the note must not claim they do.
+    const judged = simulatedNote("judge", reference);
+    expect(judged).toContain("No judge was called");
+    expect(judged).not.toContain("real grader");
   });
 
   it("says nothing about simulation when the run is real", async () => {

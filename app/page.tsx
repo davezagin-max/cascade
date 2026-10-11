@@ -63,8 +63,9 @@ export default function Home() {
             <>
               No real run exists yet. These rows were written by <code className="font-mono">cascade simulate</code>{" "}
               (seed {meta.generator?.seed}) in exactly the schema a real run uses. Pass or fail is drawn from assumed
-              model abilities; the grades are real grader output on stand-in answers. Token counts, costs, and
-              latencies are assumptions.
+              model abilities; the grades are real grader output on stand-in answers, except for open-ended tasks,
+              whose rubric scores are drawn without calling the judge. Token counts, costs, and latencies are
+              assumptions.
             </>
           ) : (
             <>
@@ -169,6 +170,7 @@ export default function Home() {
             answer. Extraction must be valid against a JSON Schema and then match field by field. Code runs against
             hidden unit tests in a subprocess. Open-ended answers are scored by Opus against a written rubric, without
             being told which model wrote them.
+            {SYNTHETIC && " In this synthetic run the judge was not called: its rubric scores are drawn by the simulator."}
           </li>
           <li>
             <span className="font-medium text-fg">Cost basis.</span> Costs on this page are list price per request,

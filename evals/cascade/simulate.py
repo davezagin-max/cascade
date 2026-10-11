@@ -13,6 +13,11 @@ known-wrong answer on a fail) to the **real graders**. Scores, pass flags, and
 grader details in a synthetic run are therefore genuine grader output; only the
 answers, token counts, and latencies are invented.
 
+The one exception is the open-ended tasks. Their grader is the Opus judge, which
+cannot be called without a key, so `simulated_judge` draws a score per rubric
+criterion instead and only the weighting is real code. Those rows say so in their
+rationales, and the dashboard says so wherever it describes the synthetic run.
+
 The numbers below are priors, not calibrated to anything. They were chosen once
 and not tuned afterwards: tuning them until the router headline looked good would
 make the placeholder a lie.
@@ -49,8 +54,9 @@ from .tasks import JudgeSpec, Task, task_index
 DEFAULT_SEED = 7
 SIMULATOR_NOTE = (
     "Deterministic simulator. Pass or fail is drawn from assumed abilities and task "
-    "difficulties; the stand-in answers are graded by the real graders. Tokens, costs "
-    "and latencies are derived from stated assumptions. Not a measurement."
+    "difficulties; the stand-in answers are graded by the real graders, except open-ended "
+    "ones, whose rubric scores are drawn without calling the judge. Tokens, costs and "
+    "latencies are derived from stated assumptions. Not a measurement."
 )
 
 # Assumed ability per arm, on the same 1-5 scale as task difficulty.

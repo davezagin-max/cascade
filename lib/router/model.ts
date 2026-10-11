@@ -7,7 +7,7 @@
  * instant preview while typing), so the two cannot disagree.
  */
 import routerJson from "@/data/router.json";
-import type { Effort, ModelId } from "@/lib/config";
+import { MODELS, type Effort, type ModelId } from "@/lib/config";
 import { extractFeatures, type FeatureSpec } from "./features";
 
 export interface RouterArm {
@@ -117,9 +117,9 @@ export function probability(logit: number): number {
 }
 
 const MODEL_NAMES: Record<string, string> = {
-  "claude-haiku-5-5": "Haiku",
-  "claude-sonnet-5-5": "Sonnet",
-  "claude-opus-5-5": "Opus",
+  [MODELS.haiku]: "Haiku",
+  [MODELS.sonnet]: "Sonnet",
+  [MODELS.opus]: "Opus",
 };
 
 export function armLabel(arm: { model: string; effort: string }): string {

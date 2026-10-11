@@ -18,7 +18,7 @@ export default function TasksPage() {
         Every task in the suite is hand-written, with a grader that needs no judgement call wherever one is possible.
         Open a task to see its prompt, how it is graded, and what each model and effort level answered.
         {SYNTHETIC &&
-          " While the data is synthetic, the answers shown are each task's own stand-in answers, graded by the real graders."}
+          " While the data is synthetic, the answers shown are each task's own stand-in answers, graded by the real graders (open-ended tasks get drawn rubric scores, because the judge cannot be called without a key)."}
       </p>
       <TaskExplorer
         tasks={tasks}

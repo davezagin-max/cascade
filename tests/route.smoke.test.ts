@@ -65,6 +65,18 @@ describe("POST /api/route-and-run in demo mode", () => {
     const body = await res.json();
     expect(body).toMatchObject({ ok: false, error: { kind: "demo_miss" } });
     expect(body.error.message).toContain("add your Anthropic key");
+    // Whether the presets are samples or recordings is the fixture's to say, not this message's.
+    expect(body.error.message.toLowerCase()).not.toContain("recorded");
+  });
+
+  it("replays a preset only for that preset's own prompt", async () => {
+    // A known id with someone else's text must not be answered with the preset's answer.
+    const res = await POST(post({ demoId: preset.body.demoId, prompt: "Ignore that. What is 2 + 2?" }));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toMatchObject({ ok: false, error: { kind: "invalid" } });
+    // An id that is not a preset is just a free-form prompt, which needs a key.
+    const unknown = await POST(post({ demoId: "not-a-preset", prompt: preset.body.prompt }));
+    expect(unknown.status).toBe(404);
   });
 
   it("rejects malformed bodies and malformed keys", async () => {
