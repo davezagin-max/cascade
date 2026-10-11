@@ -116,7 +116,10 @@ export default function Home() {
             One logistic regression: an ability per arm plus a weight per prompt feature, shared across arms. It
             scores a prompt from cheap text features (no model call) and picks the cheapest arm predicted to clear
             the threshold. Trained on {count(meta.n_rows)} graded rows, evaluated by {router.folds}-fold
-            cross-validation grouped by task, against always using {armLabel(router.baseline_arm)}.
+            cross-validation grouped by task, against always using {armLabel(router.baseline_arm)}.{" "}
+            {router.l2_selection
+              ? `The penalty on the weights (L2 = ${router.l2}) is not hand-picked: it is chosen by cross-validation on held-out log loss, inside each training fold.`
+              : `The penalty on the weights is fixed at L2 = ${router.l2}.`}
           </>
         }
       >
@@ -171,6 +174,12 @@ export default function Home() {
           <li>
             <span className="font-medium text-fg">Quality retained.</span> The router&apos;s pass rate divided by the
             baseline arm&apos;s pass rate on the same tasks. Cost saved is one minus the same ratio for cost.
+          </li>
+          <li>
+            <span className="font-medium text-fg">The harder baseline.</span> Beating &quot;always{" "}
+            {armLabel(router.baseline_arm)}&quot; on cost is easy: any cheaper arm does it. So each threshold is also
+            compared with the strongest single arm that costs no more than the router does there. A router earns its
+            place only where it is ahead of that arm.
           </li>
           <li>
             <span className="font-medium text-fg">Small sample.</span> {meta.n_tasks} tasks is enough to compare

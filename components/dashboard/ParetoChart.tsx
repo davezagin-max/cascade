@@ -103,11 +103,11 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
       taken.push(chosen);
       return { text, x: chosen.x, y: chosen.y + 9.5 };
     });
-    return { x, y, xTicks, yTicks, points, labels };
+    return { x, y, xTicks, yTicks, points, labels, taken };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [arms, curve, width, height]);
 
-  const { x, y, xTicks, yTicks, points, labels } = layout;
+  const { x, y, xTicks, yTicks, points, labels, taken } = layout;
   const frontier = points.filter((p) => p.arm.frontier).sort((a, b) => a.arm.cost - b.arm.cost);
   const frontierPath = frontier.map((p, i) => `${i ? "L" : "M"}${p.px.toFixed(1)},${p.py.toFixed(1)}`).join("");
   const curvePath = curve
@@ -116,6 +116,24 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
   const operating = curve[selected];
   const ox = x(operating.cost);
   const oy = y(operating.quality);
+
+  // The router's marker moves with the threshold, so its label looks for a free corner each time.
+  const routerLabel = (() => {
+    const w = 38;
+    const h = 12;
+    const corners: Box[] = [
+      { x: ox - 12 - w, y: oy - 20, w, h },
+      { x: ox + 12, y: oy + 8, w, h },
+      { x: ox + 12, y: oy - 20, w, h },
+      { x: ox - 12 - w, y: oy + 8, w, h },
+      { x: ox - w / 2, y: oy - 27, w, h },
+      { x: ox - w / 2, y: oy + 15, w, h },
+    ];
+    const inside = (b: Box) =>
+      b.x >= margin.left && b.x + b.w <= width - 2 && b.y >= 0 && b.y + b.h <= height - margin.bottom;
+    const free = corners.find((b) => inside(b) && !taken.some((t) => overlaps(b, t))) ?? corners[0];
+    return { dx: free.x - ox, dy: free.y - oy + 9.5 };
+  })();
 
   const tip = (() => {
     if (active === "router") {
@@ -245,9 +263,8 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
             <circle r={9} fill="var(--bg)" stroke="var(--accent)" strokeWidth={2} />
             <circle r={3.5} fill="var(--accent)" />
             <text
-              x={-13}
-              y={-8}
-              textAnchor="end"
+              x={routerLabel.dx}
+              y={routerLabel.dy}
               fontSize="10"
               fontWeight={600}
               fill="var(--accent)"

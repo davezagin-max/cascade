@@ -56,6 +56,7 @@ export function Playground({ presets, maxChars }: Props) {
   const [run, setRun] = useState<Run>({ state: "idle" });
   const controller = useRef<AbortController | null>(null);
   const runId = useRef(0);
+  const responseRef = useRef<HTMLDivElement>(null);
   const synthetic = ROUTER.trained_on.synthetic;
 
   // Abandoning the page mid-run must stop the request, and with it the model call.
@@ -109,6 +110,16 @@ export function Playground({ presets, maxChars }: Props) {
   function choose(item: Preset) {
     setPrompt(item.prompt);
     void start(item.prompt, item.demoId);
+    // On a phone the answer is below the fold, so a preset tap would appear to do nothing.
+    requestAnimationFrame(() => {
+      const node = responseRef.current;
+      if (!node) return;
+      const { top, bottom } = node.getBoundingClientRect();
+      if (top >= 0 && bottom <= window.innerHeight) return;
+      const stacked = window.matchMedia("(max-width: 1023px)").matches;
+      const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      node.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: stacked ? "start" : "nearest" });
+    });
   }
 
   return (
@@ -193,7 +204,10 @@ export function Playground({ presets, maxChars }: Props) {
           </div>
         </form>
 
-        <Response run={run} decision={decision} synthetic={synthetic} onAddKey={openKeyModal} />
+        {/* The scroll margin clears the sticky banner when a preset scrolls the answer into view. */}
+        <div ref={responseRef} className="scroll-mt-24 sm:scroll-mt-12">
+          <Response run={run} decision={decision} synthetic={synthetic} onAddKey={openKeyModal} />
+        </div>
       </div>
 
       <DecisionPanel decision={decision} synthetic={synthetic} />

@@ -1,5 +1,5 @@
 import { ArmGlyph } from "@/components/ArmGlyph";
-import { armLabel, pct } from "@/lib/format";
+import { armCode, armLabel, pct } from "@/lib/format";
 import type { ArmSummary, RouterSummary } from "@/lib/run-schema";
 
 interface Props {
@@ -60,7 +60,7 @@ export function CategoryHeatmap({ arms, categories, router }: Props) {
               <th scope="row" className="whitespace-nowrap px-2 py-1.5 text-left font-normal">
                 <ArmGlyph model={arm.model_short} effort={arm.effort} />{" "}
                 <span className="hidden sm:inline">{armLabel(arm.key)}</span>
-                <span className="sm:hidden">{arm.effort}</span>
+                <span className="sm:hidden">{armCode(arm.key)}</span>
               </th>
               {categories.map((category) => (
                 <Cell key={category.key} value={arm.by_category[category.key]?.quality} />

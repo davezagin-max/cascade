@@ -14,6 +14,15 @@ export interface SweepPoint {
   cost_saved: number;
   quality_retained: number;
   mix: Record<string, number>;
+  /** The strongest single arm that costs no more than the router does at this threshold. */
+  best_fixed: { arm: string; quality: number; cost_per_request: number } | null;
+}
+
+/** "2.6 points ahead of", "4.8 points behind", or "level with": the router against one arm. */
+function versus(delta: number): string {
+  const points = Math.abs(delta * 100).toFixed(1);
+  if (points === "0.0") return "level with";
+  return `${points} points ${delta > 0 ? "ahead of" : "behind"}`;
 }
 
 interface Props {
@@ -68,8 +77,12 @@ export function HeroLab({
             of quality. <SimTag show={synthetic} className="align-[0.35em]" />
           </h1>
           <p className="mt-3 max-w-xl text-sm text-muted">
-            Each request goes to the cheapest Claude model and effort level predicted to get it right. Measured by{" "}
-            {folds}-fold cross-validation on {nTasks} eval tasks: every task is routed by a model that never saw it.
+            Each request goes to the cheapest Claude model and effort level predicted to get it right.{" "}
+            {/* The method is repeated in the router section; on a phone this line would push the control down. */}
+            <span className="hidden sm:inline">
+              Measured by {folds}-fold cross-validation on {nTasks} eval tasks: every task is routed by a model that
+              never saw it.
+            </span>
           </p>
         </div>
 
@@ -132,6 +145,30 @@ export function HeroLab({
               <dd className="tabular mt-0.5 text-sm">
                 <span className="font-semibold">{pct(point.quality)}</span>{" "}
                 <span className="text-muted">vs {pct(baseline.quality)}</span>
+              </dd>
+            </div>
+            {/* The harder baseline: not "always Opus", but the best single arm you could afford instead. */}
+            <div className="col-span-2 border-t border-grid pt-2" data-testid="best-fixed">
+              <dt className="text-muted">against the best single arm at this cost or less</dt>
+              <dd className="mt-0.5 font-sans text-[13px] leading-snug">
+                {point.best_fixed ? (
+                  <>
+                    The router is{" "}
+                    <span className="tabular font-mono font-semibold">
+                      {versus(point.quality - point.best_fixed.quality)}
+                    </span>{" "}
+                    always using{" "}
+                    <span className="whitespace-nowrap font-mono">
+                      <ArmGlyph {...armParts(point.best_fixed.arm)} size={10} /> {armLabel(point.best_fixed.arm)}
+                    </span>{" "}
+                    <span className="tabular whitespace-nowrap font-mono text-muted">
+                      ({pct(point.best_fixed.quality)} at {usd(point.best_fixed.cost_per_request * 1000)})
+                    </span>
+                    .
+                  </>
+                ) : (
+                  "No single arm is this cheap."
+                )}
               </dd>
             </div>
           </dl>

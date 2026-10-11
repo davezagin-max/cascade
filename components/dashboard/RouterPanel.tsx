@@ -109,8 +109,23 @@ export function FeatureWeights({ router }: { router: RouterSummary }) {
 }
 
 export function RouterFacts({ router }: { router: RouterSummary }) {
-  const { confusion, calibration, oracle, n_tasks: n } = router;
+  const { confusion, calibration, oracle, headline, log_loss: loss, n_tasks: n } = router;
+  const fixed = headline.best_fixed;
+  const points = (delta: number) => `${delta >= 0 ? "+" : "−"}${Math.abs(delta * 100).toFixed(1)} pts`;
+  // How often the router beats the best arm it could have been replaced with, across the sweep.
+  const compared = router.sweep.filter((point) => point.best_fixed);
+  const ahead = compared.filter((point) => point.quality > (point.best_fixed?.quality ?? 0) + 1e-9).length;
   const facts: [string, string, string][] = [
+    [
+      "against the best fixed arm",
+      fixed ? `${points(headline.quality - fixed.quality)} vs ${armLabel(fixed.arm)}` : "no arm is this cheap",
+      `pass rate against always using the strongest single arm that costs no more; the router is ahead at ${ahead} of ${compared.length} thresholds`,
+    ],
+    [
+      "do the features help",
+      `log loss ${loss.router.toFixed(3)} vs ${loss.arms_only.toFixed(3)}`,
+      "held-out log loss with the prompt features, against per-arm abilities alone; lower is better, equal means no signal",
+    ],
     ["exact", `${confusion.exact} of ${n}`, "the router picked the hindsight-best arm"],
     ["over-routed", `${confusion.over_routed} of ${n}`, "it picked a dearer arm than needed: wasted money"],
     ["under-routed", `${confusion.under_routed} of ${n}`, "it picked a cheaper arm than needed: quality at risk"],

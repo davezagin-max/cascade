@@ -12,9 +12,14 @@ interface DemoBannerProps {
   aiRequired?: boolean;
   /** What a live request does in this app, when it is not simply "calls Opus". */
   liveLabel?: string;
+  /**
+   * Demo-mode wording for an app whose answers do not all come from Opus. Both
+   * are required together, and `placeholder` still decides which one is shown.
+   */
+  demoLabels?: { sample: string; recorded: string };
 }
 
-export function DemoBanner({ placeholder = false, aiRequired = true, liveLabel }: DemoBannerProps) {
+export function DemoBanner({ placeholder = false, aiRequired = true, liveLabel, demoLabels }: DemoBannerProps) {
   const { isLive, openKeyModal } = useKey();
 
   if (isLive) {
@@ -34,8 +39,9 @@ export function DemoBanner({ placeholder = false, aiRequired = true, liveLabel }
   const message = !aiRequired
     ? "Everything here works without a key. Add one to turn on the Claude Opus 5.5 features."
     : placeholder
-      ? "Demo mode — showing sample output until a real Claude Opus 5.5 run is recorded. Add your key to go live."
-      : "Demo mode — replaying a recorded Claude Opus 5.5 run. Add your key to go live.";
+      ? (demoLabels?.sample ??
+        "Demo mode — showing sample output until a real Claude Opus 5.5 run is recorded. Add your key to go live.")
+      : (demoLabels?.recorded ?? "Demo mode — replaying a recorded Claude Opus 5.5 run. Add your key to go live.");
 
   return (
     <div

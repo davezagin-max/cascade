@@ -35,6 +35,12 @@ export default function PlaygroundPage() {
       <DemoBanner
         placeholder={anyPlaceholder}
         liveLabel="Live: the model the router picks answers with your key."
+        demoLabels={{
+          sample:
+            "Demo mode: routing is real, and the preset answers are hand-written samples until real runs are recorded. Add your key to run any prompt.",
+          recorded:
+            "Demo mode: routing is real, and the preset answers are recorded runs of the routed model. Add your key to run any prompt.",
+        }}
       />
       <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 pb-4 pt-6 sm:pt-8">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Playground</p>
