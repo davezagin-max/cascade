@@ -10,7 +10,7 @@
     "opus-medium",
     "opus-high"
   ],
-  "created_at": "2026-10-11T22:26:29+00:00",
+  "created_at": "2026-10-11T22:47:19+00:00",
   "generator": {
     "name": "cascade simulate",
     "note": "Deterministic simulator. Pass or fail is drawn from assumed abilities and task difficulties; the stand-in answers are graded by the real graders. Tokens, costs and latencies are derived from stated assumptions. Not a measurement.",

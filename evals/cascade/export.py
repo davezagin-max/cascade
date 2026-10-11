@@ -170,12 +170,14 @@ def _task_cells(rows: list[Row]) -> dict[str, dict[str, float]]:
     for row in rows:
         if row["passed"] is not None:
             cells[arm_key(row)].append(row)
+    # Keyed in arm order, not row order, so exporting the same run twice writes the same file.
     return {
-        key: {
-            "pass_rate": _mean([1.0 if row["passed"] else 0.0 for row in members]),
-            "mean_score": _mean([row["score"] for row in members]),
+        arm.key: {
+            "pass_rate": _mean([1.0 if row["passed"] else 0.0 for row in cells[arm.key]]),
+            "mean_score": _mean([row["score"] for row in cells[arm.key]]),
         }
-        for key, members in cells.items()
+        for arm in _arm_order(rows)
+        if arm.key in cells
     }
 
 
@@ -291,7 +293,7 @@ def build_summary(
             "run_id": meta["run_id"],
             "synthetic": bool(meta["synthetic"]),
             "created_at": meta["created_at"],
-            "generator": meta.get("generator"),
+            "generator": dict(sorted(meta["generator"].items())) if meta.get("generator") else None,
             "suite_hash": meta.get("suite_hash"),
             "models": [m for m in MODELS if any(arm["model"] == m for arm in arms)],
             "efforts": [e for e in EFFORTS if any(arm["effort"] == e for arm in arms)],

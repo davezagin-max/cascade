@@ -92,6 +92,9 @@ def test_committed_dashboard_data_is_exactly_what_export_produces() -> None:
     summary, rows, meta, model, caching = _committed()
     rebuilt = build_summary(rows, TASKS, meta=meta, router_model=model, caching=caching)
     _close(json.loads(json.dumps(rebuilt)), summary)
+    # Byte for byte, too: exporting a run again must not rewrite the file in a new key order.
+    committed_text = (DATA / "summary.json").read_text(encoding="utf-8")
+    assert json.dumps(rebuilt, indent=2, ensure_ascii=False) + "\n" == committed_text
     served = json.loads((DATA / "router.json").read_text(encoding="utf-8"))
     _close(json.loads(json.dumps(web_router(model, rebuilt["arms"]))), served)
     assert summary["meta"]["suite_hash"] == suite_hash(TASKS), (
