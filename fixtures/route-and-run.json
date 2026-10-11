@@ -1,0 +1,2897 @@
+{
+  "dice-probability": {
+    "label": "Solve a probability problem",
+    "placeholder": true,
+    "recordedAt": null,
+    "model": "claude-opus-5-5",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "costUsd": 0,
+    "data": {
+      "arm": {
+        "key": "opus-high",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      },
+      "routerVersion": "1206d2c22b6f",
+      "answer": "Count the ordered outcomes out of 6^3 = 216.\n\n- Sum 18: (6,6,6), 1 way.\n- Sum 17: one 5 and two 6s, 3 ways.\n- Sum 16: one 4 and two 6s (3 ways), or two 5s and one 6 (3 ways), 6 ways.\n\nThat is 1 + 3 + 6 = 10 outcomes, so the probability is 10/216 = **5/108**.",
+      "stopReason": "end_turn",
+      "comparison": null
+    },
+    "events": [
+      {
+        "at": 0,
+        "event": {
+          "type": "decision",
+          "arm": {
+            "key": "opus-high",
+            "model": "claude-opus-5-5",
+            "effort": "high"
+          },
+          "routerVersion": "1206d2c22b6f"
+        }
+      },
+      {
+        "at": 700,
+        "event": {
+          "type": "text",
+          "delta": "Count "
+        }
+      },
+      {
+        "at": 755,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 810,
+        "event": {
+          "type": "text",
+          "delta": "ordered "
+        }
+      },
+      {
+        "at": 865,
+        "event": {
+          "type": "text",
+          "delta": "outcomes "
+        }
+      },
+      {
+        "at": 920,
+        "event": {
+          "type": "text",
+          "delta": "out "
+        }
+      },
+      {
+        "at": 975,
+        "event": {
+          "type": "text",
+          "delta": "of "
+        }
+      },
+      {
+        "at": 1030,
+        "event": {
+          "type": "text",
+          "delta": "6^3 "
+        }
+      },
+      {
+        "at": 1085,
+        "event": {
+          "type": "text",
+          "delta": "= "
+        }
+      },
+      {
+        "at": 1140,
+        "event": {
+          "type": "text",
+          "delta": "216.\n\n"
+        }
+      },
+      {
+        "at": 1195,
+        "event": {
+          "type": "text",
+          "delta": "- "
+        }
+      },
+      {
+        "at": 1250,
+        "event": {
+          "type": "text",
+          "delta": "Sum "
+        }
+      },
+      {
+        "at": 1305,
+        "event": {
+          "type": "text",
+          "delta": "18: "
+        }
+      },
+      {
+        "at": 1360,
+        "event": {
+          "type": "text",
+          "delta": "(6,6,6), "
+        }
+      },
+      {
+        "at": 1415,
+        "event": {
+          "type": "text",
+          "delta": "1 "
+        }
+      },
+      {
+        "at": 1470,
+        "event": {
+          "type": "text",
+          "delta": "way.\n"
+        }
+      },
+      {
+        "at": 1525,
+        "event": {
+          "type": "text",
+          "delta": "- "
+        }
+      },
+      {
+        "at": 1580,
+        "event": {
+          "type": "text",
+          "delta": "Sum "
+        }
+      },
+      {
+        "at": 1635,
+        "event": {
+          "type": "text",
+          "delta": "17: "
+        }
+      },
+      {
+        "at": 1690,
+        "event": {
+          "type": "text",
+          "delta": "one "
+        }
+      },
+      {
+        "at": 1745,
+        "event": {
+          "type": "text",
+          "delta": "5 "
+        }
+      },
+      {
+        "at": 1800,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 1855,
+        "event": {
+          "type": "text",
+          "delta": "two "
+        }
+      },
+      {
+        "at": 1910,
+        "event": {
+          "type": "text",
+          "delta": "6s, "
+        }
+      },
+      {
+        "at": 1965,
+        "event": {
+          "type": "text",
+          "delta": "3 "
+        }
+      },
+      {
+        "at": 2020,
+        "event": {
+          "type": "text",
+          "delta": "ways.\n"
+        }
+      },
+      {
+        "at": 2075,
+        "event": {
+          "type": "text",
+          "delta": "- "
+        }
+      },
+      {
+        "at": 2130,
+        "event": {
+          "type": "text",
+          "delta": "Sum "
+        }
+      },
+      {
+        "at": 2185,
+        "event": {
+          "type": "text",
+          "delta": "16: "
+        }
+      },
+      {
+        "at": 2240,
+        "event": {
+          "type": "text",
+          "delta": "one "
+        }
+      },
+      {
+        "at": 2295,
+        "event": {
+          "type": "text",
+          "delta": "4 "
+        }
+      },
+      {
+        "at": 2350,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 2405,
+        "event": {
+          "type": "text",
+          "delta": "two "
+        }
+      },
+      {
+        "at": 2460,
+        "event": {
+          "type": "text",
+          "delta": "6s "
+        }
+      },
+      {
+        "at": 2515,
+        "event": {
+          "type": "text",
+          "delta": "(3 "
+        }
+      },
+      {
+        "at": 2570,
+        "event": {
+          "type": "text",
+          "delta": "ways), "
+        }
+      },
+      {
+        "at": 2625,
+        "event": {
+          "type": "text",
+          "delta": "or "
+        }
+      },
+      {
+        "at": 2680,
+        "event": {
+          "type": "text",
+          "delta": "two "
+        }
+      },
+      {
+        "at": 2735,
+        "event": {
+          "type": "text",
+          "delta": "5s "
+        }
+      },
+      {
+        "at": 2790,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 2845,
+        "event": {
+          "type": "text",
+          "delta": "one "
+        }
+      },
+      {
+        "at": 2900,
+        "event": {
+          "type": "text",
+          "delta": "6 "
+        }
+      },
+      {
+        "at": 2955,
+        "event": {
+          "type": "text",
+          "delta": "(3 "
+        }
+      },
+      {
+        "at": 3010,
+        "event": {
+          "type": "text",
+          "delta": "ways), "
+        }
+      },
+      {
+        "at": 3065,
+        "event": {
+          "type": "text",
+          "delta": "6 "
+        }
+      },
+      {
+        "at": 3120,
+        "event": {
+          "type": "text",
+          "delta": "ways.\n\n"
+        }
+      },
+      {
+        "at": 3175,
+        "event": {
+          "type": "text",
+          "delta": "That "
+        }
+      },
+      {
+        "at": 3230,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 3285,
+        "event": {
+          "type": "text",
+          "delta": "1 "
+        }
+      },
+      {
+        "at": 3340,
+        "event": {
+          "type": "text",
+          "delta": "+ "
+        }
+      },
+      {
+        "at": 3395,
+        "event": {
+          "type": "text",
+          "delta": "3 "
+        }
+      },
+      {
+        "at": 3450,
+        "event": {
+          "type": "text",
+          "delta": "+ "
+        }
+      },
+      {
+        "at": 3505,
+        "event": {
+          "type": "text",
+          "delta": "6 "
+        }
+      },
+      {
+        "at": 3560,
+        "event": {
+          "type": "text",
+          "delta": "= "
+        }
+      },
+      {
+        "at": 3615,
+        "event": {
+          "type": "text",
+          "delta": "10 "
+        }
+      },
+      {
+        "at": 3670,
+        "event": {
+          "type": "text",
+          "delta": "outcomes, "
+        }
+      },
+      {
+        "at": 3725,
+        "event": {
+          "type": "text",
+          "delta": "so "
+        }
+      },
+      {
+        "at": 3780,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 3835,
+        "event": {
+          "type": "text",
+          "delta": "probability "
+        }
+      },
+      {
+        "at": 3890,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 3945,
+        "event": {
+          "type": "text",
+          "delta": "10/216 "
+        }
+      },
+      {
+        "at": 4000,
+        "event": {
+          "type": "text",
+          "delta": "= "
+        }
+      },
+      {
+        "at": 4055,
+        "event": {
+          "type": "text",
+          "delta": "**5/108**."
+        }
+      }
+    ]
+  },
+  "explain-race": {
+    "label": "Explain a concept with one analogy",
+    "placeholder": true,
+    "recordedAt": null,
+    "model": "claude-haiku-5-5",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "costUsd": 0,
+    "data": {
+      "arm": {
+        "key": "haiku-high",
+        "model": "claude-haiku-5-5",
+        "effort": "high"
+      },
+      "routerVersion": "1206d2c22b6f",
+      "answer": "A race condition is a bug where the result depends on the unlucky timing of two things happening at once.\n\nPicture two cashiers selling the last concert ticket. Each checks the system, sees one ticket left, and sells it. Both checks were correct when they were made, yet two customers now hold the same seat.\n\nIn code the cashiers are threads or requests, and the ticket is shared data. Each one reads a value, decides, then writes, and another slips in between the read and the write. The fix is to make check-and-update a single indivisible step, with a lock, a transaction, or an atomic operation.",
+      "stopReason": "end_turn",
+      "comparison": null
+    },
+    "events": [
+      {
+        "at": 0,
+        "event": {
+          "type": "decision",
+          "arm": {
+            "key": "haiku-high",
+            "model": "claude-haiku-5-5",
+            "effort": "high"
+          },
+          "routerVersion": "1206d2c22b6f"
+        }
+      },
+      {
+        "at": 700,
+        "event": {
+          "type": "text",
+          "delta": "A "
+        }
+      },
+      {
+        "at": 755,
+        "event": {
+          "type": "text",
+          "delta": "race "
+        }
+      },
+      {
+        "at": 810,
+        "event": {
+          "type": "text",
+          "delta": "condition "
+        }
+      },
+      {
+        "at": 865,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 920,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 975,
+        "event": {
+          "type": "text",
+          "delta": "bug "
+        }
+      },
+      {
+        "at": 1030,
+        "event": {
+          "type": "text",
+          "delta": "where "
+        }
+      },
+      {
+        "at": 1085,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 1140,
+        "event": {
+          "type": "text",
+          "delta": "result "
+        }
+      },
+      {
+        "at": 1195,
+        "event": {
+          "type": "text",
+          "delta": "depends "
+        }
+      },
+      {
+        "at": 1250,
+        "event": {
+          "type": "text",
+          "delta": "on "
+        }
+      },
+      {
+        "at": 1305,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 1360,
+        "event": {
+          "type": "text",
+          "delta": "unlucky "
+        }
+      },
+      {
+        "at": 1415,
+        "event": {
+          "type": "text",
+          "delta": "timing "
+        }
+      },
+      {
+        "at": 1470,
+        "event": {
+          "type": "text",
+          "delta": "of "
+        }
+      },
+      {
+        "at": 1525,
+        "event": {
+          "type": "text",
+          "delta": "two "
+        }
+      },
+      {
+        "at": 1580,
+        "event": {
+          "type": "text",
+          "delta": "things "
+        }
+      },
+      {
+        "at": 1635,
+        "event": {
+          "type": "text",
+          "delta": "happening "
+        }
+      },
+      {
+        "at": 1690,
+        "event": {
+          "type": "text",
+          "delta": "at "
+        }
+      },
+      {
+        "at": 1745,
+        "event": {
+          "type": "text",
+          "delta": "once.\n\n"
+        }
+      },
+      {
+        "at": 1800,
+        "event": {
+          "type": "text",
+          "delta": "Picture "
+        }
+      },
+      {
+        "at": 1855,
+        "event": {
+          "type": "text",
+          "delta": "two "
+        }
+      },
+      {
+        "at": 1910,
+        "event": {
+          "type": "text",
+          "delta": "cashiers "
+        }
+      },
+      {
+        "at": 1965,
+        "event": {
+          "type": "text",
+          "delta": "selling "
+        }
+      },
+      {
+        "at": 2020,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 2075,
+        "event": {
+          "type": "text",
+          "delta": "last "
+        }
+      },
+      {
+        "at": 2130,
+        "event": {
+          "type": "text",
+          "delta": "concert "
+        }
+      },
+      {
+        "at": 2185,
+        "event": {
+          "type": "text",
+          "delta": "ticket. "
+        }
+      },
+      {
+        "at": 2240,
+        "event": {
+          "type": "text",
+          "delta": "Each "
+        }
+      },
+      {
+        "at": 2295,
+        "event": {
+          "type": "text",
+          "delta": "checks "
+        }
+      },
+      {
+        "at": 2350,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 2405,
+        "event": {
+          "type": "text",
+          "delta": "system, "
+        }
+      },
+      {
+        "at": 2460,
+        "event": {
+          "type": "text",
+          "delta": "sees "
+        }
+      },
+      {
+        "at": 2515,
+        "event": {
+          "type": "text",
+          "delta": "one "
+        }
+      },
+      {
+        "at": 2570,
+        "event": {
+          "type": "text",
+          "delta": "ticket "
+        }
+      },
+      {
+        "at": 2625,
+        "event": {
+          "type": "text",
+          "delta": "left, "
+        }
+      },
+      {
+        "at": 2680,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 2735,
+        "event": {
+          "type": "text",
+          "delta": "sells "
+        }
+      },
+      {
+        "at": 2790,
+        "event": {
+          "type": "text",
+          "delta": "it. "
+        }
+      },
+      {
+        "at": 2845,
+        "event": {
+          "type": "text",
+          "delta": "Both "
+        }
+      },
+      {
+        "at": 2900,
+        "event": {
+          "type": "text",
+          "delta": "checks "
+        }
+      },
+      {
+        "at": 2955,
+        "event": {
+          "type": "text",
+          "delta": "were "
+        }
+      },
+      {
+        "at": 3010,
+        "event": {
+          "type": "text",
+          "delta": "correct "
+        }
+      },
+      {
+        "at": 3065,
+        "event": {
+          "type": "text",
+          "delta": "when "
+        }
+      },
+      {
+        "at": 3120,
+        "event": {
+          "type": "text",
+          "delta": "they "
+        }
+      },
+      {
+        "at": 3175,
+        "event": {
+          "type": "text",
+          "delta": "were "
+        }
+      },
+      {
+        "at": 3230,
+        "event": {
+          "type": "text",
+          "delta": "made, "
+        }
+      },
+      {
+        "at": 3285,
+        "event": {
+          "type": "text",
+          "delta": "yet "
+        }
+      },
+      {
+        "at": 3340,
+        "event": {
+          "type": "text",
+          "delta": "two "
+        }
+      },
+      {
+        "at": 3395,
+        "event": {
+          "type": "text",
+          "delta": "customers "
+        }
+      },
+      {
+        "at": 3450,
+        "event": {
+          "type": "text",
+          "delta": "now "
+        }
+      },
+      {
+        "at": 3505,
+        "event": {
+          "type": "text",
+          "delta": "hold "
+        }
+      },
+      {
+        "at": 3560,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 3615,
+        "event": {
+          "type": "text",
+          "delta": "same "
+        }
+      },
+      {
+        "at": 3670,
+        "event": {
+          "type": "text",
+          "delta": "seat.\n\n"
+        }
+      },
+      {
+        "at": 3725,
+        "event": {
+          "type": "text",
+          "delta": "In "
+        }
+      },
+      {
+        "at": 3780,
+        "event": {
+          "type": "text",
+          "delta": "code "
+        }
+      },
+      {
+        "at": 3835,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 3890,
+        "event": {
+          "type": "text",
+          "delta": "cashiers "
+        }
+      },
+      {
+        "at": 3945,
+        "event": {
+          "type": "text",
+          "delta": "are "
+        }
+      },
+      {
+        "at": 4000,
+        "event": {
+          "type": "text",
+          "delta": "threads "
+        }
+      },
+      {
+        "at": 4055,
+        "event": {
+          "type": "text",
+          "delta": "or "
+        }
+      },
+      {
+        "at": 4110,
+        "event": {
+          "type": "text",
+          "delta": "requests, "
+        }
+      },
+      {
+        "at": 4165,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 4220,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 4275,
+        "event": {
+          "type": "text",
+          "delta": "ticket "
+        }
+      },
+      {
+        "at": 4330,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 4385,
+        "event": {
+          "type": "text",
+          "delta": "shared "
+        }
+      },
+      {
+        "at": 4440,
+        "event": {
+          "type": "text",
+          "delta": "data. "
+        }
+      },
+      {
+        "at": 4495,
+        "event": {
+          "type": "text",
+          "delta": "Each "
+        }
+      },
+      {
+        "at": 4550,
+        "event": {
+          "type": "text",
+          "delta": "one "
+        }
+      },
+      {
+        "at": 4605,
+        "event": {
+          "type": "text",
+          "delta": "reads "
+        }
+      },
+      {
+        "at": 4660,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 4715,
+        "event": {
+          "type": "text",
+          "delta": "value, "
+        }
+      },
+      {
+        "at": 4770,
+        "event": {
+          "type": "text",
+          "delta": "decides, "
+        }
+      },
+      {
+        "at": 4825,
+        "event": {
+          "type": "text",
+          "delta": "then "
+        }
+      },
+      {
+        "at": 4880,
+        "event": {
+          "type": "text",
+          "delta": "writes, "
+        }
+      },
+      {
+        "at": 4935,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 4990,
+        "event": {
+          "type": "text",
+          "delta": "another "
+        }
+      },
+      {
+        "at": 5045,
+        "event": {
+          "type": "text",
+          "delta": "slips "
+        }
+      },
+      {
+        "at": 5100,
+        "event": {
+          "type": "text",
+          "delta": "in "
+        }
+      },
+      {
+        "at": 5155,
+        "event": {
+          "type": "text",
+          "delta": "between "
+        }
+      },
+      {
+        "at": 5210,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 5265,
+        "event": {
+          "type": "text",
+          "delta": "read "
+        }
+      },
+      {
+        "at": 5320,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 5375,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 5430,
+        "event": {
+          "type": "text",
+          "delta": "write. "
+        }
+      },
+      {
+        "at": 5485,
+        "event": {
+          "type": "text",
+          "delta": "The "
+        }
+      },
+      {
+        "at": 5540,
+        "event": {
+          "type": "text",
+          "delta": "fix "
+        }
+      },
+      {
+        "at": 5595,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 5650,
+        "event": {
+          "type": "text",
+          "delta": "to "
+        }
+      },
+      {
+        "at": 5705,
+        "event": {
+          "type": "text",
+          "delta": "make "
+        }
+      },
+      {
+        "at": 5760,
+        "event": {
+          "type": "text",
+          "delta": "check-and-update "
+        }
+      },
+      {
+        "at": 5815,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 5870,
+        "event": {
+          "type": "text",
+          "delta": "single "
+        }
+      },
+      {
+        "at": 5925,
+        "event": {
+          "type": "text",
+          "delta": "indivisible "
+        }
+      },
+      {
+        "at": 5980,
+        "event": {
+          "type": "text",
+          "delta": "step, "
+        }
+      },
+      {
+        "at": 6035,
+        "event": {
+          "type": "text",
+          "delta": "with "
+        }
+      },
+      {
+        "at": 6090,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 6145,
+        "event": {
+          "type": "text",
+          "delta": "lock, "
+        }
+      },
+      {
+        "at": 6200,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 6255,
+        "event": {
+          "type": "text",
+          "delta": "transaction, "
+        }
+      },
+      {
+        "at": 6310,
+        "event": {
+          "type": "text",
+          "delta": "or "
+        }
+      },
+      {
+        "at": 6365,
+        "event": {
+          "type": "text",
+          "delta": "an "
+        }
+      },
+      {
+        "at": 6420,
+        "event": {
+          "type": "text",
+          "delta": "atomic "
+        }
+      },
+      {
+        "at": 6475,
+        "event": {
+          "type": "text",
+          "delta": "operation."
+        }
+      }
+    ]
+  },
+  "meeting-json": {
+    "label": "Extract a meeting as JSON",
+    "placeholder": true,
+    "recordedAt": null,
+    "model": "claude-sonnet-5-5",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "costUsd": 0,
+    "data": {
+      "arm": {
+        "key": "sonnet-high",
+        "model": "claude-sonnet-5-5",
+        "effort": "high"
+      },
+      "routerVersion": "1206d2c22b6f",
+      "answer": "```json\n{\n  \"date\": \"2026-06-03\",\n  \"time_24h\": \"16:00\",\n  \"attendees\": [\"Ana\", \"Raj\"]\n}\n```\n\nThe message was sent on Monday 1 June 2026, so the Wednesday it refers to is 3 June.",
+      "stopReason": "end_turn",
+      "comparison": null
+    },
+    "events": [
+      {
+        "at": 0,
+        "event": {
+          "type": "decision",
+          "arm": {
+            "key": "sonnet-high",
+            "model": "claude-sonnet-5-5",
+            "effort": "high"
+          },
+          "routerVersion": "1206d2c22b6f"
+        }
+      },
+      {
+        "at": 700,
+        "event": {
+          "type": "text",
+          "delta": "```json\n"
+        }
+      },
+      {
+        "at": 755,
+        "event": {
+          "type": "text",
+          "delta": "{\n  "
+        }
+      },
+      {
+        "at": 810,
+        "event": {
+          "type": "text",
+          "delta": "\"date\": "
+        }
+      },
+      {
+        "at": 865,
+        "event": {
+          "type": "text",
+          "delta": "\"2026-06-03\",\n  "
+        }
+      },
+      {
+        "at": 920,
+        "event": {
+          "type": "text",
+          "delta": "\"time_24h\": "
+        }
+      },
+      {
+        "at": 975,
+        "event": {
+          "type": "text",
+          "delta": "\"16:00\",\n  "
+        }
+      },
+      {
+        "at": 1030,
+        "event": {
+          "type": "text",
+          "delta": "\"attendees\": "
+        }
+      },
+      {
+        "at": 1085,
+        "event": {
+          "type": "text",
+          "delta": "[\"Ana\", "
+        }
+      },
+      {
+        "at": 1140,
+        "event": {
+          "type": "text",
+          "delta": "\"Raj\"]\n"
+        }
+      },
+      {
+        "at": 1195,
+        "event": {
+          "type": "text",
+          "delta": "}\n"
+        }
+      },
+      {
+        "at": 1250,
+        "event": {
+          "type": "text",
+          "delta": "```\n\n"
+        }
+      },
+      {
+        "at": 1305,
+        "event": {
+          "type": "text",
+          "delta": "The "
+        }
+      },
+      {
+        "at": 1360,
+        "event": {
+          "type": "text",
+          "delta": "message "
+        }
+      },
+      {
+        "at": 1415,
+        "event": {
+          "type": "text",
+          "delta": "was "
+        }
+      },
+      {
+        "at": 1470,
+        "event": {
+          "type": "text",
+          "delta": "sent "
+        }
+      },
+      {
+        "at": 1525,
+        "event": {
+          "type": "text",
+          "delta": "on "
+        }
+      },
+      {
+        "at": 1580,
+        "event": {
+          "type": "text",
+          "delta": "Monday "
+        }
+      },
+      {
+        "at": 1635,
+        "event": {
+          "type": "text",
+          "delta": "1 "
+        }
+      },
+      {
+        "at": 1690,
+        "event": {
+          "type": "text",
+          "delta": "June "
+        }
+      },
+      {
+        "at": 1745,
+        "event": {
+          "type": "text",
+          "delta": "2026, "
+        }
+      },
+      {
+        "at": 1800,
+        "event": {
+          "type": "text",
+          "delta": "so "
+        }
+      },
+      {
+        "at": 1855,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 1910,
+        "event": {
+          "type": "text",
+          "delta": "Wednesday "
+        }
+      },
+      {
+        "at": 1965,
+        "event": {
+          "type": "text",
+          "delta": "it "
+        }
+      },
+      {
+        "at": 2020,
+        "event": {
+          "type": "text",
+          "delta": "refers "
+        }
+      },
+      {
+        "at": 2075,
+        "event": {
+          "type": "text",
+          "delta": "to "
+        }
+      },
+      {
+        "at": 2130,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 2185,
+        "event": {
+          "type": "text",
+          "delta": "3 "
+        }
+      },
+      {
+        "at": 2240,
+        "event": {
+          "type": "text",
+          "delta": "June."
+        }
+      }
+    ]
+  },
+  "merge-sorted": {
+    "label": "Write a linear-time merge",
+    "placeholder": true,
+    "recordedAt": null,
+    "model": "claude-sonnet-5-5",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "costUsd": 0,
+    "data": {
+      "arm": {
+        "key": "sonnet-medium",
+        "model": "claude-sonnet-5-5",
+        "effort": "medium"
+      },
+      "routerVersion": "1206d2c22b6f",
+      "answer": "```python\ndef merge_sorted(a: list[int], b: list[int]) -> list[int]:\n    merged: list[int] = []\n    i = j = 0\n    while i < len(a) and j < len(b):\n        if a[i] <= b[j]:\n            merged.append(a[i])\n            i += 1\n        else:\n            merged.append(b[j])\n            j += 1\n    merged.extend(a[i:])\n    merged.extend(b[j:])\n    return merged\n```\n\nTwo indices walk the lists once each, so the work is O(len(a) + len(b)). Using `<=` keeps equal elements from `a` ahead of those from `b`, which makes the merge stable. Neither input is modified.",
+      "stopReason": "end_turn",
+      "comparison": null
+    },
+    "events": [
+      {
+        "at": 0,
+        "event": {
+          "type": "decision",
+          "arm": {
+            "key": "sonnet-medium",
+            "model": "claude-sonnet-5-5",
+            "effort": "medium"
+          },
+          "routerVersion": "1206d2c22b6f"
+        }
+      },
+      {
+        "at": 700,
+        "event": {
+          "type": "text",
+          "delta": "```python\n"
+        }
+      },
+      {
+        "at": 755,
+        "event": {
+          "type": "text",
+          "delta": "def "
+        }
+      },
+      {
+        "at": 810,
+        "event": {
+          "type": "text",
+          "delta": "merge_sorted(a: "
+        }
+      },
+      {
+        "at": 865,
+        "event": {
+          "type": "text",
+          "delta": "list[int], "
+        }
+      },
+      {
+        "at": 920,
+        "event": {
+          "type": "text",
+          "delta": "b: "
+        }
+      },
+      {
+        "at": 975,
+        "event": {
+          "type": "text",
+          "delta": "list[int]) "
+        }
+      },
+      {
+        "at": 1030,
+        "event": {
+          "type": "text",
+          "delta": "-> "
+        }
+      },
+      {
+        "at": 1085,
+        "event": {
+          "type": "text",
+          "delta": "list[int]:\n    "
+        }
+      },
+      {
+        "at": 1140,
+        "event": {
+          "type": "text",
+          "delta": "merged: "
+        }
+      },
+      {
+        "at": 1195,
+        "event": {
+          "type": "text",
+          "delta": "list[int] "
+        }
+      },
+      {
+        "at": 1250,
+        "event": {
+          "type": "text",
+          "delta": "= "
+        }
+      },
+      {
+        "at": 1305,
+        "event": {
+          "type": "text",
+          "delta": "[]\n    "
+        }
+      },
+      {
+        "at": 1360,
+        "event": {
+          "type": "text",
+          "delta": "i "
+        }
+      },
+      {
+        "at": 1415,
+        "event": {
+          "type": "text",
+          "delta": "= "
+        }
+      },
+      {
+        "at": 1470,
+        "event": {
+          "type": "text",
+          "delta": "j "
+        }
+      },
+      {
+        "at": 1525,
+        "event": {
+          "type": "text",
+          "delta": "= "
+        }
+      },
+      {
+        "at": 1580,
+        "event": {
+          "type": "text",
+          "delta": "0\n    "
+        }
+      },
+      {
+        "at": 1635,
+        "event": {
+          "type": "text",
+          "delta": "while "
+        }
+      },
+      {
+        "at": 1690,
+        "event": {
+          "type": "text",
+          "delta": "i "
+        }
+      },
+      {
+        "at": 1745,
+        "event": {
+          "type": "text",
+          "delta": "< "
+        }
+      },
+      {
+        "at": 1800,
+        "event": {
+          "type": "text",
+          "delta": "len(a) "
+        }
+      },
+      {
+        "at": 1855,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 1910,
+        "event": {
+          "type": "text",
+          "delta": "j "
+        }
+      },
+      {
+        "at": 1965,
+        "event": {
+          "type": "text",
+          "delta": "< "
+        }
+      },
+      {
+        "at": 2020,
+        "event": {
+          "type": "text",
+          "delta": "len(b):\n        "
+        }
+      },
+      {
+        "at": 2075,
+        "event": {
+          "type": "text",
+          "delta": "if "
+        }
+      },
+      {
+        "at": 2130,
+        "event": {
+          "type": "text",
+          "delta": "a[i] "
+        }
+      },
+      {
+        "at": 2185,
+        "event": {
+          "type": "text",
+          "delta": "<= "
+        }
+      },
+      {
+        "at": 2240,
+        "event": {
+          "type": "text",
+          "delta": "b[j]:\n            "
+        }
+      },
+      {
+        "at": 2295,
+        "event": {
+          "type": "text",
+          "delta": "merged.append(a[i])\n            "
+        }
+      },
+      {
+        "at": 2350,
+        "event": {
+          "type": "text",
+          "delta": "i "
+        }
+      },
+      {
+        "at": 2405,
+        "event": {
+          "type": "text",
+          "delta": "+= "
+        }
+      },
+      {
+        "at": 2460,
+        "event": {
+          "type": "text",
+          "delta": "1\n        "
+        }
+      },
+      {
+        "at": 2515,
+        "event": {
+          "type": "text",
+          "delta": "else:\n            "
+        }
+      },
+      {
+        "at": 2570,
+        "event": {
+          "type": "text",
+          "delta": "merged.append(b[j])\n            "
+        }
+      },
+      {
+        "at": 2625,
+        "event": {
+          "type": "text",
+          "delta": "j "
+        }
+      },
+      {
+        "at": 2680,
+        "event": {
+          "type": "text",
+          "delta": "+= "
+        }
+      },
+      {
+        "at": 2735,
+        "event": {
+          "type": "text",
+          "delta": "1\n    "
+        }
+      },
+      {
+        "at": 2790,
+        "event": {
+          "type": "text",
+          "delta": "merged.extend(a[i:])\n    "
+        }
+      },
+      {
+        "at": 2845,
+        "event": {
+          "type": "text",
+          "delta": "merged.extend(b[j:])\n    "
+        }
+      },
+      {
+        "at": 2900,
+        "event": {
+          "type": "text",
+          "delta": "return "
+        }
+      },
+      {
+        "at": 2955,
+        "event": {
+          "type": "text",
+          "delta": "merged\n"
+        }
+      },
+      {
+        "at": 3010,
+        "event": {
+          "type": "text",
+          "delta": "```\n\n"
+        }
+      },
+      {
+        "at": 3065,
+        "event": {
+          "type": "text",
+          "delta": "Two "
+        }
+      },
+      {
+        "at": 3120,
+        "event": {
+          "type": "text",
+          "delta": "indices "
+        }
+      },
+      {
+        "at": 3175,
+        "event": {
+          "type": "text",
+          "delta": "walk "
+        }
+      },
+      {
+        "at": 3230,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 3285,
+        "event": {
+          "type": "text",
+          "delta": "lists "
+        }
+      },
+      {
+        "at": 3340,
+        "event": {
+          "type": "text",
+          "delta": "once "
+        }
+      },
+      {
+        "at": 3395,
+        "event": {
+          "type": "text",
+          "delta": "each, "
+        }
+      },
+      {
+        "at": 3450,
+        "event": {
+          "type": "text",
+          "delta": "so "
+        }
+      },
+      {
+        "at": 3505,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 3560,
+        "event": {
+          "type": "text",
+          "delta": "work "
+        }
+      },
+      {
+        "at": 3615,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 3670,
+        "event": {
+          "type": "text",
+          "delta": "O(len(a) "
+        }
+      },
+      {
+        "at": 3725,
+        "event": {
+          "type": "text",
+          "delta": "+ "
+        }
+      },
+      {
+        "at": 3780,
+        "event": {
+          "type": "text",
+          "delta": "len(b)). "
+        }
+      },
+      {
+        "at": 3835,
+        "event": {
+          "type": "text",
+          "delta": "Using "
+        }
+      },
+      {
+        "at": 3890,
+        "event": {
+          "type": "text",
+          "delta": "`<=` "
+        }
+      },
+      {
+        "at": 3945,
+        "event": {
+          "type": "text",
+          "delta": "keeps "
+        }
+      },
+      {
+        "at": 4000,
+        "event": {
+          "type": "text",
+          "delta": "equal "
+        }
+      },
+      {
+        "at": 4055,
+        "event": {
+          "type": "text",
+          "delta": "elements "
+        }
+      },
+      {
+        "at": 4110,
+        "event": {
+          "type": "text",
+          "delta": "from "
+        }
+      },
+      {
+        "at": 4165,
+        "event": {
+          "type": "text",
+          "delta": "`a` "
+        }
+      },
+      {
+        "at": 4220,
+        "event": {
+          "type": "text",
+          "delta": "ahead "
+        }
+      },
+      {
+        "at": 4275,
+        "event": {
+          "type": "text",
+          "delta": "of "
+        }
+      },
+      {
+        "at": 4330,
+        "event": {
+          "type": "text",
+          "delta": "those "
+        }
+      },
+      {
+        "at": 4385,
+        "event": {
+          "type": "text",
+          "delta": "from "
+        }
+      },
+      {
+        "at": 4440,
+        "event": {
+          "type": "text",
+          "delta": "`b`, "
+        }
+      },
+      {
+        "at": 4495,
+        "event": {
+          "type": "text",
+          "delta": "which "
+        }
+      },
+      {
+        "at": 4550,
+        "event": {
+          "type": "text",
+          "delta": "makes "
+        }
+      },
+      {
+        "at": 4605,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 4660,
+        "event": {
+          "type": "text",
+          "delta": "merge "
+        }
+      },
+      {
+        "at": 4715,
+        "event": {
+          "type": "text",
+          "delta": "stable. "
+        }
+      },
+      {
+        "at": 4770,
+        "event": {
+          "type": "text",
+          "delta": "Neither "
+        }
+      },
+      {
+        "at": 4825,
+        "event": {
+          "type": "text",
+          "delta": "input "
+        }
+      },
+      {
+        "at": 4880,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 4935,
+        "event": {
+          "type": "text",
+          "delta": "modified."
+        }
+      }
+    ]
+  },
+  "refund-email": {
+    "label": "Write a short customer email",
+    "placeholder": true,
+    "recordedAt": null,
+    "model": "claude-haiku-5-5",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "costUsd": 0,
+    "data": {
+      "arm": {
+        "key": "haiku-medium",
+        "model": "claude-haiku-5-5",
+        "effort": "medium"
+      },
+      "routerVersion": "1206d2c22b6f",
+      "answer": "Subject: Your refund is on its way\n\nHi Maya,\n\nThanks for your patience. Your refund has been approved and is now with our payments team. It will reach your original payment method within five working days, and your bank may take another day to show it.\n\nI'm sorry for the wait. If the money has not arrived by next Friday, reply to this email and I will chase it personally.\n\nWarm regards,\nJo\nCustomer Support",
+      "stopReason": "end_turn",
+      "comparison": null
+    },
+    "events": [
+      {
+        "at": 0,
+        "event": {
+          "type": "decision",
+          "arm": {
+            "key": "haiku-medium",
+            "model": "claude-haiku-5-5",
+            "effort": "medium"
+          },
+          "routerVersion": "1206d2c22b6f"
+        }
+      },
+      {
+        "at": 700,
+        "event": {
+          "type": "text",
+          "delta": "Subject: "
+        }
+      },
+      {
+        "at": 755,
+        "event": {
+          "type": "text",
+          "delta": "Your "
+        }
+      },
+      {
+        "at": 810,
+        "event": {
+          "type": "text",
+          "delta": "refund "
+        }
+      },
+      {
+        "at": 865,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 920,
+        "event": {
+          "type": "text",
+          "delta": "on "
+        }
+      },
+      {
+        "at": 975,
+        "event": {
+          "type": "text",
+          "delta": "its "
+        }
+      },
+      {
+        "at": 1030,
+        "event": {
+          "type": "text",
+          "delta": "way\n\n"
+        }
+      },
+      {
+        "at": 1085,
+        "event": {
+          "type": "text",
+          "delta": "Hi "
+        }
+      },
+      {
+        "at": 1140,
+        "event": {
+          "type": "text",
+          "delta": "Maya,\n\n"
+        }
+      },
+      {
+        "at": 1195,
+        "event": {
+          "type": "text",
+          "delta": "Thanks "
+        }
+      },
+      {
+        "at": 1250,
+        "event": {
+          "type": "text",
+          "delta": "for "
+        }
+      },
+      {
+        "at": 1305,
+        "event": {
+          "type": "text",
+          "delta": "your "
+        }
+      },
+      {
+        "at": 1360,
+        "event": {
+          "type": "text",
+          "delta": "patience. "
+        }
+      },
+      {
+        "at": 1415,
+        "event": {
+          "type": "text",
+          "delta": "Your "
+        }
+      },
+      {
+        "at": 1470,
+        "event": {
+          "type": "text",
+          "delta": "refund "
+        }
+      },
+      {
+        "at": 1525,
+        "event": {
+          "type": "text",
+          "delta": "has "
+        }
+      },
+      {
+        "at": 1580,
+        "event": {
+          "type": "text",
+          "delta": "been "
+        }
+      },
+      {
+        "at": 1635,
+        "event": {
+          "type": "text",
+          "delta": "approved "
+        }
+      },
+      {
+        "at": 1690,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 1745,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 1800,
+        "event": {
+          "type": "text",
+          "delta": "now "
+        }
+      },
+      {
+        "at": 1855,
+        "event": {
+          "type": "text",
+          "delta": "with "
+        }
+      },
+      {
+        "at": 1910,
+        "event": {
+          "type": "text",
+          "delta": "our "
+        }
+      },
+      {
+        "at": 1965,
+        "event": {
+          "type": "text",
+          "delta": "payments "
+        }
+      },
+      {
+        "at": 2020,
+        "event": {
+          "type": "text",
+          "delta": "team. "
+        }
+      },
+      {
+        "at": 2075,
+        "event": {
+          "type": "text",
+          "delta": "It "
+        }
+      },
+      {
+        "at": 2130,
+        "event": {
+          "type": "text",
+          "delta": "will "
+        }
+      },
+      {
+        "at": 2185,
+        "event": {
+          "type": "text",
+          "delta": "reach "
+        }
+      },
+      {
+        "at": 2240,
+        "event": {
+          "type": "text",
+          "delta": "your "
+        }
+      },
+      {
+        "at": 2295,
+        "event": {
+          "type": "text",
+          "delta": "original "
+        }
+      },
+      {
+        "at": 2350,
+        "event": {
+          "type": "text",
+          "delta": "payment "
+        }
+      },
+      {
+        "at": 2405,
+        "event": {
+          "type": "text",
+          "delta": "method "
+        }
+      },
+      {
+        "at": 2460,
+        "event": {
+          "type": "text",
+          "delta": "within "
+        }
+      },
+      {
+        "at": 2515,
+        "event": {
+          "type": "text",
+          "delta": "five "
+        }
+      },
+      {
+        "at": 2570,
+        "event": {
+          "type": "text",
+          "delta": "working "
+        }
+      },
+      {
+        "at": 2625,
+        "event": {
+          "type": "text",
+          "delta": "days, "
+        }
+      },
+      {
+        "at": 2680,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 2735,
+        "event": {
+          "type": "text",
+          "delta": "your "
+        }
+      },
+      {
+        "at": 2790,
+        "event": {
+          "type": "text",
+          "delta": "bank "
+        }
+      },
+      {
+        "at": 2845,
+        "event": {
+          "type": "text",
+          "delta": "may "
+        }
+      },
+      {
+        "at": 2900,
+        "event": {
+          "type": "text",
+          "delta": "take "
+        }
+      },
+      {
+        "at": 2955,
+        "event": {
+          "type": "text",
+          "delta": "another "
+        }
+      },
+      {
+        "at": 3010,
+        "event": {
+          "type": "text",
+          "delta": "day "
+        }
+      },
+      {
+        "at": 3065,
+        "event": {
+          "type": "text",
+          "delta": "to "
+        }
+      },
+      {
+        "at": 3120,
+        "event": {
+          "type": "text",
+          "delta": "show "
+        }
+      },
+      {
+        "at": 3175,
+        "event": {
+          "type": "text",
+          "delta": "it.\n\n"
+        }
+      },
+      {
+        "at": 3230,
+        "event": {
+          "type": "text",
+          "delta": "I'm "
+        }
+      },
+      {
+        "at": 3285,
+        "event": {
+          "type": "text",
+          "delta": "sorry "
+        }
+      },
+      {
+        "at": 3340,
+        "event": {
+          "type": "text",
+          "delta": "for "
+        }
+      },
+      {
+        "at": 3395,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 3450,
+        "event": {
+          "type": "text",
+          "delta": "wait. "
+        }
+      },
+      {
+        "at": 3505,
+        "event": {
+          "type": "text",
+          "delta": "If "
+        }
+      },
+      {
+        "at": 3560,
+        "event": {
+          "type": "text",
+          "delta": "the "
+        }
+      },
+      {
+        "at": 3615,
+        "event": {
+          "type": "text",
+          "delta": "money "
+        }
+      },
+      {
+        "at": 3670,
+        "event": {
+          "type": "text",
+          "delta": "has "
+        }
+      },
+      {
+        "at": 3725,
+        "event": {
+          "type": "text",
+          "delta": "not "
+        }
+      },
+      {
+        "at": 3780,
+        "event": {
+          "type": "text",
+          "delta": "arrived "
+        }
+      },
+      {
+        "at": 3835,
+        "event": {
+          "type": "text",
+          "delta": "by "
+        }
+      },
+      {
+        "at": 3890,
+        "event": {
+          "type": "text",
+          "delta": "next "
+        }
+      },
+      {
+        "at": 3945,
+        "event": {
+          "type": "text",
+          "delta": "Friday, "
+        }
+      },
+      {
+        "at": 4000,
+        "event": {
+          "type": "text",
+          "delta": "reply "
+        }
+      },
+      {
+        "at": 4055,
+        "event": {
+          "type": "text",
+          "delta": "to "
+        }
+      },
+      {
+        "at": 4110,
+        "event": {
+          "type": "text",
+          "delta": "this "
+        }
+      },
+      {
+        "at": 4165,
+        "event": {
+          "type": "text",
+          "delta": "email "
+        }
+      },
+      {
+        "at": 4220,
+        "event": {
+          "type": "text",
+          "delta": "and "
+        }
+      },
+      {
+        "at": 4275,
+        "event": {
+          "type": "text",
+          "delta": "I "
+        }
+      },
+      {
+        "at": 4330,
+        "event": {
+          "type": "text",
+          "delta": "will "
+        }
+      },
+      {
+        "at": 4385,
+        "event": {
+          "type": "text",
+          "delta": "chase "
+        }
+      },
+      {
+        "at": 4440,
+        "event": {
+          "type": "text",
+          "delta": "it "
+        }
+      },
+      {
+        "at": 4495,
+        "event": {
+          "type": "text",
+          "delta": "personally.\n\n"
+        }
+      },
+      {
+        "at": 4550,
+        "event": {
+          "type": "text",
+          "delta": "Warm "
+        }
+      },
+      {
+        "at": 4605,
+        "event": {
+          "type": "text",
+          "delta": "regards,\n"
+        }
+      },
+      {
+        "at": 4660,
+        "event": {
+          "type": "text",
+          "delta": "Jo\n"
+        }
+      },
+      {
+        "at": 4715,
+        "event": {
+          "type": "text",
+          "delta": "Customer "
+        }
+      },
+      {
+        "at": 4770,
+        "event": {
+          "type": "text",
+          "delta": "Support"
+        }
+      }
+    ]
+  },
+  "support-ticket": {
+    "label": "Classify a support ticket",
+    "placeholder": true,
+    "recordedAt": null,
+    "model": "claude-haiku-5-5",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0
+    },
+    "costUsd": 0,
+    "data": {
+      "arm": {
+        "key": "haiku-low",
+        "model": "claude-haiku-5-5",
+        "effort": "low"
+      },
+      "routerVersion": "1206d2c22b6f",
+      "answer": "**shipping**\n\nThe customer is reporting a parcel marked delivered that never arrived, plus a broken tracking link. Both are delivery problems, not a charge, a product fault, or a login issue.",
+      "stopReason": "end_turn",
+      "comparison": null
+    },
+    "events": [
+      {
+        "at": 0,
+        "event": {
+          "type": "decision",
+          "arm": {
+            "key": "haiku-low",
+            "model": "claude-haiku-5-5",
+            "effort": "low"
+          },
+          "routerVersion": "1206d2c22b6f"
+        }
+      },
+      {
+        "at": 700,
+        "event": {
+          "type": "text",
+          "delta": "**shipping**\n\n"
+        }
+      },
+      {
+        "at": 755,
+        "event": {
+          "type": "text",
+          "delta": "The "
+        }
+      },
+      {
+        "at": 810,
+        "event": {
+          "type": "text",
+          "delta": "customer "
+        }
+      },
+      {
+        "at": 865,
+        "event": {
+          "type": "text",
+          "delta": "is "
+        }
+      },
+      {
+        "at": 920,
+        "event": {
+          "type": "text",
+          "delta": "reporting "
+        }
+      },
+      {
+        "at": 975,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 1030,
+        "event": {
+          "type": "text",
+          "delta": "parcel "
+        }
+      },
+      {
+        "at": 1085,
+        "event": {
+          "type": "text",
+          "delta": "marked "
+        }
+      },
+      {
+        "at": 1140,
+        "event": {
+          "type": "text",
+          "delta": "delivered "
+        }
+      },
+      {
+        "at": 1195,
+        "event": {
+          "type": "text",
+          "delta": "that "
+        }
+      },
+      {
+        "at": 1250,
+        "event": {
+          "type": "text",
+          "delta": "never "
+        }
+      },
+      {
+        "at": 1305,
+        "event": {
+          "type": "text",
+          "delta": "arrived, "
+        }
+      },
+      {
+        "at": 1360,
+        "event": {
+          "type": "text",
+          "delta": "plus "
+        }
+      },
+      {
+        "at": 1415,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 1470,
+        "event": {
+          "type": "text",
+          "delta": "broken "
+        }
+      },
+      {
+        "at": 1525,
+        "event": {
+          "type": "text",
+          "delta": "tracking "
+        }
+      },
+      {
+        "at": 1580,
+        "event": {
+          "type": "text",
+          "delta": "link. "
+        }
+      },
+      {
+        "at": 1635,
+        "event": {
+          "type": "text",
+          "delta": "Both "
+        }
+      },
+      {
+        "at": 1690,
+        "event": {
+          "type": "text",
+          "delta": "are "
+        }
+      },
+      {
+        "at": 1745,
+        "event": {
+          "type": "text",
+          "delta": "delivery "
+        }
+      },
+      {
+        "at": 1800,
+        "event": {
+          "type": "text",
+          "delta": "problems, "
+        }
+      },
+      {
+        "at": 1855,
+        "event": {
+          "type": "text",
+          "delta": "not "
+        }
+      },
+      {
+        "at": 1910,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 1965,
+        "event": {
+          "type": "text",
+          "delta": "charge, "
+        }
+      },
+      {
+        "at": 2020,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 2075,
+        "event": {
+          "type": "text",
+          "delta": "product "
+        }
+      },
+      {
+        "at": 2130,
+        "event": {
+          "type": "text",
+          "delta": "fault, "
+        }
+      },
+      {
+        "at": 2185,
+        "event": {
+          "type": "text",
+          "delta": "or "
+        }
+      },
+      {
+        "at": 2240,
+        "event": {
+          "type": "text",
+          "delta": "a "
+        }
+      },
+      {
+        "at": 2295,
+        "event": {
+          "type": "text",
+          "delta": "login "
+        }
+      },
+      {
+        "at": 2350,
+        "event": {
+          "type": "text",
+          "delta": "issue."
+        }
+      }
+    ]
+  }
+}

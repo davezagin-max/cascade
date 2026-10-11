@@ -1,4 +1,50 @@
 [
-  { "route": "/api/example", "body": { "demoId": "powder-day", "topic": "a powder day in the Wasatch" } },
-  { "route": "/api/example", "body": { "demoId": "house-set", "topic": "the first drop in a house set" } }
+  {
+    "route": "/api/route-and-run",
+    "label": "Classify a support ticket",
+    "body": {
+      "demoId": "support-ticket",
+      "prompt": "Classify this support message as one of: billing, shipping, technical, account.\n\n\"My order says delivered but nothing has arrived, and the tracking link is dead.\""
+    }
+  },
+  {
+    "route": "/api/route-and-run",
+    "label": "Write a short customer email",
+    "body": {
+      "demoId": "refund-email",
+      "prompt": "Write an email to a customer explaining that their refund will take five working days. Keep it under 90 words, warm in tone, and do not apologize more than once."
+    }
+  },
+  {
+    "route": "/api/route-and-run",
+    "label": "Explain a concept with one analogy",
+    "body": {
+      "demoId": "explain-race",
+      "prompt": "Explain what a race condition is to a new engineer in at most 120 words, with exactly one concrete analogy."
+    }
+  },
+  {
+    "route": "/api/route-and-run",
+    "label": "Extract a meeting as JSON",
+    "body": {
+      "demoId": "meeting-json",
+      "prompt": "Extract the meeting as JSON with the keys date (YYYY-MM-DD), time_24h, and attendees.\n\n\"Sent Monday 2026-06-01: can we do Wednesday at 4pm with Ana and Raj?\""
+    }
+  },
+  {
+    "route": "/api/route-and-run",
+    "label": "Write a linear-time merge",
+    "body": {
+      "demoId": "merge-sorted",
+      "prompt": "Write a Python function `merge_sorted(a: list[int], b: list[int]) -> list[int]` that merges two sorted lists into one sorted list in O(len(a) + len(b)) time without using sort()."
+    }
+  },
+  {
+    "route": "/api/route-and-run",
+    "label": "Solve a probability problem",
+    "body": {
+      "demoId": "dice-probability",
+      "prompt": "Three fair dice are rolled. What is the probability that the sum is at least 16? Give a fraction in lowest terms."
+    }
+  }
 ]

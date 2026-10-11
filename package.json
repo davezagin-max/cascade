@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3150",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -13,7 +13,8 @@
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "smoke": "vitest run tests/kit/smoke.live.test.ts",
     "record": "node scripts/record.mjs",
-    "screenshots": "node scripts/screenshot.mjs"
+    "screenshots": "node scripts/screenshot.mjs",
+    "overflow": "node scripts/overflow.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",
