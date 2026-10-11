@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 
 from cascade import store
+from cascade.config import OPUS
 from cascade.export import (
     REPO_ROOT,
     bootstrap_ci,
@@ -119,8 +120,9 @@ def test_arm_summary_matches_the_rows() -> None:
     model, effort = arms[key]["model"], arms[key]["effort"]
     mine = [row for row in rows if row["model"] == model and row["effort"] == effort]
     assert arms[key]["n_rows"] == len(mine)
+    answered = [row for row in mine if row["status"] != "error"]
     assert arms[key]["cost_per_1k"] == pytest.approx(
-        1000 * sum(r["cost_usd"] for r in mine) / len(mine)
+        1000 * sum(r["cost_usd"] for r in answered) / len(answered)
     )
     graded = [row for row in mine if row["passed"] is not None]
     # Quality is the mean over tasks of each task's pass rate, so a task that lost a trial
@@ -179,3 +181,21 @@ def test_export_says_when_playground_fixtures_predate_the_router(tmp_path: Path)
     write({**older, "placeholder": False}, current)
     recorded = stale_fixtures_note(tmp_path, "abc")
     assert recorded is not None and "placeholder_fixtures.py" not in recorded
+
+
+def test_failed_requests_do_not_make_an_arm_look_cheaper() -> None:
+    def row(task_id: str, status: str, cost: float, passed: bool | None) -> dict:
+        return {
+            "task_id": task_id, "category": "code", "model": OPUS, "effort": "high", "trial": 0,
+            "status": status, "cost_usd": cost, "input_tokens": 100 if cost else 0,
+            "output_tokens": 400 if cost else 0, "latency_ms": None, "passed": passed,
+            "score": None if passed is None else float(passed),
+        }  # fmt: skip
+
+    rows = [row("a", "ok", 0.02, True), row("b", "ok", 0.04, False), row("c", "error", 0.0, None)]
+    (arm,) = summarize_arms(rows)
+    assert arm["cost_per_request"] == pytest.approx(0.03)  # not 0.02: the failure is left out
+    assert arm["output_tokens_mean"] == 400 and arm["input_tokens_mean"] == 100
+    assert (
+        arm["quality"] == 0.5 and arm["errors"] == 1 and arm["ungraded"] == 1 and arm["n_rows"] == 3
+    )

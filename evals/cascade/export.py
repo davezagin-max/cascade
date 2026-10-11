@@ -123,7 +123,10 @@ def summarize_arms(rows: list[Row]) -> list[dict[str, Any]]:
         task_rates = [_mean(values) for _, values in sorted(per_task.items())]
         low, high = bootstrap_ci(task_rates, arm.key)
         latencies = [row["latency_ms"] for row in members if row["latency_ms"] is not None]
-        cost = _mean([row["cost_usd"] for row in members])
+        # A request that failed at the API cost nothing and used no tokens. Counting it
+        # would make the arm look cheaper than it is.
+        answered = [row for row in members if row["status"] != "error"]
+        cost = _mean([row["cost_usd"] for row in answered])
         by_category: dict[str, Any] = {}
         for category in CATEGORIES:
             subset = [row for row in graded if row["category"] == category]
@@ -149,8 +152,8 @@ def summarize_arms(rows: list[Row]) -> list[dict[str, Any]]:
                 "latency_p50_ms": percentile(latencies, 0.5),
                 "latency_p95_ms": percentile(latencies, 0.95),
                 "latency_n": len(latencies),
-                "input_tokens_mean": _mean([row["input_tokens"] for row in members]),
-                "output_tokens_mean": _mean([row["output_tokens"] for row in members]),
+                "input_tokens_mean": _mean([row["input_tokens"] for row in answered]),
+                "output_tokens_mean": _mean([row["output_tokens"] for row in answered]),
                 "n_rows": len(members),
                 "refusals": sum(1 for row in members if row["status"] == "refusal"),
                 "truncated": sum(1 for row in members if row["status"] == "truncated"),
