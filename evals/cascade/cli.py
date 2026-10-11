@@ -28,7 +28,7 @@ import anthropic
 
 from . import store
 from .caching import DEFAULT_CALLS, estimate_caching_usd, run_caching, simulate_caching
-from .claude_client import client_for_key, count_tokens
+from .claude_client import api_error, client_for_key, count_tokens
 from .config import (
     DEFAULT_EFFORTS,
     EFFORTS,
@@ -354,6 +354,13 @@ def execute_run(
         executor.stop.set()
         log(f"\nInterrupted. Resume with: cascade run --resume {run_id}")
         return 130
+    except anthropic.APIError as error:
+        # A whole-run failure, such as a rejected key when the first batch is submitted. (One
+        # failed request is not: it becomes an error row.) The SDK's own message is not
+        # printed; `api_error` maps it to a sentence that cannot contain the key.
+        log(f"Stopped: {api_error(error)[1]}")
+        log(f"What was collected is kept. Resume with: cascade run --resume {run_id}")
+        return 2
 
     meta["spent_usd"] = round(guard.spent_usd, 4)
     finish(

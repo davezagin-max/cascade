@@ -99,6 +99,37 @@ def test_run_asks_before_spending_more_than_five_dollars(monkeypatch, tmp_path: 
     assert client.sync_requests == [] and client.batches == {}
 
 
+def test_a_rejected_key_stops_the_run_with_a_plain_message(tmp_path: Path) -> None:
+    import anthropic
+
+    secret = "sk-ant-" + "x" * 24
+    client = ScriptedClient(fake_api)
+
+    def rejected(**_params: object) -> object:
+        # Built without its HTTP response: only the type and the message matter here.
+        error = anthropic.AuthenticationError.__new__(anthropic.AuthenticationError)
+        error.args = (f"invalid x-api-key {secret}",)
+        raise error
+
+    client.messages.batches.create = rejected
+    lines: list[str] = []
+    code = cli.execute_run(
+        parse("run", "--yes", "--no-caching", "--run-id", "bad-key"),
+        client,  # type: ignore[arg-type]
+        log=lines.append,
+        root=tmp_path,
+        out=tmp_path,
+        sleep=lambda _s: None,
+    )
+    assert code == 2
+    printed = "\n".join(lines)
+    assert "Stopped: Anthropic rejected that API key." in printed
+    assert "cascade run --resume bad-key" in printed
+    # Whatever the SDK put in its own message, the key is never echoed.
+    assert secret not in printed
+    assert not (tmp_path / "data" / "summary.json").exists()
+
+
 def test_a_run_refuses_to_start_on_a_broken_suite(monkeypatch, tmp_path: Path) -> None:
     from cascade.validate import Problem
 
