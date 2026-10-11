@@ -1,0 +1,471 @@
+{
+  "version": "076d6348fa4f",
+  "trained_on": {
+    "run_id": "synthetic-v1",
+    "synthetic": true,
+    "n_tasks": 63,
+    "n_rows": 1701
+  },
+  "threshold": 0.9,
+  "threshold_logit": 2.197225,
+  "baseline_arm": "opus-high",
+  "features": [
+    {
+      "name": "length",
+      "label": "Prompt length",
+      "kind": "chars",
+      "transform": "sat",
+      "k": 400
+    },
+    {
+      "name": "words",
+      "label": "Word count",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "[a-z0-9]+"
+      ],
+      "transform": "sat",
+      "k": 80
+    },
+    {
+      "name": "line_breaks",
+      "label": "Line breaks",
+      "kind": "count",
+      "source": "raw",
+      "patterns": [
+        "\\n"
+      ],
+      "transform": "sat",
+      "k": 8
+    },
+    {
+      "name": "digit_density",
+      "label": "Digit density",
+      "kind": "count",
+      "source": "raw",
+      "patterns": [
+        "[0-9]"
+      ],
+      "transform": "ratio"
+    },
+    {
+      "name": "numbers",
+      "label": "Numbers in the prompt",
+      "kind": "count",
+      "source": "raw",
+      "patterns": [
+        "[0-9]+(?:[,][0-9]{3})*(?:[.][0-9]+)?"
+      ],
+      "transform": "sat",
+      "k": 8
+    },
+    {
+      "name": "big_numbers",
+      "label": "Large numbers or powers",
+      "kind": "count",
+      "source": "raw",
+      "patterns": [
+        "[0-9]{4,}",
+        "[0-9]\\^[0-9]",
+        "\\*\\*"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "code_cues",
+      "label": "Code cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "```",
+        "\\bdef [a-z_]",
+        "\\bclass [a-z_]",
+        "\\breturns?\\b",
+        "\\bfunction\\b",
+        "\\bpython\\b",
+        "\\bjavascript\\b",
+        "\\btypescript\\b",
+        "\\bimplement",
+        "\\bunit tests?\\b",
+        "\\bo\\([a-z0-9 +*^]+\\)",
+        "\\(\\)",
+        "->",
+        "\\bsql\\b",
+        "\\bregex",
+        "\\bbug\\b",
+        "\\balgorithm",
+        "\\brefactor"
+      ],
+      "transform": "sat",
+      "k": 3
+    },
+    {
+      "name": "structure_cues",
+      "label": "Structured-output cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bjson\\b",
+        "\\bextract",
+        "\\bkeys?\\b",
+        "\\bfields?\\b",
+        "\\bschema\\b",
+        "yyyy-mm-dd",
+        "\\bparse\\b",
+        "\\bnull\\b",
+        "\\bcsv\\b",
+        "\\bboolean\\b",
+        "\\binteger\\b"
+      ],
+      "transform": "sat",
+      "k": 3
+    },
+    {
+      "name": "label_cues",
+      "label": "Classification cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bclassif",
+        "\\blabel",
+        "\\bcategor",
+        "\\bone of\\b",
+        "\\bwhich (?:of|category|language|class)\\b",
+        "\\bsentiment\\b",
+        "\\banswer with\\b",
+        "\\bassign\\b",
+        "\\bchoose\\b",
+        "\\btag\\b",
+        "\\bdecide whether\\b"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "math_cues",
+      "label": "Math cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bhow many\\b",
+        "\\bhow much\\b",
+        "\\bcalculat",
+        "\\bcompute\\b",
+        "\\bsum\\b",
+        "\\bprobabilit",
+        "\\bremainder\\b",
+        "\\baverage\\b",
+        "\\bpercent",
+        "%",
+        "\\bfraction\\b",
+        "\\bexpected\\b",
+        "\\bdivisible\\b",
+        "\\bdivided\\b",
+        "\\bdigits?\\b",
+        "\\bprofit\\b",
+        "\\bspeed\\b",
+        "\\btimes as\\b",
+        "\\bequation",
+        "[0-9] ?[-+*=] ?[0-9]"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "hard_cues",
+      "label": "Hard-reasoning cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bprove\\b",
+        "\\bexpected number\\b",
+        "\\bhow many (?:ways|seatings|arrangements|integers|distinct)\\b",
+        "\\bneither\\b",
+        "\\bnone of\\b",
+        "\\bat (?:least|most)\\b",
+        "\\bminimum\\b",
+        "\\bsmallest\\b",
+        "\\bshortest\\b",
+        "\\bmaximum\\b",
+        "\\blargest\\b",
+        "\\boptimal",
+        "\\bconstraint",
+        "\\binvariant",
+        "\\bedge cases?\\b",
+        "\\bpreceden",
+        "\\boverrides?\\b",
+        "\\bimmediately\\b",
+        "\\badjacent\\b",
+        "\\blexicographic",
+        "\\brefuse",
+        "\\bparadox",
+        "\\btrade-?offs?\\b",
+        "\\brace condition"
+      ],
+      "transform": "sat",
+      "k": 3
+    },
+    {
+      "name": "constraint_words",
+      "label": "Constraint words",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bmust\\b",
+        "\\bdo not\\b",
+        "\\bnever\\b",
+        "\\bonly\\b",
+        "\\bno more than\\b",
+        "\\bwithout\\b",
+        "\\bexcept\\b",
+        "\\bunless\\b",
+        "\\bshould\\b",
+        "\\bcannot\\b",
+        "\\bexactly\\b",
+        "\\binstead\\b"
+      ],
+      "transform": "sat",
+      "k": 4
+    },
+    {
+      "name": "list_items",
+      "label": "Bulleted or numbered lines",
+      "kind": "lines",
+      "pattern": "(?:[-*]|[0-9]+[.)]|\\[[0-9]+\\]) ",
+      "transform": "sat",
+      "k": 4
+    },
+    {
+      "name": "conditionals",
+      "label": "Conditional and ordering words",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bif\\b",
+        "\\bthen\\b",
+        "\\botherwise\\b",
+        "\\bafter\\b",
+        "\\bbefore\\b",
+        "\\bfirst\\b",
+        "\\bwhen\\b",
+        "\\beach\\b",
+        "\\bevery\\b",
+        "\\buntil\\b",
+        "\\bwhile\\b",
+        "\\blater\\b",
+        "\\bearlier\\b"
+      ],
+      "transform": "sat",
+      "k": 5
+    },
+    {
+      "name": "writing_cues",
+      "label": "Open-ended writing cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bexplain",
+        "\\bsummar",
+        "\\bwrite an? (?:email|summary|recommendation|memo|paragraph|review|reply|note)",
+        "\\bdraft\\b",
+        "\\bdescribe",
+        "\\brecommend",
+        "\\breview\\b",
+        "\\baudience\\b",
+        "\\btone\\b",
+        "\\bwords\\b",
+        "\\banalogy\\b",
+        "\\bconclusion\\b"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "questions",
+      "label": "Question marks",
+      "kind": "count",
+      "source": "raw",
+      "patterns": [
+        "[?]"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "quoted_text",
+      "label": "Quoted source text",
+      "kind": "count",
+      "source": "raw",
+      "patterns": [
+        "\""
+      ],
+      "transform": "sat",
+      "k": 6
+    },
+    {
+      "name": "proper_nouns",
+      "label": "Capitalized words",
+      "kind": "count",
+      "source": "raw",
+      "patterns": [
+        "\\b[A-Z][a-z]+\\b"
+      ],
+      "transform": "sat",
+      "k": 12
+    }
+  ],
+  "mean": [
+    0.416604,
+    0.391976,
+    0.327118,
+    0.030666,
+    0.272733,
+    0.103836,
+    0.157068,
+    0.160128,
+    0.135979,
+    0.183333,
+    0.103968,
+    0.10839,
+    0.101138,
+    0.132338,
+    0.077778,
+    0.10582,
+    0.148696,
+    0.277356
+  ],
+  "scale": [
+    0.151922,
+    0.138694,
+    0.196792,
+    0.034331,
+    0.224705,
+    0.200428,
+    0.255001,
+    0.247929,
+    0.221132,
+    0.238547,
+    0.154381,
+    0.125369,
+    0.210698,
+    0.145808,
+    0.191439,
+    0.155163,
+    0.185409,
+    0.130213
+  ],
+  "weights": [
+    -1.335628,
+    -0.53599,
+    0.378049,
+    -0.753714,
+    0.995565,
+    -0.405716,
+    0.130729,
+    0.735413,
+    0.861346,
+    -0.366297,
+    -0.654353,
+    -0.153351,
+    -0.350951,
+    0.295308,
+    0.411524,
+    -0.788323,
+    0.269768,
+    -0.223825
+  ],
+  "arms": [
+    {
+      "key": "haiku-low",
+      "model": "claude-haiku-5-5",
+      "effort": "low",
+      "bias": -0.006461,
+      "cost_per_request": 0.00010451,
+      "pass_rate": 0.502646,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 173.82
+    },
+    {
+      "key": "haiku-medium",
+      "model": "claude-haiku-5-5",
+      "effort": "medium",
+      "bias": 0.622557,
+      "cost_per_request": 0.000216,
+      "pass_rate": 0.608466,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 396.79
+    },
+    {
+      "key": "haiku-high",
+      "model": "claude-haiku-5-5",
+      "effort": "high",
+      "bias": 1.165298,
+      "cost_per_request": 0.0004395,
+      "pass_rate": 0.693122,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 843.79
+    },
+    {
+      "key": "sonnet-low",
+      "model": "claude-sonnet-5-5",
+      "effort": "low",
+      "bias": 1.024315,
+      "cost_per_request": 0.00250249,
+      "pass_rate": 0.671958,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 215.04
+    },
+    {
+      "key": "sonnet-medium",
+      "model": "claude-sonnet-5-5",
+      "effort": "medium",
+      "bias": 1.501088,
+      "cost_per_request": 0.00511021,
+      "pass_rate": 0.740741,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 475.81
+    },
+    {
+      "key": "opus-low",
+      "model": "claude-opus-5-5",
+      "effort": "low",
+      "bias": 1.917244,
+      "cost_per_request": 0.0057491,
+      "pass_rate": 0.793651,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 252.25
+    },
+    {
+      "key": "sonnet-high",
+      "model": "claude-sonnet-5-5",
+      "effort": "high",
+      "bias": 2.518516,
+      "cost_per_request": 0.01120233,
+      "pass_rate": 0.857143,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 1085.03
+    },
+    {
+      "key": "opus-medium",
+      "model": "claude-opus-5-5",
+      "effort": "medium",
+      "bias": 3.270831,
+      "cost_per_request": 0.01213968,
+      "pass_rate": 0.915344,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 571.78
+    },
+    {
+      "key": "opus-high",
+      "model": "claude-opus-5-5",
+      "effort": "high",
+      "bias": 3.448298,
+      "cost_per_request": 0.02618847,
+      "pass_rate": 0.925926,
+      "input_tokens_mean": 176.03,
+      "output_tokens_mean": 1274.22
+    }
+  ]
+}

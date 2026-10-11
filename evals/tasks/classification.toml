@@ -1,0 +1,306 @@
+# Classification: exact match on one label from a fixed set.
+# Labels are decided by rules stated in the prompt, never by taste, so the key is not arguable.
+
+[[task]]
+id = "cls-ticket-billing"
+title = "Support ticket intent"
+difficulty = 1
+prompt = '''
+Classify this support message as one of: billing, shipping, technical, account.
+
+"Hi, I was charged twice for my March subscription. Can one of the charges be reversed?"
+'''
+wrong = "ANSWER: account"
+[task.grader]
+type = "exact"
+expected = "billing"
+labels = ["billing", "shipping", "technical", "account"]
+
+[[task]]
+id = "cls-review-positive"
+title = "Plain review sentiment"
+difficulty = 1
+prompt = '''
+Label the sentiment of this product review as positive, negative, or mixed.
+
+"Arrived a day early and works exactly as described. Setup took two minutes. Happy with it."
+'''
+wrong = "ANSWER: mixed"
+[task.grader]
+type = "exact"
+expected = "positive"
+labels = ["positive", "negative", "mixed"]
+
+[[task]]
+id = "cls-language-id"
+title = "Language identification"
+difficulty = 1
+prompt = '''
+Which language is this sentence written in? Choose one of: german, dutch, danish, swedish.
+
+"Wir treffen uns morgen um acht am Bahnhof."
+'''
+wrong = "ANSWER: dutch"
+[task.grader]
+type = "exact"
+expected = "german"
+labels = ["german", "dutch", "danish", "swedish"]
+
+[[task]]
+id = "cls-review-mixed"
+title = "Review with pros and cons"
+difficulty = 2
+prompt = '''
+Label the sentiment of this review as positive, negative, or mixed. Use mixed only when the
+review contains at least one clear praise and at least one clear complaint.
+
+"The camera is superb and the battery lasts two full days. But the phone overheats during
+calls and the speaker crackles at any volume."
+'''
+wrong = "ANSWER: negative"
+[task.grader]
+type = "exact"
+expected = "mixed"
+labels = ["positive", "negative", "mixed"]
+
+[[task]]
+id = "cls-contract-clause"
+title = "Contract clause type"
+difficulty = 2
+prompt = '''
+Classify this contract clause as one of: indemnification, limitation_of_liability,
+termination, confidentiality, governing_law.
+
+"In no event shall either party's aggregate liability arising out of this Agreement exceed
+the fees paid by Customer in the twelve months preceding the claim."
+'''
+wrong = "ANSWER: indemnification"
+[task.grader]
+type = "exact"
+expected = "limitation_of_liability"
+labels = ["indemnification", "limitation_of_liability", "termination", "confidentiality", "governing_law"]
+
+[[task]]
+id = "cls-incident-severity"
+title = "Incident severity from a rubric"
+difficulty = 2
+prompt = '''
+Assign a severity to this incident using the definitions below. Answer with sev1, sev2,
+sev3, or sev4.
+
+- sev1: a revenue-critical flow is down for all customers in at least one region.
+- sev2: a revenue-critical flow is degraded, or down for only some customers.
+- sev3: a non-critical feature is down or degraded.
+- sev4: cosmetic issue, no functional impact.
+
+Incident: "Since 09:14 UTC, checkout returns HTTP 500 for every customer in the EU region.
+US and APAC are unaffected. The marketing banner on the home page is also misaligned."
+'''
+wrong = "ANSWER: sev2"
+[task.grader]
+type = "exact"
+expected = "sev1"
+labels = ["sev1", "sev2", "sev3", "sev4"]
+
+[[task]]
+id = "cls-off-by-one"
+title = "Bug category in a short function"
+difficulty = 2
+prompt = '''
+Classify the bug in this function as one of: off_by_one, race_condition,
+null_dereference, resource_leak, integer_overflow.
+
+```python
+def last_k(items, k):
+    """Return the last k items of the list."""
+    return [items[i] for i in range(len(items) - k, len(items) + 1)]
+```
+'''
+wrong = "ANSWER: null_dereference"
+[task.grader]
+type = "exact"
+expected = "off_by_one"
+labels = ["off_by_one", "race_condition", "null_dereference", "resource_leak", "integer_overflow"]
+
+[[task]]
+id = "cls-sarcasm"
+title = "Sarcastic review sentiment"
+difficulty = 3
+prompt = '''
+Label the sentiment of this app review as positive, negative, or mixed. Use mixed only when
+the review contains at least one sincere praise and at least one sincere complaint.
+
+"Oh great, another update that 'improves stability'. My app now crashes before the splash
+screen even loads. Stellar work, truly, give the whole team a raise."
+'''
+wrong = "ANSWER: mixed"
+[task.grader]
+type = "exact"
+expected = "negative"
+labels = ["positive", "negative", "mixed"]
+
+[[task]]
+id = "cls-intent-negation"
+title = "Intent behind a negated request"
+difficulty = 3
+prompt = '''
+Classify what this customer is asking for. Choose one of: refund_request, delivery_issue,
+product_defect, cancellation.
+
+"I'm not asking for a refund and I don't want to cancel. The first unit was fine, I just
+gave it to my brother. I only want the second one I ordered to actually turn up: the
+tracking page has said 'out for delivery' since last Tuesday."
+'''
+wrong = "ANSWER: refund_request"
+[task.grader]
+type = "exact"
+expected = "delivery_issue"
+labels = ["refund_request", "delivery_issue", "product_defect", "cancellation"]
+
+[[task]]
+id = "cls-quantifier-nli"
+title = "Entailment with a quantifier"
+difficulty = 3
+prompt = '''
+Decide whether the hypothesis is entailed by the premise, contradicted by it, or neither.
+Answer with entailment, contradiction, or neutral.
+
+Premise: "Fewer than half of the 40 applicants passed the screening."
+Hypothesis: "At least 21 applicants passed the screening."
+'''
+wrong = "ANSWER: neutral"
+[task.grader]
+type = "exact"
+expected = "contradiction"
+labels = ["entailment", "contradiction", "neutral"]
+
+[[task]]
+id = "cls-lock-race"
+title = "Bug category in threaded code"
+difficulty = 3
+prompt = '''
+Classify the bug in this class as one of: off_by_one, race_condition, null_dereference,
+resource_leak, integer_overflow. Many threads call `incr` at the same time and the counter
+must never exceed LIMIT.
+
+```python
+import threading
+
+LIMIT = 100
+
+class Counter:
+    def __init__(self):
+        self.n = 0
+        self.lock = threading.Lock()
+
+    def incr(self):
+        if self.n < LIMIT:
+            with self.lock:
+                self.n += 1
+```
+'''
+wrong = "ANSWER: off_by_one"
+[task.grader]
+type = "exact"
+expected = "race_condition"
+labels = ["off_by_one", "race_condition", "null_dereference", "resource_leak", "integer_overflow"]
+
+[[task]]
+id = "cls-log-leak"
+title = "Sensitive data category in a log line"
+difficulty = 4
+prompt = '''
+Which category of sensitive data does this log line leak? Use these definitions:
+
+- credential: a password, API key, or session or bearer token.
+- payment_card: a complete card number (13 to 19 digits).
+- government_id: a complete national ID or passport number.
+- email: a complete email address.
+- none: none of the above.
+
+If more than one applies, answer with the most severe, in this order:
+credential, payment_card, government_id, email, none.
+
+Log line:
+user=jsmith action=update_profile auth="Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MiJ9.c2ln" note="card ending 4242 on file, passport check passed, contact via the address on record"
+'''
+wrong = "ANSWER: payment_card"
+[task.grader]
+type = "exact"
+expected = "credential"
+labels = ["credential", "payment_card", "government_id", "email", "none"]
+
+[[task]]
+id = "cls-expense-policy"
+title = "Expense claim under a precedence policy"
+difficulty = 4
+prompt = '''
+Apply this expense policy to the claim and answer with exactly one of: approve,
+needs_manager, needs_receipt, reject.
+
+Policy for meals, per person per day:
+1. Up to $60: approve.
+2. More than $60 and up to $150: needs_manager.
+3. More than $150: reject.
+4. Any claim over $25 with no receipt attached is needs_receipt. This rule overrides
+   rules 1 and 2, but a claim that rule 3 rejects is still rejected.
+
+Claim: one dinner for one person, $142.00 including tip. The employee notes that the
+receipt was lost and attaches a card statement line instead.
+'''
+wrong = "ANSWER: needs_manager"
+[task.grader]
+type = "exact"
+expected = "needs_receipt"
+labels = ["approve", "needs_manager", "needs_receipt", "reject"]
+
+[[task]]
+id = "cls-parcel-class"
+title = "Shipping class from threshold rules"
+difficulty = 4
+prompt = '''
+Assign the parcel a shipping class: standard, oversize, freight, hazmat, or reject. Apply
+the first rule that matches.
+
+1. Contains a lithium battery over 100 Wh: hazmat, unless the parcel also weighs over
+   30 kg, in which case reject.
+2. Longest side over 150 cm, or weight over 30 kg: freight.
+3. The three sides add up to more than 200 cm, or weight over 20 kg: oversize.
+4. Otherwise: standard.
+
+Parcel: 148 cm x 40 cm x 20 cm, 19.5 kg, contains one 96 Wh lithium battery pack.
+'''
+wrong = "ANSWER: standard"
+[task.grader]
+type = "exact"
+expected = "oversize"
+labels = ["standard", "oversize", "freight", "hazmat", "reject"]
+
+[[task]]
+id = "cls-subscription-state"
+title = "Subscription state on a given date"
+difficulty = 5
+prompt = '''
+Work out the state of this subscription on the date given. Answer with active,
+grace_period, expired, or cancelled.
+
+Rules:
+- A subscription is active through its paid-through date, inclusive.
+- If a cancellation was requested, it takes effect the day after the paid-through date.
+  From then on the state is cancelled and no grace period applies.
+- Otherwise, the 14 days after the paid-through date are a grace_period.
+- After the grace period ends, the state is expired.
+- A successful renewal payment moves the paid-through date forward by one month and
+  withdraws any earlier cancellation request.
+
+History:
+- Paid through 2026-01-27.
+- 2026-01-20: customer requests cancellation.
+- 2026-01-25: renewal payment succeeds.
+- 2026-03-05: today. No other events.
+'''
+wrong = "ANSWER: cancelled"
+[task.grader]
+type = "exact"
+expected = "grace_period"
+labels = ["active", "grace_period", "expired", "cancelled"]

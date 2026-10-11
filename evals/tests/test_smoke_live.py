@@ -9,8 +9,8 @@ import anthropic
 import pytest
 from pydantic import BaseModel
 
-from app.claude_client import call_claude, strict_tool, with_system_note
-from app.config import HAIKU, OPUS
+from cascade.claude_client import call_claude, strict_tool, with_system_note
+from cascade.config import HAIKU, OPUS
 
 pytestmark = pytest.mark.skipif(not os.environ.get("ANTHROPIC_API_KEY"), reason="no API key")
 

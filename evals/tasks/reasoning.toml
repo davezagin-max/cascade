@@ -1,0 +1,203 @@
+# Reasoning and math: exact match on the final answer.
+# `wrong` is the tempting mistake for each problem. Every key was checked by brute force.
+
+[[task]]
+id = "rsn-crates"
+title = "One-step multiplication"
+difficulty = 1
+prompt = "A crate holds 24 bottles. How many bottles are there in 17 full crates?"
+wrong = "ANSWER: 398"
+[task.grader]
+type = "exact"
+expected = "408"
+
+[[task]]
+id = "rsn-average-speed"
+title = "Average speed over two legs"
+difficulty = 2
+prompt = '''
+A car covers 150 km in 2.5 hours, then 90 km in 1.5 hours. What is its average speed over
+the whole trip, in km/h?
+'''
+wrong = "ANSWER: 61"
+[task.grader]
+type = "exact"
+expected = "60"
+
+[[task]]
+id = "rsn-original-price"
+title = "Reverse a percentage discount"
+difficulty = 2
+prompt = "A jacket costs $80 after a 20% discount. What was its original price in dollars?"
+wrong = "ANSWER: 96"
+[task.grader]
+type = "exact"
+expected = "100"
+
+[[task]]
+id = "rsn-ages"
+title = "Two-equation age problem"
+difficulty = 2
+prompt = '''
+Lena is three times as old as Max. In 12 years she will be twice as old as he is then.
+How old is Lena now?
+'''
+wrong = "ANSWER: 12"
+[task.grader]
+type = "exact"
+expected = "36"
+
+[[task]]
+id = "rsn-pen-notebook"
+title = "Intuition trap with a sum and a difference"
+difficulty = 3
+prompt = '''
+A notebook and a pen cost $2.60 together. The notebook costs $2.00 more than the pen. How
+many cents does the pen cost?
+'''
+wrong = "ANSWER: 60"
+[task.grader]
+type = "exact"
+expected = "30"
+
+[[task]]
+id = "rsn-level-anagrams"
+title = "Arrangements with repeated letters"
+difficulty = 3
+prompt = "How many distinct arrangements are there of the letters in the word LEVEL?"
+wrong = "ANSWER: 120"
+[task.grader]
+type = "exact"
+expected = "30"
+
+[[task]]
+id = "rsn-two-pumps"
+title = "Work rates with a switch-off"
+difficulty = 3
+prompt = '''
+Pump A fills an empty tank in 6 hours and pump B fills it in 4 hours. Both run together
+for one hour, then pump A is switched off. How many more minutes does pump B need to finish
+filling the tank?
+'''
+wrong = "ANSWER: 84"
+[task.grader]
+type = "exact"
+expected = "140"
+
+[[task]]
+id = "rsn-weekday"
+title = "Weekday three months later"
+difficulty = 3
+prompt = '''
+In a certain year, 1 March falls on a Monday. On which day of the week does 1 June fall in
+the same year?
+'''
+wrong = "ANSWER: Monday"
+[task.grader]
+type = "exact"
+expected = "Tuesday"
+
+[[task]]
+id = "rsn-market-stall"
+title = "Profit with losses and a fixed fee"
+difficulty = 3
+prompt = '''
+A trader buys 120 mugs at $3.50 each. 15 of them break on the way to the market. She sells
+all the others at $6 each and pays a $45 stall fee. What is her profit in dollars?
+'''
+wrong = "ANSWER: 255"
+[task.grader]
+type = "exact"
+expected = "165"
+
+[[task]]
+id = "rsn-power-mod"
+title = "Remainder of a large power"
+difficulty = 4
+prompt = "What is the remainder when 7^100 is divided by 13?"
+wrong = "ANSWER: 1"
+[task.grader]
+type = "exact"
+expected = "9"
+
+[[task]]
+id = "rsn-dice-product"
+title = "Probability that a product is a multiple of 6"
+difficulty = 4
+prompt = '''
+Two fair six-sided dice are rolled. What is the probability that the product of the two
+numbers is a multiple of 6? Give the answer as a fraction in lowest terms.
+'''
+wrong = "ANSWER: 11/36"
+[task.grader]
+type = "exact"
+expected = "5/12"
+
+[[task]]
+id = "rsn-talk-schedule"
+title = "Ordering puzzle with six constraints"
+difficulty = 4
+prompt = '''
+Five talks, A, B, C, D and E, fill slots 1 to 5, one talk per slot.
+
+- A is in an earlier slot than B.
+- C is in the slot immediately after D.
+- E is in neither slot 1 nor slot 5.
+- B and C are not in adjacent slots.
+- A is not in slot 1.
+- E is in a later slot than A.
+
+Which talk is in slot 3? Answer with a single letter.
+'''
+wrong = "ANSWER: E"
+[task.grader]
+type = "exact"
+expected = "A"
+
+[[task]]
+id = "rsn-round-table"
+title = "Circular seating with a restriction"
+difficulty = 4
+prompt = '''
+Six people sit around a round table. Two of them refuse to sit next to each other. How
+many seatings are possible, if two seatings that differ only by a rotation count as the same?
+'''
+wrong = "ANSWER: 96"
+[task.grader]
+type = "exact"
+expected = "72"
+
+[[task]]
+id = "rsn-inclusion-exclusion"
+title = "Counting with three overlapping divisors"
+difficulty = 5
+prompt = '''
+How many integers from 1 to 1000 inclusive are divisible by none of 6, 10 and 15?
+'''
+wrong = "ANSWER: 668"
+[task.grader]
+type = "exact"
+expected = "734"
+
+[[task]]
+id = "rsn-coin-pattern"
+title = "Expected flips until a pattern"
+difficulty = 5
+prompt = '''
+A fair coin is flipped repeatedly until the three most recent flips read heads, tails,
+heads, in that order. What is the expected number of flips?
+'''
+wrong = "ANSWER: 8"
+[task.grader]
+type = "exact"
+expected = "10"
+
+[[task]]
+id = "rsn-digit-sum"
+title = "Digit sum of a large power of two"
+difficulty = 5
+prompt = "What is the sum of the decimal digits of 2^50?"
+wrong = "ANSWER: 67"
+[task.grader]
+type = "exact"
+expected = "76"

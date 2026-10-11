@@ -1,0 +1,293 @@
+{
+  "version": 1,
+  "note": "Cheap prompt features for the router. Interpreted by cascade/features.py and lib/router/features.ts; both must produce bit-identical values. Patterns are ASCII-only, never match the empty string, and avoid '.', negated classes and anchors so Python and JavaScript regex engines agree.",
+  "features": [
+    {
+      "name": "length",
+      "label": "Prompt length",
+      "kind": "chars",
+      "transform": "sat",
+      "k": 400
+    },
+    {
+      "name": "words",
+      "label": "Word count",
+      "kind": "count",
+      "source": "lower",
+      "patterns": ["[a-z0-9]+"],
+      "transform": "sat",
+      "k": 80
+    },
+    {
+      "name": "line_breaks",
+      "label": "Line breaks",
+      "kind": "count",
+      "source": "raw",
+      "patterns": ["\\n"],
+      "transform": "sat",
+      "k": 8
+    },
+    {
+      "name": "digit_density",
+      "label": "Digit density",
+      "kind": "count",
+      "source": "raw",
+      "patterns": ["[0-9]"],
+      "transform": "ratio"
+    },
+    {
+      "name": "numbers",
+      "label": "Numbers in the prompt",
+      "kind": "count",
+      "source": "raw",
+      "patterns": ["[0-9]+(?:[,][0-9]{3})*(?:[.][0-9]+)?"],
+      "transform": "sat",
+      "k": 8
+    },
+    {
+      "name": "big_numbers",
+      "label": "Large numbers or powers",
+      "kind": "count",
+      "source": "raw",
+      "patterns": ["[0-9]{4,}", "[0-9]\\^[0-9]", "\\*\\*"],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "code_cues",
+      "label": "Code cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "```",
+        "\\bdef [a-z_]",
+        "\\bclass [a-z_]",
+        "\\breturns?\\b",
+        "\\bfunction\\b",
+        "\\bpython\\b",
+        "\\bjavascript\\b",
+        "\\btypescript\\b",
+        "\\bimplement",
+        "\\bunit tests?\\b",
+        "\\bo\\([a-z0-9 +*^]+\\)",
+        "\\(\\)",
+        "->",
+        "\\bsql\\b",
+        "\\bregex",
+        "\\bbug\\b",
+        "\\balgorithm",
+        "\\brefactor"
+      ],
+      "transform": "sat",
+      "k": 3
+    },
+    {
+      "name": "structure_cues",
+      "label": "Structured-output cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bjson\\b",
+        "\\bextract",
+        "\\bkeys?\\b",
+        "\\bfields?\\b",
+        "\\bschema\\b",
+        "yyyy-mm-dd",
+        "\\bparse\\b",
+        "\\bnull\\b",
+        "\\bcsv\\b",
+        "\\bboolean\\b",
+        "\\binteger\\b"
+      ],
+      "transform": "sat",
+      "k": 3
+    },
+    {
+      "name": "label_cues",
+      "label": "Classification cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bclassif",
+        "\\blabel",
+        "\\bcategor",
+        "\\bone of\\b",
+        "\\bwhich (?:of|category|language|class)\\b",
+        "\\bsentiment\\b",
+        "\\banswer with\\b",
+        "\\bassign\\b",
+        "\\bchoose\\b",
+        "\\btag\\b",
+        "\\bdecide whether\\b"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "math_cues",
+      "label": "Math cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bhow many\\b",
+        "\\bhow much\\b",
+        "\\bcalculat",
+        "\\bcompute\\b",
+        "\\bsum\\b",
+        "\\bprobabilit",
+        "\\bremainder\\b",
+        "\\baverage\\b",
+        "\\bpercent",
+        "%",
+        "\\bfraction\\b",
+        "\\bexpected\\b",
+        "\\bdivisible\\b",
+        "\\bdivided\\b",
+        "\\bdigits?\\b",
+        "\\bprofit\\b",
+        "\\bspeed\\b",
+        "\\btimes as\\b",
+        "\\bequation",
+        "[0-9] ?[-+*=] ?[0-9]"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "hard_cues",
+      "label": "Hard-reasoning cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bprove\\b",
+        "\\bexpected number\\b",
+        "\\bhow many (?:ways|seatings|arrangements|integers|distinct)\\b",
+        "\\bneither\\b",
+        "\\bnone of\\b",
+        "\\bat (?:least|most)\\b",
+        "\\bminimum\\b",
+        "\\bsmallest\\b",
+        "\\bshortest\\b",
+        "\\bmaximum\\b",
+        "\\blargest\\b",
+        "\\boptimal",
+        "\\bconstraint",
+        "\\binvariant",
+        "\\bedge cases?\\b",
+        "\\bpreceden",
+        "\\boverrides?\\b",
+        "\\bimmediately\\b",
+        "\\badjacent\\b",
+        "\\blexicographic",
+        "\\brefuse",
+        "\\bparadox",
+        "\\btrade-?offs?\\b",
+        "\\brace condition"
+      ],
+      "transform": "sat",
+      "k": 3
+    },
+    {
+      "name": "constraint_words",
+      "label": "Constraint words",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bmust\\b",
+        "\\bdo not\\b",
+        "\\bnever\\b",
+        "\\bonly\\b",
+        "\\bno more than\\b",
+        "\\bwithout\\b",
+        "\\bexcept\\b",
+        "\\bunless\\b",
+        "\\bshould\\b",
+        "\\bcannot\\b",
+        "\\bexactly\\b",
+        "\\binstead\\b"
+      ],
+      "transform": "sat",
+      "k": 4
+    },
+    {
+      "name": "list_items",
+      "label": "Bulleted or numbered lines",
+      "kind": "lines",
+      "pattern": "(?:[-*]|[0-9]+[.)]|\\[[0-9]+\\]) ",
+      "transform": "sat",
+      "k": 4
+    },
+    {
+      "name": "conditionals",
+      "label": "Conditional and ordering words",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bif\\b",
+        "\\bthen\\b",
+        "\\botherwise\\b",
+        "\\bafter\\b",
+        "\\bbefore\\b",
+        "\\bfirst\\b",
+        "\\bwhen\\b",
+        "\\beach\\b",
+        "\\bevery\\b",
+        "\\buntil\\b",
+        "\\bwhile\\b",
+        "\\blater\\b",
+        "\\bearlier\\b"
+      ],
+      "transform": "sat",
+      "k": 5
+    },
+    {
+      "name": "writing_cues",
+      "label": "Open-ended writing cues",
+      "kind": "count",
+      "source": "lower",
+      "patterns": [
+        "\\bexplain",
+        "\\bsummar",
+        "\\bwrite an? (?:email|summary|recommendation|memo|paragraph|review|reply|note)",
+        "\\bdraft\\b",
+        "\\bdescribe",
+        "\\brecommend",
+        "\\breview\\b",
+        "\\baudience\\b",
+        "\\btone\\b",
+        "\\bwords\\b",
+        "\\banalogy\\b",
+        "\\bconclusion\\b"
+      ],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "questions",
+      "label": "Question marks",
+      "kind": "count",
+      "source": "raw",
+      "patterns": ["[?]"],
+      "transform": "sat",
+      "k": 2
+    },
+    {
+      "name": "quoted_text",
+      "label": "Quoted source text",
+      "kind": "count",
+      "source": "raw",
+      "patterns": ["\""],
+      "transform": "sat",
+      "k": 6
+    },
+    {
+      "name": "proper_nouns",
+      "label": "Capitalized words",
+      "kind": "count",
+      "source": "raw",
+      "patterns": ["\\b[A-Z][a-z]+\\b"],
+      "transform": "sat",
+      "k": 12
+    }
+  ]
+}

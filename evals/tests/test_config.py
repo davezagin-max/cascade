@@ -1,6 +1,6 @@
 import pytest
 
-from app.config import HAIKU, OPUS, SONNET, Usage, cost_usd
+from cascade.config import HAIKU, OPUS, SONNET, Usage, cost_usd
 
 
 def test_opus_is_4_in_20_out_per_million() -> None:

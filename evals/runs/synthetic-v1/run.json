@@ -1,0 +1,51 @@
+{
+  "arms": [
+    "haiku-low",
+    "haiku-medium",
+    "haiku-high",
+    "sonnet-low",
+    "sonnet-medium",
+    "sonnet-high",
+    "opus-low",
+    "opus-medium",
+    "opus-high"
+  ],
+  "created_at": "2026-10-11T20:26:58+00:00",
+  "generator": {
+    "name": "cascade simulate",
+    "note": "Deterministic simulator. Pass or fail is drawn from assumed abilities and task difficulties; the stand-in answers are graded by the real graders. Tokens, costs and latencies are derived from stated assumptions. Not a measurement.",
+    "seed": 7
+  },
+  "n_requests": 1701,
+  "n_tasks": 63,
+  "pricing": {
+    "batch_multiplier": 0.5,
+    "last_verified": "2026-10-11",
+    "per_mtok": {
+      "claude-haiku-5-5": {
+        "cache_read": 0.01,
+        "cache_write_5m": 0.125,
+        "input": 0.1,
+        "output": 0.5
+      },
+      "claude-opus-5-5": {
+        "cache_read": 0.2,
+        "cache_write_5m": 5.0,
+        "input": 4.0,
+        "output": 20.0
+      },
+      "claude-sonnet-5-5": {
+        "cache_read": 0.1,
+        "cache_write_5m": 2.5,
+        "input": 2.0,
+        "output": 10.0
+      }
+    },
+    "source": "https://platform.claude.com/docs/en/about-claude/pricing"
+  },
+  "run_id": "synthetic-v1",
+  "status": "complete",
+  "suite_hash": "f20918d4c2b2",
+  "synthetic": true,
+  "trials": 3
+}

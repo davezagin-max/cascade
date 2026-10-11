@@ -1,0 +1,306 @@
+# Open-ended: scored by the Opus judge against a written rubric.
+# The judge sees the task, the rubric, and the answer. It never sees which model wrote it.
+# Each criterion is scored 0 (not met), 1 (partly met) or 2 (fully met), then weighted.
+# `reference` is a strong answer and `wrong` a weak one; they document the bar and
+# stand in for model output in the simulator.
+
+[[task]]
+id = "open-incident-summary"
+title = "Incident summary for executives"
+difficulty = 2
+prompt = '''
+Summarize this incident for a non-technical executive audience in at most 80 words. Cover
+what happened, the customer impact, the fix, and one follow-up action.
+
+Timeline (UTC):
+09:14 Deploy of checkout-api v412 begins in the EU region.
+09:16 Error rate on EU checkout rises to 100%. v412 reads a config key that was never
+      set in EU.
+09:31 On-call engineer paged by a customer-support escalation; the automated alert had
+      been muted during last week's migration and never re-enabled.
+09:43 Rollback to v411 completes. Error rate returns to normal.
+Impact: 27 minutes of failed EU checkouts, about 1,900 failed orders. US and APAC unaffected.
+'''
+reference = '''
+A faulty release broke checkout for all EU customers for 27 minutes,
+causing about 1,900 failed orders. Other regions were not affected. The release depended
+on a setting that was missing in the EU. We restored service by rolling back to the
+previous version. Our automatic alert had been switched off, which delayed the response,
+so we are re-enabling it and adding a check that blocks releases when a required setting
+is missing.
+'''
+wrong = '''
+At 09:14 UTC the deploy of checkout-api v412 started and by 09:16 the error rate hit 100%
+because v412 reads a config key that was never set. The on-call engineer got paged at
+09:31 and rolled back to v411 at 09:43. This was a significant outage for the business and
+we take it very seriously. Going forward the team will be more careful with deploys and
+config keys, and we will look at improving our processes, tooling, culture and
+communication across all regions so that this kind of thing is less likely to happen again
+in the future.
+'''
+[task.grader]
+type = "judge"
+rubric = [
+  { name = "cause", weight = 1.0, description = "States the cause in plain language: a release needed a setting that was missing in the EU. No version numbers or config jargon required." },
+  { name = "impact", weight = 1.5, description = "States the impact with the facts given: EU checkout only, about 27 minutes, about 1,900 failed orders. Does not invent or alter numbers." },
+  { name = "fix_and_follow_up", weight = 1.0, description = "Says service was restored by rolling back, and names one concrete follow-up (for example re-enabling the muted alert)." },
+  { name = "audience_and_length", weight = 1.0, description = "At most 80 words, and readable by a non-technical executive: no UTC timestamps, version numbers, or unexplained jargon." },
+]
+
+[[task]]
+id = "open-decline-vendor"
+title = "Polite decline email"
+difficulty = 2
+prompt = '''
+Write an email to Jordan at Lumen Analytics declining their proposal for a customer-churn
+dashboard. Facts to use: our budget for new tools is frozen until the next fiscal year,
+which starts in July; we liked their demo; we would be open to talking again in June.
+Keep it under 120 words, warm but direct, and do not apologize for the decision.
+'''
+reference = '''
+Subject: Lumen proposal
+
+Hi Jordan,
+
+Thank you for the proposal and for the demo. The team was impressed by how quickly the
+churn dashboard surfaced at-risk accounts.
+
+We have decided not to move forward right now. Our budget for new tools is frozen until
+the next fiscal year begins in July, so we cannot take on a new contract before then.
+
+I would be glad to pick this up again in June, when planning for the new year is under
+way. If that works for you, I will reach out then to set up a call.
+
+Best regards,
+Sam
+'''
+wrong = '''
+Hi Jordan,
+
+I'm so sorry, but unfortunately we are going to have to pass on this one. I really
+apologize for the inconvenience and for taking up so much of your time with the demo and
+the follow-up calls. It is nothing to do with the product, it's just not the right time
+for us for a number of internal reasons that I can't really go into. Sorry again, and I
+hope there are no hard feelings. Wishing you and the whole Lumen team all the very best
+with everything in the future, and thanks so much again for all of your patience and
+understanding with us on this.
+
+Sam
+'''
+[task.grader]
+type = "judge"
+rubric = [
+  { name = "clear_decline", weight = 1.5, description = "Clearly says no to the proposal for now. The reader cannot mistake it for a maybe." },
+  { name = "reason_and_reopen", weight = 1.5, description = "Gives the real reason (budget frozen until the fiscal year that starts in July) and offers to talk again in June." },
+  { name = "tone", weight = 1.0, description = "Warm and direct, mentions that the demo was liked, and does not apologize for the decision." },
+  { name = "length", weight = 0.5, description = "Under 120 words, and reads as a complete email with a greeting and sign-off." },
+]
+
+[[task]]
+id = "open-explain-consistency"
+title = "Explain a concept to a non-engineer"
+difficulty = 3
+prompt = '''
+Explain eventual consistency to a product manager in at most 150 words. Include exactly one
+concrete analogy and one practical implication for a feature they might be designing.
+Avoid jargon such as "replica", "quorum" or "CAP".
+'''
+reference = '''
+Eventual consistency means that after a change is saved, different parts of the system may
+briefly disagree about it, and then all catch up.
+
+Think of a chain of shops updating a price. Head office sends the new price, but each shop
+changes its shelf labels at a slightly different moment. For a short while, two shops show
+different prices. Soon they all match.
+
+The practical implication: right after a user edits something, another screen or another
+user may still see the old value for a moment. If you are designing a "like" counter, that
+delay is harmless. If you are designing "seats remaining" for ticket sales, it is not, and
+the design has to confirm the seat at the moment of purchase instead of trusting the
+number on screen.
+'''
+wrong = '''
+Eventual consistency is a consistency model used in distributed systems where replicas
+converge over time. Under the CAP theorem you can only have two of consistency,
+availability and partition tolerance, so many databases choose AP and relax consistency.
+Writes are acknowledged before a quorum of replicas has applied them, and anti-entropy
+processes such as read repair and gossip reconcile divergent replicas later. It is like a
+bank, or like DNS, or like a group chat. This is in contrast to strong consistency, where
+linearizability guarantees that every read reflects the latest write.
+'''
+[task.grader]
+type = "judge"
+rubric = [
+  { name = "correct", weight = 1.5, description = "The explanation is accurate: copies of the data can briefly disagree after a change and then converge. No false claims." },
+  { name = "analogy", weight = 1.0, description = "Contains exactly one concrete analogy, and the analogy actually shows a temporary disagreement that resolves." },
+  { name = "implication", weight = 1.5, description = "Gives one practical product implication a PM could act on (for example a user may briefly see stale data, and when that matters)." },
+  { name = "plain_language", weight = 1.0, description = "At most 150 words and free of the banned jargon (replica, quorum, CAP) and of similar unexplained terms." },
+]
+
+[[task]]
+id = "open-code-review"
+title = "Review a risky function"
+difficulty = 4
+prompt = '''
+Review this function as you would in a pull request. List the problems that matter, most
+serious first, with a concrete fix for each. Do not pad the review with style nits.
+
+```python
+def transfer(conn, from_id, to_id, amount):
+    cur = conn.cursor()
+    cur.execute(f"SELECT balance FROM accounts WHERE id = {from_id}")
+    balance = cur.fetchone()[0]
+    if balance >= amount:
+        cur.execute(f"UPDATE accounts SET balance = balance - {amount} WHERE id = {from_id}")
+        conn.commit()
+        cur.execute(f"UPDATE accounts SET balance = balance + {amount} WHERE id = {to_id}")
+        conn.commit()
+    return True
+```
+'''
+reference = '''
+1. SQL injection. Every query is built with an f-string from caller input. Use
+   parameterized queries: `cur.execute("SELECT balance FROM accounts WHERE id = %s", (from_id,))`.
+
+2. The transfer is not atomic. The debit is committed before the credit, so a crash or
+   error between the two loses money. Do both updates in one transaction with a single
+   commit, and roll back on any exception.
+
+3. Race condition on the balance check. Two concurrent transfers can both read the same
+   balance and both pass the check, overdrawing the account. Lock the row with
+   `SELECT ... FOR UPDATE`, or make the debit conditional
+   (`UPDATE ... SET balance = balance - %s WHERE id = %s AND balance >= %s`) and check the
+   affected row count.
+
+4. It returns True even when nothing was transferred, and it accepts a negative or zero
+   amount, which would move money the wrong way. Validate `amount > 0`, and return False or
+   raise when funds are insufficient or an account does not exist (`fetchone()` returning
+   None currently raises a TypeError).
+'''
+wrong = '''
+Nice and readable overall! A few suggestions:
+
+- Add type hints and a docstring so the intent is clear.
+- `cur` could be renamed to `cursor` for readability.
+- Consider using a context manager for the cursor.
+- The function is a little long; you could extract the two UPDATE statements into helper
+  functions.
+- f-strings are fine here but some teams prefer `.format()`.
+- You might want to log the transfer for auditing purposes.
+
+Otherwise LGTM.
+'''
+[task.grader]
+type = "judge"
+pass_mark = 0.7
+rubric = [
+  { name = "sql_injection", weight = 1.5, description = "Identifies that the queries are built by string interpolation (SQL injection) and recommends parameterized queries." },
+  { name = "atomicity", weight = 1.5, description = "Identifies that committing the debit before the credit makes the transfer non-atomic, and recommends a single transaction with rollback." },
+  { name = "concurrency_or_correctness", weight = 1.0, description = "Identifies at least one further real defect: the check-then-update race, returning True when nothing happened, negative amounts, or a missing account." },
+  { name = "prioritized_and_concrete", weight = 1.0, description = "Orders issues by seriousness, gives a concrete fix for each, and does not pad the review with style nits or invented problems." },
+]
+
+[[task]]
+id = "open-queue-decision"
+title = "Build-versus-buy recommendation"
+difficulty = 4
+prompt = '''
+Write a recommendation of at most 180 words for the engineering director. Choose between
+the two options using only the facts given, state the main risk of your choice, and say
+what would change your mind.
+
+Context: we need a job queue for sending about 2 million emails a day, with retries.
+- Option A, managed queue service: $1,400 a month at our volume, 99.9% SLA, live in about
+  one week. The vendor caps messages at 256 KB.
+- Option B, run our own on the existing Postgres cluster: no new spend, about six weeks
+  of one engineer to build and harden, and that team is already carrying on-call for two
+  other systems.
+- Our largest email payload is 40 KB. The launch date for the feature that needs this is
+  in four weeks.
+'''
+reference = '''
+Recommendation: Option A, the managed queue.
+
+The launch is in four weeks. Option A is live in about one week; Option B needs about six
+weeks of an engineer, so it would miss the date. Option B also adds a third on-call system
+to a team already carrying two. The vendor's 256 KB message cap is not a constraint: our
+largest payload is 40 KB.
+
+The cost is $1,400 a month, roughly $16,800 a year, which is small next to six weeks of
+engineering time plus the ongoing operational load.
+
+Main risk: dependence on the vendor's pricing and its 99.9% SLA, which still allows about
+43 minutes of downtime a month, so sends must be safe to retry.
+
+What would change my mind: a launch date that moves out by two months or more, volume
+growth that pushes the price up several times over, or payloads approaching the 256 KB cap.
+'''
+wrong = '''
+Both options have their pros and cons and ultimately it depends on what the team values
+most. Option A is faster but costs money, while Option B is free but takes longer. Many
+companies start with a managed service and migrate later, although others have had great
+success running queues on Postgres, and Kafka is also worth considering since it scales to
+billions of messages. Given that our payloads can be as large as 400 KB, the vendor cap
+could be a problem. I would suggest forming a small working group to evaluate all the
+options in more depth and report back next quarter before committing either way.
+'''
+[task.grader]
+type = "judge"
+rubric = [
+  { name = "clear_choice", weight = 1.0, description = "Makes one clear recommendation (A or B) instead of hedging or deferring the decision." },
+  { name = "uses_facts_correctly", weight = 2.0, description = "The reasoning rests on the given facts and gets them right: four-week launch versus one week and six weeks, the on-call load, 40 KB against the 256 KB cap, $1,400 a month. No invented facts or options." },
+  { name = "risk", weight = 1.0, description = "Names a real main risk of the chosen option." },
+  { name = "reversal_condition", weight = 1.0, description = "Says concretely what would change the recommendation." },
+  { name = "length", weight = 0.5, description = "At most 180 words and written for a director: direct, no filler." },
+]
+
+[[task]]
+id = "open-ab-paradox"
+title = "Interpret an A/B test with a segment reversal"
+difficulty = 5
+prompt = '''
+A teammate says "Variant B won, ship it." Using only the table below, explain in at most
+170 words whether that conclusion holds and what you would do next.
+
+Checkout conversion by device:
+
+| Device  | Variant A              | Variant B              |
+|---------|------------------------|------------------------|
+| Desktop | 400 of 2,000 (20.0%)   | 1,440 of 8,000 (18.0%) |
+| Mobile  | 640 of 8,000 (8.0%)    | 120 of 2,000 (6.0%)    |
+| Total   | 1,040 of 10,000 (10.4%)| 1,560 of 10,000 (15.6%)|
+'''
+reference = '''
+The conclusion does not hold. B has the higher overall rate (15.6% against 10.4%), but A
+converts better on both devices: 20.0% against 18.0% on desktop and 8.0% against 6.0% on
+mobile.
+
+The total is misleading because the two variants saw different traffic. B's visitors were
+80% desktop and A's were 80% mobile, and desktop converts far better than mobile for
+either variant. B's overall lead comes from that mix, not from the variant itself. This is
+Simpson's paradox.
+
+It also means the assignment was not properly randomized, or it was broken by device, so
+the test itself is suspect.
+
+Next: do not ship B. Find out why the device split differs between the arms, fix the
+assignment, and rerun the test with a balanced split, then compare within each device. On
+the current evidence, A is the better variant.
+'''
+wrong = '''
+Yes, the conclusion holds. Variant B converted 15.6% of visitors compared with 10.4% for
+Variant A, which is a 50% relative lift on a sample of 10,000 users per arm. That is a very
+large sample, so the result is clearly statistically significant. B did slightly worse in
+each device row, but those are smaller subgroups and the overall number is the one that
+matters for the business. I would ship B to 100% of traffic and keep monitoring the
+conversion dashboard for a week or two to confirm that the improvement holds up in
+production.
+'''
+[task.grader]
+type = "judge"
+rubric = [
+  { name = "spots_reversal", weight = 2.0, description = "States that A beats B within both desktop and mobile even though B leads in the total, and concludes that 'B won' does not hold." },
+  { name = "explains_mix", weight = 2.0, description = "Explains why: the variants received very different device mixes (B mostly desktop, A mostly mobile) and desktop converts better, so the total reflects the mix. Naming Simpson's paradox is optional." },
+  { name = "next_step", weight = 1.5, description = "Recommends a sound next step: do not ship B on this evidence; investigate the unbalanced assignment and rerun or compare within device." },
+  { name = "accurate_and_brief", weight = 1.0, description = "At most 170 words and every number quoted matches the table. No invented statistics." },
+]

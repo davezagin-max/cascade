@@ -1,0 +1,4428 @@
+{
+  "meta": {
+    "run_id": "synthetic-v1",
+    "synthetic": true,
+    "created_at": "2026-10-11T20:26:58+00:00",
+    "generator": {
+      "name": "cascade simulate",
+      "seed": 7,
+      "note": "Deterministic simulator. Pass or fail is drawn from assumed abilities and task difficulties; the stand-in answers are graded by the real graders. Tokens, costs and latencies are derived from stated assumptions. Not a measurement."
+    },
+    "suite_hash": "f20918d4c2b2",
+    "models": [
+      "claude-haiku-5-5",
+      "claude-sonnet-5-5",
+      "claude-opus-5-5"
+    ],
+    "efforts": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "trials": 3,
+    "n_tasks": 63,
+    "n_rows": 1701,
+    "sync_rows": 90,
+    "batch_rows": 1611,
+    "answers_billed_usd": 6.3435111,
+    "answers_list_usd": 12.0302815,
+    "judge_usd": 1.325898,
+    "baseline_arm": "opus-high",
+    "pricing": {
+      "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+      "last_verified": "2026-10-11",
+      "batch_multiplier": 0.5,
+      "per_mtok": {
+        "claude-haiku-5-5": {
+          "input": 0.1,
+          "output": 0.5,
+          "cache_write_5m": 0.125,
+          "cache_read": 0.01
+        },
+        "claude-sonnet-5-5": {
+          "input": 2.0,
+          "output": 10.0,
+          "cache_write_5m": 2.5,
+          "cache_read": 0.1
+        },
+        "claude-opus-5-5": {
+          "input": 4.0,
+          "output": 20.0,
+          "cache_write_5m": 5.0,
+          "cache_read": 0.2
+        }
+      }
+    }
+  },
+  "categories": [
+    {
+      "key": "classification",
+      "label": "Classification",
+      "n_tasks": 15
+    },
+    {
+      "key": "extraction",
+      "label": "Extraction",
+      "n_tasks": 14
+    },
+    {
+      "key": "reasoning",
+      "label": "Reasoning and math",
+      "n_tasks": 16
+    },
+    {
+      "key": "code",
+      "label": "Code",
+      "n_tasks": 12
+    },
+    {
+      "key": "open_ended",
+      "label": "Open-ended",
+      "n_tasks": 6
+    }
+  ],
+  "arms": [
+    {
+      "key": "haiku-low",
+      "model": "claude-haiku-5-5",
+      "model_short": "haiku",
+      "effort": "low",
+      "quality": 0.5026455,
+      "ci": [
+        0.4021164,
+        0.5978836
+      ],
+      "mean_score": 0.64029642,
+      "cost_per_request": 0.00010451,
+      "cost_per_1k": 0.10451323,
+      "cost_per_1k_batch": 0.05225661,
+      "latency_p50_ms": 1263.85,
+      "latency_p95_ms": 2042.025,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 173.82010582,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.66666667,
+          "mean_score": 0.66666667,
+          "cost_per_1k": 0.04079556,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.69047619,
+          "mean_score": 0.85039683,
+          "cost_per_1k": 0.06171667,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.29166667,
+          "mean_score": 0.29166667,
+          "cost_per_1k": 0.14670625,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.41666667,
+          "mean_score": 0.85271673,
+          "cost_per_1k": 0.17031667,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.38888889,
+          "mean_score": 0.58897522,
+          "cost_per_1k": 0.11954444,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    },
+    {
+      "key": "haiku-medium",
+      "model": "claude-haiku-5-5",
+      "model_short": "haiku",
+      "effort": "medium",
+      "quality": 0.60846561,
+      "ci": [
+        0.51322751,
+        0.70899471
+      ],
+      "mean_score": 0.71549459,
+      "cost_per_request": 0.000216,
+      "cost_per_1k": 0.21599735,
+      "cost_per_1k_batch": 0.10799868,
+      "latency_p50_ms": 2908.35,
+      "latency_p95_ms": 4586.615,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 396.78835979,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.8,
+          "mean_score": 0.8,
+          "cost_per_1k": 0.06504,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.76190476,
+          "mean_score": 0.89007937,
+          "cost_per_1k": 0.11687143,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.39583333,
+          "mean_score": 0.39583333,
+          "cost_per_1k": 0.30356042,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.5,
+          "mean_score": 0.89266382,
+          "cost_per_1k": 0.38053889,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.55555556,
+          "mean_score": 0.59495813,
+          "cost_per_1k": 0.2621,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    },
+    {
+      "key": "haiku-high",
+      "model": "claude-haiku-5-5",
+      "model_short": "haiku",
+      "effort": "high",
+      "quality": 0.69312169,
+      "ci": [
+        0.6031746,
+        0.78306878
+      ],
+      "mean_score": 0.77219005,
+      "cost_per_request": 0.0004395,
+      "cost_per_1k": 0.43949735,
+      "cost_per_1k_batch": 0.21974868,
+      "latency_p50_ms": 5766.5,
+      "latency_p95_ms": 10027.125,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 843.78835979,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.86666667,
+          "mean_score": 0.86666667,
+          "cost_per_1k": 0.12252889,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.76190476,
+          "mean_score": 0.89007937,
+          "cost_per_1k": 0.25437143,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.52083333,
+          "mean_score": 0.52083333,
+          "cost_per_1k": 0.66085208,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.69444444,
+          "mean_score": 0.91815646,
+          "cost_per_1k": 0.73133056,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.55555556,
+          "mean_score": 0.63927523,
+          "cost_per_1k": 0.48993333,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    },
+    {
+      "key": "sonnet-low",
+      "model": "claude-sonnet-5-5",
+      "model_short": "sonnet",
+      "effort": "low",
+      "quality": 0.67195767,
+      "ci": [
+        0.57142857,
+        0.77248677
+      ],
+      "mean_score": 0.75846345,
+      "cost_per_request": 0.00250249,
+      "cost_per_1k": 2.50248677,
+      "cost_per_1k_batch": 1.25124339,
+      "latency_p50_ms": 2828.3,
+      "latency_p95_ms": 5376.365,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 215.04232804,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.8,
+          "mean_score": 0.8,
+          "cost_per_1k": 0.91857778,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.83333333,
+          "mean_score": 0.92777778,
+          "cost_per_1k": 1.45933333,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.45833333,
+          "mean_score": 0.45833333,
+          "cost_per_1k": 3.52579167,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.66666667,
+          "mean_score": 0.94243234,
+          "cost_per_1k": 4.01744444,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.55555556,
+          "mean_score": 0.69196452,
+          "cost_per_1k": 3.13755556,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": false
+    },
+    {
+      "key": "sonnet-medium",
+      "model": "claude-sonnet-5-5",
+      "model_short": "sonnet",
+      "effort": "medium",
+      "quality": 0.74074074,
+      "ci": [
+        0.64550265,
+        0.82010582
+      ],
+      "mean_score": 0.81958365,
+      "cost_per_request": 0.00511021,
+      "cost_per_1k": 5.11021164,
+      "cost_per_1k_batch": 2.55510582,
+      "latency_p50_ms": 6178.95,
+      "latency_p95_ms": 9726.55,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 475.81481481,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.88888889,
+          "mean_score": 0.88888889,
+          "cost_per_1k": 1.50235556,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.83333333,
+          "mean_score": 0.93571429,
+          "cost_per_1k": 2.7012381,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.625,
+          "mean_score": 0.625,
+          "cost_per_1k": 7.57516667,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.66666667,
+          "mean_score": 0.93194953,
+          "cost_per_1k": 8.60438889,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.61111111,
+          "mean_score": 0.66950704,
+          "cost_per_1k": 6.18922222,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    },
+    {
+      "key": "sonnet-high",
+      "model": "claude-sonnet-5-5",
+      "model_short": "sonnet",
+      "effort": "high",
+      "quality": 0.85714286,
+      "ci": [
+        0.78835979,
+        0.92063492
+      ],
+      "mean_score": 0.90373844,
+      "cost_per_request": 0.01120233,
+      "cost_per_1k": 11.20232804,
+      "cost_per_1k_batch": 5.60116402,
+      "latency_p50_ms": 12686.85,
+      "latency_p95_ms": 25981.335,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 1085.02645503,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.93333333,
+          "mean_score": 0.93333333,
+          "cost_per_1k": 2.91435556,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.9047619,
+          "mean_score": 0.96706349,
+          "cost_per_1k": 5.83219048,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.79166667,
+          "mean_score": 0.79166667,
+          "cost_per_1k": 17.54495833,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.83333333,
+          "mean_score": 0.96655983,
+          "cost_per_1k": 18.20688889,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.77777778,
+          "mean_score": 0.85520806,
+          "cost_per_1k": 13.52977778,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    },
+    {
+      "key": "opus-low",
+      "model": "claude-opus-5-5",
+      "model_short": "opus",
+      "effort": "low",
+      "quality": 0.79365079,
+      "ci": [
+        0.71428571,
+        0.86772487
+      ],
+      "mean_score": 0.86118172,
+      "cost_per_request": 0.0057491,
+      "cost_per_1k": 5.74910053,
+      "cost_per_1k_batch": 2.87455026,
+      "latency_p50_ms": 4007.0,
+      "latency_p95_ms": 9473.27,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 252.24867725,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.88888889,
+          "mean_score": 0.88888889,
+          "cost_per_1k": 1.95404444,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.88095238,
+          "mean_score": 0.95515873,
+          "cost_per_1k": 3.15819048,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.72916667,
+          "mean_score": 0.72916667,
+          "cost_per_1k": 8.66616667,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.72222222,
+          "mean_score": 0.95074193,
+          "cost_per_1k": 9.22988889,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.66666667,
+          "mean_score": 0.74555383,
+          "cost_per_1k": 6.54177778,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    },
+    {
+      "key": "opus-medium",
+      "model": "claude-opus-5-5",
+      "model_short": "opus",
+      "effort": "medium",
+      "quality": 0.91534392,
+      "ci": [
+        0.85714286,
+        0.96825397
+      ],
+      "mean_score": 0.92978133,
+      "cost_per_request": 0.01213968,
+      "cost_per_1k": 12.13968254,
+      "cost_per_1k_batch": 6.06984127,
+      "latency_p50_ms": 9756.7,
+      "latency_p95_ms": 20490.32,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 571.77777778,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.95555556,
+          "mean_score": 0.95555556,
+          "cost_per_1k": 3.39848889,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.95238095,
+          "mean_score": 0.98095238,
+          "cost_per_1k": 6.60009524,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.83333333,
+          "mean_score": 0.83333333,
+          "cost_per_1k": 18.597,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.91666667,
+          "mean_score": 0.9875,
+          "cost_per_1k": 20.12544444,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.94444444,
+          "mean_score": 0.88770396,
+          "cost_per_1k": 13.72733333,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    },
+    {
+      "key": "opus-high",
+      "model": "claude-opus-5-5",
+      "model_short": "opus",
+      "effort": "high",
+      "quality": 0.92592593,
+      "ci": [
+        0.87301587,
+        0.96825397
+      ],
+      "mean_score": 0.94900429,
+      "cost_per_request": 0.02618847,
+      "cost_per_1k": 26.18846561,
+      "cost_per_1k_batch": 13.0942328,
+      "latency_p50_ms": 26008.25,
+      "latency_p95_ms": 55989.175,
+      "latency_n": 10,
+      "input_tokens_mean": 176.03174603,
+      "output_tokens_mean": 1274.21693122,
+      "n_rows": 189,
+      "refusals": 0,
+      "truncated": 0,
+      "errors": 0,
+      "ungraded": 0,
+      "by_category": {
+        "classification": {
+          "quality": 0.97777778,
+          "mean_score": 0.97777778,
+          "cost_per_1k": 6.39582222,
+          "n_tasks": 15
+        },
+        "extraction": {
+          "quality": 0.95238095,
+          "mean_score": 0.97619048,
+          "cost_per_1k": 13.62057143,
+          "n_tasks": 14
+        },
+        "reasoning": {
+          "quality": 0.89583333,
+          "mean_score": 0.89583333,
+          "cost_per_1k": 41.17908333,
+          "n_tasks": 16
+        },
+        "code": {
+          "quality": 0.91666667,
+          "mean_score": 0.98952991,
+          "cost_per_1k": 43.56322222,
+          "n_tasks": 12
+        },
+        "open_ended": {
+          "quality": 0.83333333,
+          "mean_score": 0.87437408,
+          "cost_per_1k": 30.27066667,
+          "n_tasks": 6
+        }
+      },
+      "on_frontier": true
+    }
+  ],
+  "router": {
+    "version": "076d6348fa4f",
+    "threshold": 0.9,
+    "l2": 1.0,
+    "folds": 5,
+    "n_tasks": 63,
+    "baseline_arm": "opus-high",
+    "baseline": {
+      "quality": 0.92592593,
+      "cost_per_request": 0.02618847
+    },
+    "headline": {
+      "quality": 0.84656085,
+      "cost_per_request": 0.01164608,
+      "cost_saved": 0.55529723,
+      "quality_retained": 0.91428571,
+      "mix": {
+        "haiku-low": 4,
+        "haiku-medium": 4,
+        "haiku-high": 11,
+        "sonnet-medium": 4,
+        "opus-low": 10,
+        "sonnet-high": 5,
+        "opus-medium": 18,
+        "opus-high": 7
+      }
+    },
+    "oracle": {
+      "quality": 0.96825397,
+      "cost_per_request": 0.00531555,
+      "cost_saved": 0.79702706,
+      "quality_retained": 1.04571429,
+      "mix": {
+        "haiku-low": 21,
+        "haiku-medium": 12,
+        "haiku-high": 6,
+        "sonnet-low": 3,
+        "sonnet-medium": 4,
+        "opus-low": 3,
+        "sonnet-high": 7,
+        "opus-medium": 4,
+        "opus-high": 3
+      }
+    },
+    "sweep": [
+      {
+        "threshold": 0.5,
+        "quality": 0.66137566,
+        "cost_per_request": 0.00367347,
+        "cost_saved": 0.85972949,
+        "quality_retained": 0.71428571,
+        "mix": {
+          "haiku-low": 35,
+          "haiku-medium": 7,
+          "haiku-high": 4,
+          "sonnet-medium": 5,
+          "opus-low": 2,
+          "sonnet-high": 4,
+          "opus-medium": 6
+        }
+      },
+      {
+        "threshold": 0.55,
+        "quality": 0.67724868,
+        "cost_per_request": 0.00500281,
+        "cost_saved": 0.80896893,
+        "quality_retained": 0.73142857,
+        "mix": {
+          "haiku-low": 33,
+          "haiku-medium": 5,
+          "haiku-high": 8,
+          "sonnet-medium": 2,
+          "opus-low": 4,
+          "sonnet-high": 4,
+          "opus-medium": 5,
+          "opus-high": 2
+        }
+      },
+      {
+        "threshold": 0.6,
+        "quality": 0.69312169,
+        "cost_per_request": 0.00535181,
+        "cost_saved": 0.79564255,
+        "quality_retained": 0.74857143,
+        "mix": {
+          "haiku-low": 31,
+          "haiku-medium": 6,
+          "haiku-high": 6,
+          "sonnet-medium": 4,
+          "opus-low": 5,
+          "sonnet-high": 1,
+          "opus-medium": 8,
+          "opus-high": 2
+        }
+      },
+      {
+        "threshold": 0.65,
+        "quality": 0.73015873,
+        "cost_per_request": 0.00596727,
+        "cost_saved": 0.77214115,
+        "quality_retained": 0.78857143,
+        "mix": {
+          "haiku-low": 23,
+          "haiku-medium": 12,
+          "haiku-high": 6,
+          "sonnet-medium": 4,
+          "opus-low": 4,
+          "sonnet-high": 4,
+          "opus-medium": 8,
+          "opus-high": 2
+        }
+      },
+      {
+        "threshold": 0.7,
+        "quality": 0.74603175,
+        "cost_per_request": 0.00654391,
+        "cost_saved": 0.75012253,
+        "quality_retained": 0.80571429,
+        "mix": {
+          "haiku-low": 22,
+          "haiku-medium": 10,
+          "haiku-high": 6,
+          "sonnet-medium": 2,
+          "opus-low": 8,
+          "sonnet-high": 4,
+          "opus-medium": 9,
+          "opus-high": 2
+        }
+      },
+      {
+        "threshold": 0.75,
+        "quality": 0.77248677,
+        "cost_per_request": 0.00759686,
+        "cost_saved": 0.70991571,
+        "quality_retained": 0.83428571,
+        "mix": {
+          "haiku-low": 17,
+          "haiku-medium": 11,
+          "haiku-high": 7,
+          "sonnet-medium": 3,
+          "opus-low": 6,
+          "sonnet-high": 6,
+          "opus-medium": 9,
+          "opus-high": 4
+        }
+      },
+      {
+        "threshold": 0.8,
+        "quality": 0.78306878,
+        "cost_per_request": 0.00838157,
+        "cost_saved": 0.67995175,
+        "quality_retained": 0.84571429,
+        "mix": {
+          "haiku-low": 8,
+          "haiku-medium": 15,
+          "haiku-high": 10,
+          "sonnet-medium": 3,
+          "opus-low": 3,
+          "sonnet-high": 10,
+          "opus-medium": 10,
+          "opus-high": 4
+        }
+      },
+      {
+        "threshold": 0.85,
+        "quality": 0.83068783,
+        "cost_per_request": 0.00974057,
+        "cost_saved": 0.62805884,
+        "quality_retained": 0.89714286,
+        "mix": {
+          "haiku-low": 7,
+          "haiku-medium": 7,
+          "haiku-high": 12,
+          "sonnet-medium": 7,
+          "opus-low": 3,
+          "sonnet-high": 8,
+          "opus-medium": 14,
+          "opus-high": 5
+        }
+      },
+      {
+        "threshold": 0.9,
+        "quality": 0.84656085,
+        "cost_per_request": 0.01164608,
+        "cost_saved": 0.55529723,
+        "quality_retained": 0.91428571,
+        "mix": {
+          "haiku-low": 4,
+          "haiku-medium": 4,
+          "haiku-high": 11,
+          "sonnet-medium": 4,
+          "opus-low": 10,
+          "sonnet-high": 5,
+          "opus-medium": 18,
+          "opus-high": 7
+        }
+      },
+      {
+        "threshold": 0.95,
+        "quality": 0.86243386,
+        "cost_per_request": 0.01511028,
+        "cost_saved": 0.42301793,
+        "quality_retained": 0.93142857,
+        "mix": {
+          "haiku-low": 2,
+          "haiku-medium": 2,
+          "haiku-high": 2,
+          "sonnet-medium": 2,
+          "opus-low": 11,
+          "sonnet-high": 13,
+          "opus-medium": 19,
+          "opus-high": 12
+        }
+      }
+    ],
+    "confusion": {
+      "predicted": [
+        "haiku-low",
+        "haiku-medium",
+        "haiku-high",
+        "sonnet-low",
+        "sonnet-medium",
+        "opus-low",
+        "sonnet-high",
+        "opus-medium",
+        "opus-high"
+      ],
+      "oracle": [
+        "haiku-low",
+        "haiku-medium",
+        "haiku-high",
+        "sonnet-low",
+        "sonnet-medium",
+        "opus-low",
+        "sonnet-high",
+        "opus-medium",
+        "opus-high",
+        "none"
+      ],
+      "matrix": [
+        [
+          2,
+          2,
+          6,
+          0,
+          0,
+          5,
+          0,
+          5,
+          0
+        ],
+        [
+          1,
+          0,
+          3,
+          0,
+          2,
+          4,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          2,
+          3,
+          0
+        ],
+        [
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          3,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "exact": 5,
+      "over_routed": 48,
+      "under_routed": 10
+    },
+    "by_category": {
+      "classification": {
+        "n_tasks": 15,
+        "quality": 0.84444444,
+        "cost_per_request": 0.00157401,
+        "baseline_quality": 0.97777778,
+        "baseline_cost_per_request": 0.00639582,
+        "mix": {
+          "haiku-low": 4,
+          "haiku-medium": 2,
+          "haiku-high": 3,
+          "sonnet-medium": 1,
+          "opus-low": 2,
+          "opus-medium": 2,
+          "opus-high": 1
+        }
+      },
+      "extraction": {
+        "n_tasks": 14,
+        "quality": 0.85714286,
+        "cost_per_request": 0.00230078,
+        "baseline_quality": 0.95238095,
+        "baseline_cost_per_request": 0.01362057,
+        "mix": {
+          "haiku-medium": 1,
+          "haiku-high": 6,
+          "sonnet-medium": 1,
+          "opus-low": 4,
+          "opus-medium": 2
+        }
+      },
+      "reasoning": {
+        "n_tasks": 16,
+        "quality": 0.8125,
+        "cost_per_request": 0.02529275,
+        "baseline_quality": 0.89583333,
+        "baseline_cost_per_request": 0.04117908,
+        "mix": {
+          "sonnet-medium": 1,
+          "opus-low": 1,
+          "sonnet-high": 4,
+          "opus-medium": 5,
+          "opus-high": 5
+        }
+      },
+      "code": {
+        "n_tasks": 12,
+        "quality": 0.86111111,
+        "cost_per_request": 0.01806202,
+        "baseline_quality": 0.91666667,
+        "baseline_cost_per_request": 0.04356322,
+        "mix": {
+          "haiku-medium": 1,
+          "haiku-high": 1,
+          "sonnet-medium": 1,
+          "opus-low": 1,
+          "sonnet-high": 1,
+          "opus-medium": 6,
+          "opus-high": 1
+        }
+      },
+      "open_ended": {
+        "n_tasks": 6,
+        "quality": 0.88888889,
+        "cost_per_request": 0.00940897,
+        "baseline_quality": 0.83333333,
+        "baseline_cost_per_request": 0.03027067,
+        "mix": {
+          "haiku-high": 1,
+          "opus-low": 2,
+          "opus-medium": 3
+        }
+      }
+    },
+    "calibration": {
+      "predicted": 0.87398899,
+      "realized": 0.84656085
+    },
+    "weights": [
+      {
+        "name": "length",
+        "label": "Prompt length",
+        "weight": -1.335628
+      },
+      {
+        "name": "numbers",
+        "label": "Numbers in the prompt",
+        "weight": 0.995565
+      },
+      {
+        "name": "label_cues",
+        "label": "Classification cues",
+        "weight": 0.861346
+      },
+      {
+        "name": "questions",
+        "label": "Question marks",
+        "weight": -0.788323
+      },
+      {
+        "name": "digit_density",
+        "label": "Digit density",
+        "weight": -0.753714
+      },
+      {
+        "name": "structure_cues",
+        "label": "Structured-output cues",
+        "weight": 0.735413
+      },
+      {
+        "name": "hard_cues",
+        "label": "Hard-reasoning cues",
+        "weight": -0.654353
+      },
+      {
+        "name": "words",
+        "label": "Word count",
+        "weight": -0.53599
+      },
+      {
+        "name": "writing_cues",
+        "label": "Open-ended writing cues",
+        "weight": 0.411524
+      },
+      {
+        "name": "big_numbers",
+        "label": "Large numbers or powers",
+        "weight": -0.405716
+      },
+      {
+        "name": "line_breaks",
+        "label": "Line breaks",
+        "weight": 0.378049
+      },
+      {
+        "name": "math_cues",
+        "label": "Math cues",
+        "weight": -0.366297
+      },
+      {
+        "name": "list_items",
+        "label": "Bulleted or numbered lines",
+        "weight": -0.350951
+      },
+      {
+        "name": "conditionals",
+        "label": "Conditional and ordering words",
+        "weight": 0.295308
+      },
+      {
+        "name": "quoted_text",
+        "label": "Quoted source text",
+        "weight": 0.269768
+      },
+      {
+        "name": "proper_nouns",
+        "label": "Capitalized words",
+        "weight": -0.223825
+      },
+      {
+        "name": "constraint_words",
+        "label": "Constraint words",
+        "weight": -0.153351
+      },
+      {
+        "name": "code_cues",
+        "label": "Code cues",
+        "weight": 0.130729
+      }
+    ],
+    "arm_bias": [
+      {
+        "key": "haiku-low",
+        "bias": -0.006461
+      },
+      {
+        "key": "haiku-medium",
+        "bias": 0.622557
+      },
+      {
+        "key": "haiku-high",
+        "bias": 1.165298
+      },
+      {
+        "key": "sonnet-low",
+        "bias": 1.024315
+      },
+      {
+        "key": "sonnet-medium",
+        "bias": 1.501088
+      },
+      {
+        "key": "opus-low",
+        "bias": 1.917244
+      },
+      {
+        "key": "sonnet-high",
+        "bias": 2.518516
+      },
+      {
+        "key": "opus-medium",
+        "bias": 3.270831
+      },
+      {
+        "key": "opus-high",
+        "bias": 3.448298
+      }
+    ]
+  },
+  "caching": {
+    "synthetic": true,
+    "model": "claude-opus-5-5",
+    "effort": "low",
+    "calls": 10,
+    "prefix_tokens": 1480,
+    "short_prefix_tokens": 99,
+    "conditions": [
+      {
+        "key": "no_cache",
+        "label": "No cache breakpoint",
+        "calls": [
+          {
+            "n": 1,
+            "input_tokens": 1508,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008832
+          },
+          {
+            "n": 2,
+            "input_tokens": 1508,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008832
+          },
+          {
+            "n": 3,
+            "input_tokens": 1508,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008832
+          },
+          {
+            "n": 4,
+            "input_tokens": 1509,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008836
+          },
+          {
+            "n": 5,
+            "input_tokens": 1514,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008856
+          },
+          {
+            "n": 6,
+            "input_tokens": 1499,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008796
+          },
+          {
+            "n": 7,
+            "input_tokens": 1506,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008824
+          },
+          {
+            "n": 8,
+            "input_tokens": 1504,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008816
+          },
+          {
+            "n": 9,
+            "input_tokens": 1512,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008848
+          },
+          {
+            "n": 10,
+            "input_tokens": 1502,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.008808
+          }
+        ],
+        "input_tokens": 15070,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1400,
+        "total_usd": 0.08828
+      },
+      {
+        "key": "cached",
+        "label": "Cache breakpoint on the prefix",
+        "calls": [
+          {
+            "n": 1,
+            "input_tokens": 28,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 1480,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.010312
+          },
+          {
+            "n": 2,
+            "input_tokens": 28,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003208
+          },
+          {
+            "n": 3,
+            "input_tokens": 28,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003208
+          },
+          {
+            "n": 4,
+            "input_tokens": 29,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003212
+          },
+          {
+            "n": 5,
+            "input_tokens": 34,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003232
+          },
+          {
+            "n": 6,
+            "input_tokens": 19,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003172
+          },
+          {
+            "n": 7,
+            "input_tokens": 26,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.0032
+          },
+          {
+            "n": 8,
+            "input_tokens": 24,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003192
+          },
+          {
+            "n": 9,
+            "input_tokens": 32,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003224
+          },
+          {
+            "n": 10,
+            "input_tokens": 22,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 1480,
+            "cost_usd": 0.003184
+          }
+        ],
+        "input_tokens": 270,
+        "cache_creation_input_tokens": 1480,
+        "cache_read_input_tokens": 13320,
+        "output_tokens": 1400,
+        "total_usd": 0.039144
+      },
+      {
+        "key": "below_minimum",
+        "label": "Breakpoint on a prefix under the minimum",
+        "calls": [
+          {
+            "n": 1,
+            "input_tokens": 127,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003308
+          },
+          {
+            "n": 2,
+            "input_tokens": 127,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003308
+          },
+          {
+            "n": 3,
+            "input_tokens": 127,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003308
+          },
+          {
+            "n": 4,
+            "input_tokens": 128,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003312
+          },
+          {
+            "n": 5,
+            "input_tokens": 133,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003332
+          },
+          {
+            "n": 6,
+            "input_tokens": 118,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003272
+          },
+          {
+            "n": 7,
+            "input_tokens": 125,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.0033
+          },
+          {
+            "n": 8,
+            "input_tokens": 123,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003292
+          },
+          {
+            "n": 9,
+            "input_tokens": 131,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003324
+          },
+          {
+            "n": 10,
+            "input_tokens": 121,
+            "output_tokens": 140,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cost_usd": 0.003284
+          }
+        ],
+        "input_tokens": 1260,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 1400,
+        "total_usd": 0.03304
+      }
+    ],
+    "savings_usd": 0.049136,
+    "savings_pct": 0.55659266,
+    "input_savings_pct": 0.8151294,
+    "break_even_call": 2,
+    "rules": {
+      "min_tokens": 512,
+      "ttl_seconds": 300,
+      "write_multiplier": 1.25,
+      "read_multiplier": 0.05
+    }
+  },
+  "tasks": [
+    {
+      "id": "cls-ticket-billing",
+      "title": "Support ticket intent",
+      "category": "classification",
+      "difficulty": 1,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "cls-review-positive",
+      "title": "Plain review sentiment",
+      "category": "classification",
+      "difficulty": 1,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-low",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "cls-language-id",
+      "title": "Language identification",
+      "category": "classification",
+      "difficulty": 1,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-medium",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "cls-review-mixed",
+      "title": "Review with pros and cons",
+      "category": "classification",
+      "difficulty": 2,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "cls-contract-clause",
+      "title": "Contract clause type",
+      "category": "classification",
+      "difficulty": 2,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-medium",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "cls-incident-severity",
+      "title": "Incident severity from a rubric",
+      "category": "classification",
+      "difficulty": 2,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "cls-off-by-one",
+      "title": "Bug category in a short function",
+      "category": "classification",
+      "difficulty": 2,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        }
+      },
+      "router_pick": "haiku-low",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "cls-sarcasm",
+      "title": "Sarcastic review sentiment",
+      "category": "classification",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "cls-intent-negation",
+      "title": "Intent behind a negated request",
+      "category": "classification",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-low",
+      "oracle_arm": "sonnet-low"
+    },
+    {
+      "id": "cls-quantifier-nli",
+      "title": "Entailment with a quantifier",
+      "category": "classification",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "sonnet-medium",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "cls-lock-race",
+      "title": "Bug category in threaded code",
+      "category": "classification",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-low",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "cls-log-leak",
+      "title": "Sensitive data category in a log line",
+      "category": "classification",
+      "difficulty": 4,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-high",
+      "oracle_arm": "sonnet-high"
+    },
+    {
+      "id": "cls-expense-policy",
+      "title": "Expense claim under a precedence policy",
+      "category": "classification",
+      "difficulty": 4,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "cls-parcel-class",
+      "title": "Shipping class from threshold rules",
+      "category": "classification",
+      "difficulty": 4,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "sonnet-medium"
+    },
+    {
+      "id": "cls-subscription-state",
+      "title": "Subscription state on a given date",
+      "category": "classification",
+      "difficulty": 5,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "opus-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "opus-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "opus-high"
+    },
+    {
+      "id": "ext-contact-card",
+      "title": "Contact details from a sentence",
+      "category": "extraction",
+      "difficulty": 1,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "ext-invoice-header",
+      "title": "Invoice header fields",
+      "category": "extraction",
+      "difficulty": 1,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "ext-log-line",
+      "title": "Structured fields from a log line",
+      "category": "extraction",
+      "difficulty": 2,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "ext-meeting-move",
+      "title": "Rescheduled meeting details",
+      "category": "extraction",
+      "difficulty": 2,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "ext-product-specs",
+      "title": "Product specs with a unit conversion",
+      "category": "extraction",
+      "difficulty": 2,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "ext-org-teams",
+      "title": "Nested team structure",
+      "category": "extraction",
+      "difficulty": 2,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.83333333
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "ext-job-posting",
+      "title": "Job posting with absent fields",
+      "category": "extraction",
+      "difficulty": 3,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.77777778
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.77777778
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-medium",
+      "oracle_arm": "sonnet-medium"
+    },
+    {
+      "id": "ext-order-lines",
+      "title": "Order lines with a retraction",
+      "category": "extraction",
+      "difficulty": 3,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "ext-german-invoice",
+      "title": "Invoice in German number format",
+      "category": "extraction",
+      "difficulty": 3,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.91666667
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.91666667
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.91666667
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "ext-server-inventory",
+      "title": "Inventory with mixed memory units",
+      "category": "extraction",
+      "difficulty": 3,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "ext-thread-corrections",
+      "title": "Final values from an email thread",
+      "category": "extraction",
+      "difficulty": 4,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.66666667
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.66666667
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.66666667
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.5
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.66666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "opus-low"
+    },
+    {
+      "id": "ext-receipt-totals",
+      "title": "Receipt totals that must be computed",
+      "category": "extraction",
+      "difficulty": 4,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.66666667
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.83333333
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.83333333
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.66666667
+        }
+      },
+      "router_pick": "sonnet-medium",
+      "oracle_arm": "haiku-high"
+    },
+    {
+      "id": "ext-lease-dates",
+      "title": "Lease terms with a date calculation",
+      "category": "extraction",
+      "difficulty": 4,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.83333333
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.91666667
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.91666667
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.91666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.91666667
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "sonnet-low"
+    },
+    {
+      "id": "ext-manifest-row",
+      "title": "One row from a messy shipping manifest",
+      "category": "extraction",
+      "difficulty": 5,
+      "grader": "json",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.6
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.6
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.6
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.6
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.6
+        },
+        "sonnet-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.73333333
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.73333333
+        },
+        "opus-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.73333333
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "opus-high"
+    },
+    {
+      "id": "rsn-crates",
+      "title": "One-step multiplication",
+      "category": "reasoning",
+      "difficulty": 1,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "rsn-average-speed",
+      "title": "Average speed over two legs",
+      "category": "reasoning",
+      "difficulty": 2,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "rsn-original-price",
+      "title": "Reverse a percentage discount",
+      "category": "reasoning",
+      "difficulty": 2,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "rsn-ages",
+      "title": "Two-equation age problem",
+      "category": "reasoning",
+      "difficulty": 2,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "sonnet-high",
+      "oracle_arm": "haiku-high"
+    },
+    {
+      "id": "rsn-pen-notebook",
+      "title": "Intuition trap with a sum and a difference",
+      "category": "reasoning",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-high"
+    },
+    {
+      "id": "rsn-level-anagrams",
+      "title": "Arrangements with repeated letters",
+      "category": "reasoning",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "sonnet-low"
+    },
+    {
+      "id": "rsn-two-pumps",
+      "title": "Work rates with a switch-off",
+      "category": "reasoning",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "sonnet-high",
+      "oracle_arm": "haiku-high"
+    },
+    {
+      "id": "rsn-weekday",
+      "title": "Weekday three months later",
+      "category": "reasoning",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "sonnet-medium",
+      "oracle_arm": "sonnet-high"
+    },
+    {
+      "id": "rsn-market-stall",
+      "title": "Profit with losses and a fixed fee",
+      "category": "reasoning",
+      "difficulty": 3,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "sonnet-medium"
+    },
+    {
+      "id": "rsn-power-mod",
+      "title": "Remainder of a large power",
+      "category": "reasoning",
+      "difficulty": 4,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-high",
+      "oracle_arm": "opus-low"
+    },
+    {
+      "id": "rsn-dice-product",
+      "title": "Probability that a product is a multiple of 6",
+      "category": "reasoning",
+      "difficulty": 4,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-high",
+      "oracle_arm": "opus-low"
+    },
+    {
+      "id": "rsn-talk-schedule",
+      "title": "Ordering puzzle with six constraints",
+      "category": "reasoning",
+      "difficulty": 4,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-high",
+      "oracle_arm": "sonnet-high"
+    },
+    {
+      "id": "rsn-round-table",
+      "title": "Circular seating with a restriction",
+      "category": "reasoning",
+      "difficulty": 4,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-high",
+      "oracle_arm": "opus-medium"
+    },
+    {
+      "id": "rsn-inclusion-exclusion",
+      "title": "Counting with three overlapping divisors",
+      "category": "reasoning",
+      "difficulty": 5,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "opus-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "opus-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "opus-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        }
+      },
+      "router_pick": "opus-high",
+      "oracle_arm": "none"
+    },
+    {
+      "id": "rsn-coin-pattern",
+      "title": "Expected flips until a pattern",
+      "category": "reasoning",
+      "difficulty": 5,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "sonnet-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "opus-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "opus-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        }
+      },
+      "router_pick": "sonnet-high",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "rsn-digit-sum",
+      "title": "Digit sum of a large power of two",
+      "category": "reasoning",
+      "difficulty": 5,
+      "grader": "exact",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.0
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.66666667
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "opus-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.33333333
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "sonnet-high",
+      "oracle_arm": "opus-high"
+    },
+    {
+      "id": "code-count-vowels",
+      "title": "Count vowels",
+      "category": "code",
+      "difficulty": 1,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "code-dedupe",
+      "title": "Remove duplicates, keep order",
+      "category": "code",
+      "difficulty": 1,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.93333333
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "code-roman",
+      "title": "Integer to Roman numeral",
+      "category": "code",
+      "difficulty": 2,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.7
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.7
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "sonnet-medium",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "code-merge-intervals",
+      "title": "Merge overlapping intervals",
+      "category": "code",
+      "difficulty": 2,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.71428571
+        },
+        "haiku-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.9047619
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.9047619
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-high"
+    },
+    {
+      "id": "code-rle-decode",
+      "title": "Run-length decoding",
+      "category": "code",
+      "difficulty": 2,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "sonnet-high",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "code-parse-duration",
+      "title": "Strict duration parser",
+      "category": "code",
+      "difficulty": 3,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.76190476
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.76190476
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-high"
+    },
+    {
+      "id": "code-lru-cache",
+      "title": "LRU cache",
+      "category": "code",
+      "difficulty": 3,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.77777778
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "code-topo-order",
+      "title": "Smallest topological order",
+      "category": "code",
+      "difficulty": 3,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.91666667
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.91666667
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.95833333
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.95833333
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.95833333
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "sonnet-medium"
+    },
+    {
+      "id": "code-count-inversions",
+      "title": "Count inversions efficiently",
+      "category": "code",
+      "difficulty": 4,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.77777778
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.77777778
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.85185185
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.77777778
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.77777778
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.85185185
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "sonnet-high"
+    },
+    {
+      "id": "code-compare-versions",
+      "title": "Semantic version precedence",
+      "category": "code",
+      "difficulty": 4,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.92307692
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.92307692
+        },
+        "haiku-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.97435897
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.92307692
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.92307692
+        },
+        "sonnet-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.94871795
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.94871795
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.97435897
+        }
+      },
+      "router_pick": "opus-high",
+      "oracle_arm": "opus-medium"
+    },
+    {
+      "id": "code-min-window",
+      "title": "Minimum window substring",
+      "category": "code",
+      "difficulty": 4,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.7
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.8
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.7
+        },
+        "sonnet-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.8
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.9
+        },
+        "sonnet-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.7
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.8
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "opus-medium"
+    },
+    {
+      "id": "code-evaluate",
+      "title": "Integer expression evaluator",
+      "category": "code",
+      "difficulty": 5,
+      "grader": "code",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.85
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.85
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.9
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.85
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.9
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.95
+        },
+        "opus-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.85
+        },
+        "opus-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.85
+        },
+        "opus-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.9
+        }
+      },
+      "router_pick": "haiku-medium",
+      "oracle_arm": "sonnet-high"
+    },
+    {
+      "id": "open-incident-summary",
+      "title": "Incident summary for executives",
+      "category": "open_ended",
+      "difficulty": 2,
+      "grader": "judge",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.48148148
+        },
+        "haiku-medium": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.37037037
+        },
+        "haiku-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.57407407
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.81481481
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.72222222
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.75925926
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.88888889
+        },
+        "opus-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.72222222
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "sonnet-high"
+    },
+    {
+      "id": "open-decline-vendor",
+      "title": "Polite decline email",
+      "category": "open_ended",
+      "difficulty": 2,
+      "grader": "judge",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 1.0,
+          "mean_score": 0.94444444
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.88888889
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 0.94444444
+        },
+        "sonnet-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.7962963
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.90740741
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.81481481
+        },
+        "opus-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.88888889
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.94444444
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 0.98148148
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-low"
+    },
+    {
+      "id": "open-explain-consistency",
+      "title": "Explain a concept to a non-engineer",
+      "category": "open_ended",
+      "difficulty": 3,
+      "grader": "judge",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.78333333
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.85
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 0.95
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 0.95
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.88333333
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 0.91666667
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 0.93333333
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.85
+        }
+      },
+      "router_pick": "haiku-high",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "open-code-review",
+      "title": "Review a risky function",
+      "category": "open_ended",
+      "difficulty": 4,
+      "grader": "judge",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.75
+        },
+        "haiku-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.95
+        },
+        "haiku-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "sonnet-low": {
+          "pass_rate": 1.0,
+          "mean_score": 0.93333333
+        },
+        "sonnet-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.91666667
+        },
+        "sonnet-high": {
+          "pass_rate": 1.0,
+          "mean_score": 1.0
+        },
+        "opus-low": {
+          "pass_rate": 1.0,
+          "mean_score": 0.9
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.88333333
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 0.9
+        }
+      },
+      "router_pick": "opus-low",
+      "oracle_arm": "haiku-medium"
+    },
+    {
+      "id": "open-queue-decision",
+      "title": "Build-versus-buy recommendation",
+      "category": "open_ended",
+      "difficulty": 4,
+      "grader": "judge",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.15151515
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.31818182
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.3030303
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.27272727
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.31818182
+        },
+        "sonnet-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.84848485
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.53030303
+        },
+        "opus-medium": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.71212121
+        },
+        "opus-high": {
+          "pass_rate": 0.66666667,
+          "mean_score": 0.81818182
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "sonnet-high"
+    },
+    {
+      "id": "open-ab-paradox",
+      "title": "Interpret an A/B test with a segment reversal",
+      "category": "open_ended",
+      "difficulty": 5,
+      "grader": "judge",
+      "cells": {
+        "haiku-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.42307692
+        },
+        "haiku-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.19230769
+        },
+        "haiku-high": {
+          "pass_rate": 0.0,
+          "mean_score": 0.06410256
+        },
+        "sonnet-low": {
+          "pass_rate": 0.0,
+          "mean_score": 0.38461538
+        },
+        "sonnet-medium": {
+          "pass_rate": 0.0,
+          "mean_score": 0.26923077
+        },
+        "sonnet-high": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.55128205
+        },
+        "opus-low": {
+          "pass_rate": 0.33333333,
+          "mean_score": 0.46153846
+        },
+        "opus-medium": {
+          "pass_rate": 1.0,
+          "mean_score": 0.8974359
+        },
+        "opus-high": {
+          "pass_rate": 1.0,
+          "mean_score": 0.97435897
+        }
+      },
+      "router_pick": "opus-medium",
+      "oracle_arm": "opus-medium"
+    }
+  ]
+}

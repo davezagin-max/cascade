@@ -1,0 +1,400 @@
+# Extraction: the answer must be a JSON object that validates against `schema`
+# and then matches `expected` field by field. `wrong_patch` is the typical mistake.
+
+[[task]]
+id = "ext-contact-card"
+title = "Contact details from a sentence"
+difficulty = 1
+prompt = '''
+Extract the contact from this note as JSON with the keys name, email, phone, and role.
+
+"For badge access, reach Dana Whitfield (facilities lead) at dana.whitfield@northlake.example
+or on 555-0142."
+'''
+wrong_patch = '{"role": "badge access"}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["name", "email", "phone", "role"],
+ "properties": {"name": {"type": "string"}, "email": {"type": "string"},
+                "phone": {"type": "string"}, "role": {"type": "string"}}}
+'''
+expected = '''
+{"name": "Dana Whitfield", "email": "dana.whitfield@northlake.example",
+ "phone": "555-0142", "role": "facilities lead"}
+'''
+
+[[task]]
+id = "ext-invoice-header"
+title = "Invoice header fields"
+difficulty = 1
+prompt = '''
+Extract these fields from the invoice text as JSON: vendor, invoice_number, date (as
+YYYY-MM-DD), and total (a number, no currency symbol).
+
+BRIGHTLINE PAPER CO.
+Invoice INV-20417
+Issued: 9 January 2026
+Bill to: Harbor Street Studio
+Total due: $1,284.50
+'''
+wrong_patch = '{"vendor": "Harbor Street Studio"}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["vendor", "invoice_number", "date", "total"],
+ "properties": {"vendor": {"type": "string"}, "invoice_number": {"type": "string"},
+                "date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+                "total": {"type": "number"}}}
+'''
+expected = '''
+{"vendor": "Brightline Paper Co.", "invoice_number": "INV-20417",
+ "date": "2026-01-09", "total": 1284.5}
+'''
+
+[[task]]
+id = "ext-log-line"
+title = "Structured fields from a log line"
+difficulty = 2
+prompt = '''
+Parse this log line into JSON with the keys timestamp (as written), level, service,
+status_code (integer), and duration_ms (integer).
+
+2026-04-02T08:15:27Z WARN checkout-api POST /v2/orders 503 in 1.84s (upstream timeout)
+'''
+wrong_patch = '{"duration_ms": 184}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["timestamp", "level", "service", "status_code", "duration_ms"],
+ "properties": {"timestamp": {"type": "string"}, "level": {"type": "string"},
+                "service": {"type": "string"}, "status_code": {"type": "integer"},
+                "duration_ms": {"type": "integer"}}}
+'''
+expected = '''
+{"timestamp": "2026-04-02T08:15:27Z", "level": "WARN", "service": "checkout-api",
+ "status_code": 503, "duration_ms": 1840}
+'''
+
+[[task]]
+id = "ext-meeting-move"
+title = "Rescheduled meeting details"
+difficulty = 2
+prompt = '''
+This email was sent on Monday 2026-03-09. Extract the new meeting details as JSON with the
+keys date (YYYY-MM-DD), time_24h (HH:MM), room, and attendees (a list of first names, in
+the order mentioned).
+
+"Hi all, the vendor call ran long, so let's move our sync to this Thursday at 3:30pm.
+Room Aspen is free then (Birch is booked). Priya and Tom, please join; Marta is out."
+'''
+wrong_patch = '{"attendees": ["Priya", "Tom", "Marta"]}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["date", "time_24h", "room", "attendees"],
+ "properties": {"date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+                "time_24h": {"type": "string", "pattern": "^\\d{2}:\\d{2}$"},
+                "room": {"type": "string"},
+                "attendees": {"type": "array", "items": {"type": "string"}}}}
+'''
+expected = '''
+{"date": "2026-03-12", "time_24h": "15:30", "room": "Aspen", "attendees": ["Priya", "Tom"]}
+'''
+
+[[task]]
+id = "ext-product-specs"
+title = "Product specs with a unit conversion"
+difficulty = 2
+prompt = '''
+Extract the product specs as JSON with the keys name, weight_kg (number), battery_hours
+(number), waterproof (boolean), and colors (list of strings, lower case, in the order given).
+
+"The Trailhead Mini speaker weighs just 850 g and plays for 12 hours on a charge. It is
+rated IP67, so a dunk in the lake won't hurt it. Available in Slate, Ember and Moss."
+'''
+wrong_patch = '{"weight_kg": 850}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["name", "weight_kg", "battery_hours", "waterproof", "colors"],
+ "properties": {"name": {"type": "string"}, "weight_kg": {"type": "number"},
+                "battery_hours": {"type": "number"}, "waterproof": {"type": "boolean"},
+                "colors": {"type": "array", "items": {"type": "string"}}}}
+'''
+expected = '''
+{"name": "Trailhead Mini", "weight_kg": 0.85, "battery_hours": 12, "waterproof": true,
+ "colors": ["slate", "ember", "moss"]}
+'''
+
+[[task]]
+id = "ext-org-teams"
+title = "Nested team structure"
+difficulty = 2
+prompt = '''
+Extract the reporting structure as JSON: vp (a name) and teams, a list of objects with the
+keys name, lead, and engineers (integer), in the order the teams are mentioned.
+
+"Mara Okafor, our VP of Engineering, runs two teams. Platform is led by Jules Tan and has
+six engineers. Data is led by Wen Li and has four engineers and one analyst."
+'''
+wrong_patch = '{"teams": [{"name": "Platform", "lead": "Jules Tan", "engineers": 6}, {"name": "Data", "lead": "Wen Li", "engineers": 5}]}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false, "required": ["vp", "teams"],
+ "properties": {"vp": {"type": "string"},
+   "teams": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+     "required": ["name", "lead", "engineers"],
+     "properties": {"name": {"type": "string"}, "lead": {"type": "string"},
+                    "engineers": {"type": "integer"}}}}}}
+'''
+expected = '''
+{"vp": "Mara Okafor",
+ "teams": [{"name": "Platform", "lead": "Jules Tan", "engineers": 6},
+           {"name": "Data", "lead": "Wen Li", "engineers": 4}]}
+'''
+
+[[task]]
+id = "ext-job-posting"
+title = "Job posting with absent fields"
+difficulty = 3
+prompt = '''
+Extract this job posting as JSON with the keys title, company, location, work_mode (one of
+"remote", "hybrid", "onsite"), salary_min, and salary_max. Salaries are integers in GBP per
+year. Use null for any value the posting does not state. Do not guess.
+
+"Senior Data Engineer at Corvid Analytics. We offer a competitive salary and a generous
+equipment budget of 2,500 GBP. You'll be in our Leeds office three days a week and at home
+the rest. Our last three hires in this band started within a week of signing."
+'''
+wrong_patch = '{"salary_min": 2500, "salary_max": 2500}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["title", "company", "location", "work_mode", "salary_min", "salary_max"],
+ "properties": {"title": {"type": "string"}, "company": {"type": "string"},
+                "location": {"type": ["string", "null"]},
+                "work_mode": {"enum": ["remote", "hybrid", "onsite"]},
+                "salary_min": {"type": ["integer", "null"]},
+                "salary_max": {"type": ["integer", "null"]}}}
+'''
+expected = '''
+{"title": "Senior Data Engineer", "company": "Corvid Analytics", "location": "Leeds",
+ "work_mode": "hybrid", "salary_min": null, "salary_max": null}
+'''
+
+[[task]]
+id = "ext-order-lines"
+title = "Order lines with a retraction"
+difficulty = 3
+prompt = '''
+Extract the final order from this message as JSON: items, a list of objects with the keys
+sku, quantity (integer), and unit_price (number), in any order. Leave out anything the
+customer retracts, and apply any changes they make.
+
+"Please send 4 of the A4 notebooks (NB-A4, 3.20 each) and two boxes of the blue pens
+(PEN-BL, 6.75 a box). Also one stapler, ST-10, at 14.00. Actually, scratch the stapler, we
+found ours. And make it 6 notebooks instead of 4."
+'''
+wrong_patch = '{"items": [{"sku": "NB-A4", "quantity": 4, "unit_price": 3.2}, {"sku": "PEN-BL", "quantity": 2, "unit_price": 6.75}]}'
+[task.grader]
+type = "json"
+unordered = ["items"]
+schema = '''
+{"type": "object", "additionalProperties": false, "required": ["items"],
+ "properties": {"items": {"type": "array", "items": {"type": "object",
+   "additionalProperties": false, "required": ["sku", "quantity", "unit_price"],
+   "properties": {"sku": {"type": "string"}, "quantity": {"type": "integer"},
+                  "unit_price": {"type": "number"}}}}}}
+'''
+expected = '''
+{"items": [{"sku": "NB-A4", "quantity": 6, "unit_price": 3.2},
+           {"sku": "PEN-BL", "quantity": 2, "unit_price": 6.75}]}
+'''
+
+[[task]]
+id = "ext-german-invoice"
+title = "Invoice in German number format"
+difficulty = 3
+prompt = '''
+Extract these fields from the German invoice line as JSON: invoice_number (string), date
+(YYYY-MM-DD), net_amount (number), and vat_percent (number).
+
+"Rechnung Nr. 2291 vom 14. März 2026. Nettobetrag: 1.234,56 € zzgl. 19 % MwSt.
+Zahlbar innerhalb von 30 Tagen."
+'''
+wrong_patch = '{"net_amount": 1.23456}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["invoice_number", "date", "net_amount", "vat_percent"],
+ "properties": {"invoice_number": {"type": "string"},
+                "date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+                "net_amount": {"type": "number"}, "vat_percent": {"type": "number"}}}
+'''
+expected = '''
+{"invoice_number": "2291", "date": "2026-03-14", "net_amount": 1234.56, "vat_percent": 19}
+'''
+
+[[task]]
+id = "ext-server-inventory"
+title = "Inventory with mixed memory units"
+difficulty = 3
+prompt = '''
+Extract the servers that are still in service as JSON: servers, a list of objects with the
+keys host, region, and memory_gb (number), in any order.
+
+"We run three boxes today. atlas-01 sits in eu-west with 64 GB of RAM. The cache node,
+brisk-02, is in us-east and only has 512 MB. cinder-03 (ap-south, 32 GB) was decommissioned
+last week and is listed here only for the audit trail. Its replacement, cinder-04, went
+live in ap-south yesterday with 128 GB."
+'''
+wrong_patch = '{"servers": [{"host": "atlas-01", "region": "eu-west", "memory_gb": 64}, {"host": "brisk-02", "region": "us-east", "memory_gb": 512}, {"host": "cinder-04", "region": "ap-south", "memory_gb": 128}]}'
+[task.grader]
+type = "json"
+unordered = ["servers"]
+schema = '''
+{"type": "object", "additionalProperties": false, "required": ["servers"],
+ "properties": {"servers": {"type": "array", "items": {"type": "object",
+   "additionalProperties": false, "required": ["host", "region", "memory_gb"],
+   "properties": {"host": {"type": "string"}, "region": {"type": "string"},
+                  "memory_gb": {"type": "number"}}}}}}
+'''
+expected = '''
+{"servers": [{"host": "atlas-01", "region": "eu-west", "memory_gb": 64},
+             {"host": "brisk-02", "region": "us-east", "memory_gb": 0.5},
+             {"host": "cinder-04", "region": "ap-south", "memory_gb": 128}]}
+'''
+
+[[task]]
+id = "ext-thread-corrections"
+title = "Final values from an email thread"
+difficulty = 4
+prompt = '''
+Read this email thread, oldest message first, and extract the plan as it stands after the
+last message. Return JSON with the keys project, owner, budget_usd (integer), and deadline
+(YYYY-MM-DD).
+
+[1] From Ines: "Kicking off Project Lantern. Budget is $40k, Rafael owns it, and we ship
+by 30 June 2026."
+[2] From Rafael: "Happy to own it. One flag: June 30 is tight. Could we have two more weeks?"
+[3] From Ines: "No to the extension, sorry. Correction on money though: finance approved
+46, not 40."
+[4] From Rafael: "Understood. I'm on leave from the 8th, so Suki will take over as owner
+from today. I'll stay on as an advisor."
+[5] From Suki: "Confirmed, I've got it. Nothing else changes."
+'''
+wrong_patch = '{"owner": "Rafael", "deadline": "2026-07-14"}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["project", "owner", "budget_usd", "deadline"],
+ "properties": {"project": {"type": "string"}, "owner": {"type": "string"},
+                "budget_usd": {"type": "integer"},
+                "deadline": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"}}}
+'''
+expected = '''
+{"project": "Project Lantern", "owner": "Suki", "budget_usd": 46000, "deadline": "2026-06-30"}
+'''
+
+[[task]]
+id = "ext-receipt-totals"
+title = "Receipt totals that must be computed"
+difficulty = 4
+prompt = '''
+The receipt below does not print every amount. Work out the missing ones and return JSON
+with the keys subtotal, discount_amount, tax_amount, and total, all numbers rounded to two
+decimal places.
+
+FERN & FLINT GARDEN SUPPLY
+2 x Cedar planter      @ 85.00
+1 x Drip irrigation kit  70.00
+Subtotal               240.00
+Loyalty discount       10% off the subtotal
+Sales tax              8%, charged on the amount after the discount
+'''
+wrong_patch = '{"tax_amount": 19.2, "total": 235.2}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["subtotal", "discount_amount", "tax_amount", "total"],
+ "properties": {"subtotal": {"type": "number"}, "discount_amount": {"type": "number"},
+                "tax_amount": {"type": "number"}, "total": {"type": "number"}}}
+'''
+expected = '''
+{"subtotal": 240.0, "discount_amount": 24.0, "tax_amount": 17.28, "total": 233.28}
+'''
+
+[[task]]
+id = "ext-lease-dates"
+title = "Lease terms with a date calculation"
+difficulty = 4
+prompt = '''
+Extract the lease terms as JSON with the keys start_date, end_date, notice_deadline (all
+YYYY-MM-DD), and monthly_rent (number). The notice deadline is the last day on which notice
+can still be given.
+
+"The tenancy began on the 3rd of February 2025 and ends on 31 August 2026. Rent is 1,450
+per month, reviewed annually. If the tenant does not intend to renew, written notice must
+reach the landlord no later than 60 days before the end date."
+'''
+wrong_patch = '{"notice_deadline": "2026-06-30"}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["start_date", "end_date", "notice_deadline", "monthly_rent"],
+ "properties": {"start_date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+                "end_date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+                "notice_deadline": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+                "monthly_rent": {"type": "number"}}}
+'''
+expected = '''
+{"start_date": "2025-02-03", "end_date": "2026-08-31", "notice_deadline": "2026-07-02",
+ "monthly_rent": 1450}
+'''
+
+[[task]]
+id = "ext-manifest-row"
+title = "One row from a messy shipping manifest"
+difficulty = 5
+prompt = '''
+Below is OCR text from a shipping manifest. Extract only the container MSKU 448120-7 as
+JSON with the keys container (as printed), weight_kg (integer, rounded to the nearest
+kilogram), seals (list of strings, in the order printed), eta (YYYY-MM-DD), and
+dangerous_goods (boolean). One pound is 0.45359237 kg.
+
+MANIFEST 7731 / VESSEL: NORDIC WREN / ROTTERDAM dep. 2026-05-30
+CNTR          GROSS WT     SEALS              ETA                 DG
+MSKU 448102-7 18,650 kg    A7741              2026-06-02          N
+MSKU 448120-7 18,700 lb    B2210 / B2211      day after dep.      see note 2
+TCLU 448120-1 9,120 kg     C0090              2026-06-02          Y (UN1993)
+note 1: weights in kg unless marked.
+note 2: no DG declared for this unit; note 3 applies to TCLU units only.
+note 3: flammable liquid, class 3.
+'''
+wrong_patch = '{"weight_kg": 18700, "dangerous_goods": true}'
+[task.grader]
+type = "json"
+schema = '''
+{"type": "object", "additionalProperties": false,
+ "required": ["container", "weight_kg", "seals", "eta", "dangerous_goods"],
+ "properties": {"container": {"type": "string"}, "weight_kg": {"type": "integer"},
+                "seals": {"type": "array", "items": {"type": "string"}},
+                "eta": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+                "dangerous_goods": {"type": "boolean"}}}
+'''
+expected = '''
+{"container": "MSKU 448120-7", "weight_kg": 8482, "seals": ["B2210", "B2211"],
+ "eta": "2026-05-31", "dangerous_goods": false}
+'''

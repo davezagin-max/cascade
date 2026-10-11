@@ -3,15 +3,16 @@ import json
 import pytest
 from pydantic import BaseModel
 
-from app.claude_client import (
+from cascade.claude_client import (
     MissingKeyError,
+    build_params,
     call_claude,
     client_for_key,
     strict_tool,
     untrusted,
     with_system_note,
 )
-from app.config import HAIKU
+from cascade.config import HAIKU
 from tests.fakes import FakeClient, block, message
 
 THINKING = block("thinking", thinking="", signature="sig-1")
@@ -45,6 +46,19 @@ def test_haiku_gets_no_fallback() -> None:
     call_claude(client, model=HAIKU, effort="low", messages=USER)  # type: ignore[arg-type]
     assert "fallbacks" not in client.requests[0]
     assert "betas" not in client.requests[0]
+
+
+def test_fallback_can_be_turned_off_for_evals_and_batches() -> None:
+    client = FakeClient([message([block("text", text="hi")])])
+    call_claude(client, messages=USER, fallback=False)  # type: ignore[arg-type]
+    assert "fallbacks" not in client.requests[0] and "betas" not in client.requests[0]
+    params = build_params(model="claude-opus-5-5", effort="high", max_tokens=100, fallback=False)
+    assert params == {
+        "model": "claude-opus-5-5",
+        "max_tokens": 100,
+        "thinking": {"type": "adaptive"},
+        "output_config": {"effort": "high"},
+    }
 
 
 def test_text_is_selected_by_type_when_response_starts_with_thinking() -> None:
