@@ -71,8 +71,31 @@ describe("runPlayground", () => {
       });
       expect("data" in result && result.data.arm.key).toBe(expected.key);
     }
-    // The two prompts are meant to land on different arms.
-    expect(route(ROUTER, EASY).arm.key).not.toBe(route(ROUTER, HARD).arm.key);
+  });
+
+  it("follows the router to either end of the ladder, whatever model is committed", async () => {
+    // A two-arm router with the bar moved out of reach in each direction. Built by hand, so
+    // the test does not depend on what a retrained router decides about any particular prompt.
+    const arms = [
+      { ...ROUTER.arms[0], key: "haiku-low", model: MODELS.haiku, effort: "low" as const, bias: 0 },
+      { ...ROUTER.arms[0], key: "opus-high", model: MODELS.opus, effort: "high" as const, bias: 3 },
+    ];
+    const cases = [
+      { model: { ...ROUTER, arms, threshold_logit: -99 }, expected: arms[0] }, // everything clears: cheapest
+      { model: { ...ROUTER, arms, threshold_logit: 99 }, expected: arms[1] }, // nothing clears: most able
+    ];
+    for (const { model, expected } of cases) {
+      const { client, requests } = fakeClient();
+      const result = await runPlayground({ prompt: HARD, client, emit: () => {}, model });
+      expect(requests).toHaveLength(1);
+      expect(requests[0].model).toBe(expected.model);
+      expect(requests[0].output_config).toEqual({ effort: expected.effort });
+      expect("data" in result && result.data.arm).toEqual({
+        key: expected.key,
+        model: expected.model,
+        effort: expected.effort,
+      });
+    }
   });
 
   it("streams the answer and returns the same text with its cost", async () => {

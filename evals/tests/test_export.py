@@ -120,7 +120,13 @@ def test_arm_summary_matches_the_rows() -> None:
         1000 * sum(r["cost_usd"] for r in mine) / len(mine)
     )
     graded = [row for row in mine if row["passed"] is not None]
-    assert arms[key]["quality"] == pytest.approx(sum(r["passed"] for r in graded) / len(graded))
+    # Quality is the mean over tasks of each task's pass rate, so a task that lost a trial
+    # to an API error still counts once.
+    per_task: dict[str, list[bool]] = {}
+    for row in graded:
+        per_task.setdefault(row["task_id"], []).append(row["passed"])
+    rates = [sum(passes) / len(passes) for passes in per_task.values()]
+    assert arms[key]["quality"] == pytest.approx(sum(rates) / len(rates))
     low, high = arms[key]["ci"]
     assert low <= arms[key]["quality"] <= high
     assert arms[key]["latency_n"] == sum(1 for row in mine if row["latency_ms"] is not None)

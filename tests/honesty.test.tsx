@@ -24,6 +24,13 @@ async function renderHome(synthetic: boolean): Promise<string> {
     if (!synthetic) {
       (run.meta as { generator: unknown }).generator = null;
       run.meta.run_id = "run-20261101-090000";
+    } else if (!run.meta.generator) {
+      // The committed export is a real run: give the forced-synthetic copy a simulator's metadata.
+      (run.meta as { generator: unknown }).generator = {
+        name: "cascade simulate",
+        seed: 7,
+        note: "Deterministic simulator. Not a measurement.",
+      };
     }
     if (run.caching) run.caching.synthetic = synthetic;
     return { RUN: run, SYNTHETIC: synthetic };
@@ -55,8 +62,8 @@ describe("synthetic data is labelled from the run's own flag", () => {
   it("tags the headline and every results section when the run is synthetic", async () => {
     const html = await renderHome(true);
     const tags = html.match(/>simulated</g) ?? [];
-    // Headline, run facts, arms, categories, latency, router, caching.
-    expect(tags.length).toBeGreaterThanOrEqual(7);
+    // Headline, run facts, arms, categories, latency, router, and caching when the run has it.
+    expect(tags.length).toBeGreaterThanOrEqual(summaryJson.caching ? 7 : 6);
     expect(text(html)).toContain("No real run exists yet");
     expect(text(html)).toContain("Not a measurement");
   });

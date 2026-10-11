@@ -34,7 +34,9 @@ describe("router parity with the Python trainer", () => {
     }
   });
 
-  it("covers several routing outcomes, so parity is not trivially true", () => {
+  // Holds for the sample router that ships with the repo. A router trained on a real run may
+  // legitimately send everything to one or two arms, and exact parity above still covers it.
+  it.skipIf(!ROUTER.trained_on.synthetic)("covers several routing outcomes in the sample run", () => {
     expect(new Set(vectors.map((v) => v.arm)).size).toBeGreaterThanOrEqual(3);
   });
 });
@@ -92,13 +94,30 @@ describe("routing rule", () => {
 
 describe("explanation", () => {
   it("names the chosen arm, the bar, and the strongest signals", () => {
-    const decision = route(ROUTER, "Classify this support message as one of: billing, shipping.");
-    const text = explain(ROUTER, decision).join(" ");
-    expect(text).toContain(`${Math.round(ROUTER.threshold * 100)}%`);
+    // One feature with a known weight on unstandardised values, so the expected sentence does
+    // not depend on the weights of whichever router is committed.
+    const labelCues = ROUTER.features.findIndex((f) => f.name === "label_cues");
+    const model = {
+      ...ROUTER,
+      mean: ROUTER.features.map(() => 0),
+      scale: ROUTER.features.map(() => 1),
+      weights: ROUTER.features.map((_, i) => (i === labelCues ? 2 : 0)),
+    };
+    const decision = route(model, "Classify this support message as one of: billing, shipping.");
+    expect(decision.score).toBe(2 * (2 / 4)); // two cues, saturating at k = 2
+    const text = explain(model, decision).join(" ");
+    expect(text).toContain(`${Math.round(model.threshold * 100)}%`);
     expect(text).toMatch(/Haiku|Sonnet|Opus/);
-    expect(text).toContain("Strongest signals");
+    expect(text).toContain("Strongest signals toward a cheaper arm: classification cues above average.");
     const chosen = probability(decision.arm.bias + decision.score);
     expect(text).toContain(`${Math.round(chosen * 100)}%`);
+  });
+
+  it("leaves the signals sentence out when no feature moves the score", () => {
+    const flat = { ...ROUTER, weights: ROUTER.features.map(() => 0) };
+    const text = explain(flat, route(flat, "Anything at all.")).join(" ");
+    expect(text).not.toContain("Strongest signals");
+    expect(text).toContain("about as hard as the typical prompt");
   });
 
   it("says so when it has to fall back", () => {
