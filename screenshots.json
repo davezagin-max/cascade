@@ -4,19 +4,49 @@
     { "name": "hero", "path": "/", "theme": "light", "viewport": "desktop", "actions": [{ "wait": 400 }] },
     { "name": "hero-dark", "path": "/", "theme": "dark", "viewport": "desktop", "actions": [{ "wait": 400 }] },
     { "name": "mobile", "path": "/", "theme": "dark", "viewport": "mobile", "actions": [{ "wait": 400 }] },
-    { "name": "dashboard-full", "path": "/", "theme": "light", "viewport": "desktop", "fullPage": true, "actions": [{ "wait": 400 }] },
-    { "name": "mobile-full", "path": "/", "theme": "light", "viewport": "mobile", "fullPage": true, "actions": [{ "wait": 400 }] },
-    { "name": "playground", "path": "/playground", "theme": "dark", "viewport": "desktop", "actions": [{ "click": "text=Solve a probability problem" }, { "waitFor": "[data-testid=response]" }, { "wait": 300 }] },
-    { "name": "playground-light", "path": "/playground", "theme": "light", "viewport": "desktop", "fullPage": true, "actions": [{ "click": "text=Write a linear-time merge" }, { "waitFor": "[data-testid=response]" }, { "wait": 300 }] },
-    { "name": "playground-mobile", "path": "/playground", "theme": "light", "viewport": "mobile", "fullPage": true, "actions": [{ "click": "text=Classify a support ticket" }, { "waitFor": "[data-testid=response]" }, { "wait": 300 }] },
-    { "name": "tasks", "path": "/tasks", "theme": "light", "viewport": "desktop", "fullPage": true, "actions": [{ "click": "text=Semantic version precedence" }, { "waitFor": "text=Hidden unit tests" }, { "wait": 400 }] },
-    { "name": "tasks-mobile", "path": "/tasks", "theme": "dark", "viewport": "mobile", "actions": [{ "wait": 300 }] }
+    {
+      "name": "playground",
+      "path": "/playground",
+      "theme": "dark",
+      "viewport": "desktop",
+      "actions": [
+        { "click": "text=Solve a probability problem" },
+        { "waitFor": "[data-testid=response]" },
+        { "wait": 300 }
+      ]
+    },
+    {
+      "name": "playground-mobile",
+      "path": "/playground",
+      "theme": "light",
+      "viewport": "mobile",
+      "actions": [
+        { "click": "text=Classify a support ticket" },
+        { "waitFor": "[data-testid=response]" },
+        { "wait": 600 }
+      ]
+    },
+    {
+      "name": "tasks",
+      "path": "/tasks",
+      "theme": "light",
+      "viewport": "desktop",
+      "fullPage": true,
+      "actions": [
+        { "click": "text=Code 12" },
+        { "click": "text=Semantic version precedence" },
+        { "waitFor": "text=Reference answer and format contract" },
+        { "wait": 400 }
+      ]
+    }
   ],
   "gif": {
     "path": "/",
     "theme": "dark",
     "actions": [
       { "wait": 900 },
+      { "click": "[aria-label^=\"Lower the threshold\"]" },
+      { "wait": 500 },
       { "click": "[aria-label^=\"Lower the threshold\"]" },
       { "wait": 500 },
       { "click": "[aria-label^=\"Lower the threshold\"]" },
@@ -30,9 +60,11 @@
       { "click": "[aria-label^=\"Raise the threshold\"]" },
       { "wait": 400 },
       { "click": "[aria-label^=\"Raise the threshold\"]" },
+      { "wait": 400 },
+      { "click": "[aria-label^=\"Raise the threshold\"]" },
       { "wait": 900 },
       { "click": "text=Try the router on a prompt" },
-      { "waitFor": "text=Presets, one per routing outcome" },
+      { "waitFor": "text=Presets: no key needed" },
       { "wait": 500 },
       { "click": "text=Solve a probability problem" },
       { "waitFor": "[data-testid=response]" },
