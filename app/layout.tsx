@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { KeyProvider } from "@/components/kit/KeyProvider";
-import { THEME_INIT_SCRIPT } from "@/components/kit/ThemeToggle";
+import { THEME_INIT_SCRIPT } from "@/components/kit/theme-script";
 import { SiteFooter, SiteHeader, SyntheticBanner } from "@/components/SiteChrome";
 import { RUN, SYNTHETIC } from "@/lib/run";
 import "./globals.css";
