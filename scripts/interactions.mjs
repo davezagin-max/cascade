@@ -72,7 +72,7 @@ try {
   await page.waitForSelector("[data-testid=response]", { timeout: 20_000 });
   const done = await page.locator("[data-testid=response]").innerText();
   check("a preset is answered", done.includes("shipping"), done.slice(0, 80));
-  check("the answer says where it came from", /Sample answer|Recorded run/.test(done), done.slice(0, 80));
+  check("the answer says where it came from", /sample answer|Recorded run/i.test(done), done.slice(0, 80));
   check("one request per run", calls === 2, `${calls} requests`);
 
   // Free-form text is routed live but cannot be sent without a key.
@@ -83,12 +83,22 @@ try {
   await page.waitForTimeout(300);
   check("nothing is sent for a free-form prompt without a key", calls === 2, `${calls} requests`);
 
-  // The threshold control on the dashboard changes the headline.
+  // The threshold control on the dashboard changes the headline result.
   await page.goto(base, { waitUntil: "networkidle" });
-  const before = await page.locator("h1").innerText();
+  const headline = page.locator("[data-testid=headline]");
+  const before = await headline.innerText();
   await page.click('[aria-label^="Lower the threshold"]');
   await page.waitForTimeout(200);
-  check("the threshold control moves the headline", (await page.locator("h1").innerText()) !== before);
+  check("the threshold control moves the headline result", (await headline.innerText()) !== before);
+
+  // The dashboard's main button plays a sample in one click, with one request.
+  const sent = calls;
+  await page.click("text=Try it on a sample prompt");
+  await page.waitForSelector("[data-testid=response]", { timeout: 20_000 });
+  await page.waitForTimeout(500);
+  const played = await page.locator("[data-testid=response]").innerText();
+  check("the main button plays a sample in one click", played.includes("shipping"), played.slice(0, 80));
+  check("and sends exactly one request", calls === sent + 1, `${calls - sent} requests`);
 } finally {
   await browser.close();
   stop();

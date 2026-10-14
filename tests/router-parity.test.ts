@@ -108,7 +108,7 @@ describe("explanation", () => {
     const text = explain(model, decision).join(" ");
     expect(text).toContain(`${Math.round(model.threshold * 100)}%`);
     expect(text).toMatch(/Haiku|Sonnet|Opus/);
-    expect(text).toContain("Strongest signals toward a cheaper arm: classification cues above average.");
+    expect(text).toContain("Biggest clues pointing to a cheaper setting: classification cues above average.");
     const chosen = probability(decision.arm.bias + decision.score);
     expect(text).toContain(`${Math.round(chosen * 100)}%`);
   });
@@ -116,14 +116,14 @@ describe("explanation", () => {
   it("leaves the signals sentence out when no feature moves the score", () => {
     const flat = { ...ROUTER, weights: ROUTER.features.map(() => 0) };
     const text = explain(flat, route(flat, "Anything at all.")).join(" ");
-    expect(text).not.toContain("Strongest signals");
-    expect(text).toContain("about as hard as the typical prompt");
+    expect(text).not.toContain("Biggest clues");
+    expect(text).toContain("about as hard as a typical test task");
   });
 
   it("says so when it has to fall back", () => {
     const hard = { ...ROUTER, threshold: 0.999, threshold_logit: 99 };
     const decision = route(hard, "anything");
     expect(decision.fallback).toBe(true);
-    expect(explain(hard, decision).join(" ")).toContain("falls back to the most able one");
+    expect(explain(hard, decision).join(" ")).toContain("falls back to the strongest one");
   });
 });

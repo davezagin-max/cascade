@@ -122,8 +122,9 @@ const MODEL_NAMES: Record<string, string> = {
   [MODELS.opus]: "Opus",
 };
 
+/** "Opus, high effort": the plain name used in sentences and headings. */
 export function armLabel(arm: { model: string; effort: string }): string {
-  return `${MODEL_NAMES[arm.model] ?? arm.model} · ${arm.effort}`;
+  return `${MODEL_NAMES[arm.model] ?? arm.model}, ${arm.effort} effort`;
 }
 
 export function armLabelFromKey(key: string): string {
@@ -151,25 +152,25 @@ export function explain(model: RouterModel, decision: Decision): string[] {
   const bar = percent(model.threshold);
   const difficulty =
     decision.score > 0.75
-      ? "easier than the typical prompt in the eval suite"
+      ? "easier than a typical test task"
       : decision.score < -0.75
-        ? "harder than the typical prompt in the eval suite"
-        : "about as hard as the typical prompt in the eval suite";
-  const lines = [`The router reads this prompt as ${difficulty}.`];
+        ? "harder than a typical test task"
+        : "about as hard as a typical test task";
+  const lines = [`This prompt looks ${difficulty}.`];
 
   if (decision.fallback) {
     lines.push(
-      `No arm is predicted to pass ${bar} of the time, so it falls back to the most able one, ` +
+      `No setting is predicted to get it right ${bar} of the time, so it falls back to the strongest one, ` +
         `${armLabel(decision.arm)} (predicted ${percent(probability(chosenLogit))}).`,
     );
   } else {
     const index = model.arms.indexOf(decision.arm);
     const skipped = index > 0 ? model.arms[index - 1] : null;
     lines.push(
-      `${armLabel(decision.arm)} is the cheapest arm predicted to pass at least ${bar} of the ` +
+      `${armLabel(decision.arm)} is the cheapest setting predicted to get it right at least ${bar} of the ` +
         `time (predicted ${percent(probability(chosenLogit))}).` +
         (skipped
-          ? ` The next cheaper arm, ${armLabel(skipped)}, is predicted at ` +
+          ? ` The next cheaper one, ${armLabel(skipped)}, is predicted at ` +
             `${percent(probability(skipped.bias + decision.score))}.`
           : " Nothing cheaper exists."),
     );
@@ -182,9 +183,9 @@ export function explain(model: RouterModel, decision: Decision): string[] {
     const easier = top.filter((item) => item.contribution > 0).map(describe);
     const harder = top.filter((item) => item.contribution < 0).map(describe);
     const parts: string[] = [];
-    if (easier.length) parts.push(`toward a cheaper arm: ${easier.join(", ")}`);
-    if (harder.length) parts.push(`toward a stronger arm: ${harder.join(", ")}`);
-    lines.push(`Strongest signals ${parts.join("; ")}.`);
+    if (easier.length) parts.push(`pointing to a cheaper setting: ${easier.join(", ")}`);
+    if (harder.length) parts.push(`pointing to a stronger setting: ${harder.join(", ")}`);
+    lines.push(`Biggest clues ${parts.join("; ")}.`);
   }
   return lines;
 }

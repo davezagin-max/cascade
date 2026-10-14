@@ -7,7 +7,7 @@ import { useKey } from "@/components/kit/KeyProvider";
 import { SimTag } from "@/components/SimTag";
 import type { ApiMeta } from "@/lib/api";
 import { streamApi } from "@/lib/client";
-import { armLabel as labelFromKey, armParts, pct, usd } from "@/lib/format";
+import { armLabel as labelFromKey, armName, armParts, pct, usd } from "@/lib/format";
 import { scrollBehavior } from "@/lib/motion";
 import type { PlaygroundEvent, PlaygroundOutput } from "@/lib/playground";
 import {
@@ -45,10 +45,19 @@ const short = (model: string) => model.replace("claude-", "").replace("-5-5", ""
 
 /** Where an answer came from, in words that match what actually produced it. */
 function provenance(meta: Pick<ApiMeta, "mode" | "placeholder" | "recordedAt">, arm: string | null): string {
-  if (meta.mode === "live") return arm ? `Live answer from ${labelFromKey(arm)}` : "Live answer";
-  if (meta.placeholder) return "Sample answer, written by hand. Not a model run.";
+  if (meta.mode === "live") return arm ? `Live answer from ${armName(arm)}` : "Live answer";
+  if (meta.placeholder) return "Pre-written sample answer, not a model run.";
   const when = meta.recordedAt ? ` on ${meta.recordedAt.slice(0, 10)}` : "";
-  return arm ? `Recorded run${when}, answered by ${labelFromKey(arm)}` : `Recorded run${when}`;
+  return arm ? `Recorded run${when}, answered by ${armName(arm)}` : `Recorded run${when}`;
+}
+
+/** The status line while an answer streams in: what is happening, in plain words. */
+function narrate(meta: Pick<ApiMeta, "mode" | "placeholder" | "recordedAt"> | null, decision: Decision | null): string {
+  if (!meta || !decision) return "Cascade is choosing a model…";
+  const picked = `Cascade picked ${armLabel(decision.arm)}.`;
+  if (meta.mode === "live") return `${picked} It is answering now…`;
+  if (meta.placeholder) return `${picked} Playing the pre-written sample answer…`;
+  return `${picked} Replaying a recorded answer…`;
 }
 
 export function Playground({ presets, maxChars }: Props) {
@@ -125,12 +134,25 @@ export function Playground({ presets, maxChars }: Props) {
     });
   }
 
+  // The home page's main button links here with ?try=<preset>, so one click plays a sample.
+  // Deferred a frame so state is set from a callback; the cleanup cancels the duplicate
+  // mount that React's development mode makes, so it still plays exactly once.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("try");
+    const item = presets.find((entry) => entry.demoId === id);
+    if (!item) return;
+    const frame = requestAnimationFrame(() => choose(item));
+    return () => cancelAnimationFrame(frame);
+    // Runs once on arrival; later preset clicks go through `choose` directly.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
       <div className="flex min-w-0 flex-col gap-4">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-            Presets: no key needed
+          <p className="text-sm font-medium">
+            Start here: pick a sample prompt <span className="font-normal text-muted">(no key needed)</span>
           </p>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             {presets.map((item) => {
@@ -162,7 +184,7 @@ export function Playground({ presets, maxChars }: Props) {
           }}
         >
           <label htmlFor="prompt" className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-            Prompt
+            Or type your own prompt
           </label>
           <textarea
             id="prompt"
@@ -171,7 +193,7 @@ export function Playground({ presets, maxChars }: Props) {
             maxLength={maxChars}
             rows={6}
             spellCheck={false}
-            placeholder="Type any prompt. The routing decision updates as you type and needs no key."
+            placeholder="Type any prompt. Cascade's choice updates as you type, with no key."
             aria-describedby="prompt-help"
             className="min-w-0 resize-y border border-border bg-surface p-2.5 font-mono text-[13px] leading-relaxed outline-none focus-visible:border-fg"
           />
@@ -206,23 +228,23 @@ export function Playground({ presets, maxChars }: Props) {
             )}
             <p id="prompt-help" className="min-w-0 flex-1 basis-56 text-xs text-muted">
               {isLive ? (
-                "Runs on your key: the router picks the arm, that model answers, and you see what it cost."
+                "Runs on your key: Cascade picks the setting, that model answers, and you see what it cost."
               ) : trimmed && !preset ? (
                 <>
-                  Routing is live with no key. To get this prompt answered,{" "}
+                  The choice above works with no key. To get this prompt answered,{" "}
                   <button type="button" onClick={openKeyModal} className="text-fg underline underline-offset-2">
                     add your Anthropic key
                   </button>
-                  , or pick a preset.
+                  , or pick a sample prompt.
                 </>
               ) : (
-                "No key needed for presets. Routing is computed in your browser; only the answer needs a model."
+                "Sample prompts need no key. The choice is worked out in your browser; only the answer needs a model."
               )}
             </p>
           </div>
         </form>
 
-        {/* The scroll margin clears the sticky banner when a preset scrolls the answer into view. */}
+        {/* The scroll margin leaves room above the answer when a preset scrolls it into view. */}
         <div ref={responseRef} className="scroll-mt-24 sm:scroll-mt-12">
           <Response run={run} decision={decision} synthetic={synthetic} onAddKey={openKeyModal} />
         </div>
@@ -250,7 +272,7 @@ function Response({
   if (run.state === "idle") {
     return (
       <div className={`${box} flex items-center justify-center p-6 text-center text-sm text-muted`} aria-live="polite">
-        Pick a preset to watch a request get routed and answered.
+        Pick a sample prompt above to watch Cascade choose a model and answer it.
       </div>
     );
   }
@@ -287,7 +309,7 @@ function Response({
     return (
       <div className={box} aria-live="polite" aria-busy>
         <p className={bar}>
-          {run.meta ? provenance(run.meta, run.meta.mode === "live" ? (decision?.arm.key ?? null) : null) : "Routing…"}
+          {narrate(run.meta, decision)}
         </p>
         <AnswerText text={run.text} streaming />
       </div>
@@ -331,12 +353,12 @@ function DecisionPanel({ decision, synthetic }: { decision: Decision | null; syn
   const baseline = findArm(ROUTER, ROUTER.baseline_arm);
   if (!decision) {
     return (
-      <aside aria-label="Router decision" className="min-w-0 border border-dashed border-border p-4 text-sm text-muted">
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em]">Router decision</p>
+      <aside aria-label="Cascade's choice" className="min-w-0 border border-dashed border-border p-4 text-sm text-muted">
+        <p className="font-mono text-[11px] uppercase tracking-[0.14em]">Cascade&apos;s choice</p>
         <p className="mt-2">
-          The router scores a prompt from {ROUTER.features.length} cheap text features and picks the cheapest arm
-          predicted to pass at least {pct(ROUTER.threshold, 0)} of the time. It appears here as soon as there is a
-          prompt.
+          Appears here as soon as there is a prompt. Cascade scores the text on {ROUTER.features.length} simple
+          clues (length, numbers, code, question marks and more) and picks the cheapest setting predicted to get it
+          right at least {pct(ROUTER.threshold, 0)} of the time.
         </p>
       </aside>
     );
@@ -347,11 +369,11 @@ function DecisionPanel({ decision, synthetic }: { decision: Decision | null; syn
   const peak = Math.max(...signals.map((item) => Math.abs(item.contribution)), 0.001);
 
   return (
-    <aside aria-label="Router decision" aria-live="polite" className="min-w-0 border border-border" data-testid="decision">
+    <aside aria-label="Cascade's choice" aria-live="polite" className="min-w-0 border border-border" data-testid="decision">
       <div className="border-b border-border bg-surface px-3 py-2">
         <p className="flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-          Router decision
-          <span className="normal-case tracking-normal">computed locally, no model call</span>
+          Cascade&apos;s choice
+          <span className="normal-case tracking-normal">worked out in your browser, no AI call</span>
         </p>
         <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           <ArmGlyph model={short(chosen.model)} effort={chosen.effort} size={18} />
@@ -359,9 +381,9 @@ function DecisionPanel({ decision, synthetic }: { decision: Decision | null; syn
           <span className="font-mono text-xs text-muted">{chosen.model}</span>
         </p>
         <p className="tabular mt-0.5 font-mono text-xs text-muted">
-          predicted pass <span className="text-fg">{pct(chosenP, 0)}</span>, threshold{" "}
+          chance of getting it right <span className="text-fg">{pct(chosenP, 0)}</span> · the bar is{" "}
           {pct(ROUTER.threshold, 0)}
-          {decision.fallback && <span className="text-accent"> · fallback: nothing clears the threshold</span>}
+          {decision.fallback && <span className="text-accent"> · nothing clears the bar, so it uses the strongest</span>}
         </p>
       </div>
 
@@ -374,7 +396,7 @@ function DecisionPanel({ decision, synthetic }: { decision: Decision | null; syn
 
         <div>
           <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-            Every arm, cheapest first
+            Every setting, cheapest first
           </p>
           <ul className="font-mono text-[11px]">
             {ROUTER.arms.map((arm, i) => {
@@ -388,7 +410,7 @@ function DecisionPanel({ decision, synthetic }: { decision: Decision | null; syn
                   }`}
                 >
                   <span className="whitespace-nowrap">
-                    <ArmGlyph {...armParts(arm.key)} size={10} muted={!picked} /> {armLabel(arm)}
+                    <ArmGlyph {...armParts(arm.key)} size={10} muted={!picked} /> {labelFromKey(arm.key)}
                   </span>
                   <span className="relative h-2.5 bg-grid" aria-hidden>
                     <span
@@ -404,14 +426,15 @@ function DecisionPanel({ decision, synthetic }: { decision: Decision | null; syn
             })}
           </ul>
           <p className="mt-1 font-mono text-[10px] text-muted">
-            bar: predicted pass probability · line: threshold · right: mean eval cost per request{" "}
+            bar: chance of getting it right · line: the {pct(ROUTER.threshold, 0)} bar · right: average cost per
+            request in testing{" "}
             <SimTag show={synthetic} />
           </p>
         </div>
 
         {signals.length > 0 && (
           <div>
-            <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Strongest signals</p>
+            <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Biggest clues</p>
             <ul className="font-mono text-[11px]">
               {signals.map((item) => {
                 const share = (Math.abs(item.contribution) / peak) * 50;
@@ -439,16 +462,16 @@ function DecisionPanel({ decision, synthetic }: { decision: Decision | null; syn
               })}
             </ul>
             <p className="mt-1 flex justify-between font-mono text-[10px] text-muted">
-              <span>left: toward a stronger arm</span>
-              <span>right: toward a cheaper arm</span>
+              <span>left: needs a stronger model</span>
+              <span>right: a cheaper one will do</span>
             </p>
           </div>
         )}
 
         {baseline && baseline.key !== chosen.key && (
           <p className="border-t border-border pt-2 font-mono text-xs text-muted">
-            On the eval suite {armLabel(chosen)} averages{" "}
-            <span className="text-fg">{usd(chosen.cost_per_request)}</span> per request against{" "}
+            In testing, {armLabel(chosen)} averaged{" "}
+            <span className="text-fg">{usd(chosen.cost_per_request)}</span> per request, against{" "}
             <span className="text-fg">{usd(baseline.cost_per_request)}</span> for {armLabel(baseline)}.{" "}
             <SimTag show={synthetic} />
           </p>
