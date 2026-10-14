@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArmGlyph, GlyphMark } from "@/components/ArmGlyph";
-import { armCode, armLabel, duration, pct, usd } from "@/lib/format";
+import { armName, duration, pct, usd } from "@/lib/format";
 
 export interface ChartArm {
   key: string;
@@ -63,7 +63,7 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
 
   const compact = width < 520;
   const height = compact ? 300 : Math.min(520, Math.round(width * 0.72));
-  const margin = { top: 14, right: compact ? 10 : 18, bottom: 40, left: compact ? 38 : 46 };
+  const margin = { top: 26, right: compact ? 10 : 18, bottom: 40, left: compact ? 38 : 46 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
 
@@ -75,36 +75,69 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
       0,
       Math.floor((Math.min(...arms.map((a) => a.ci[0]), ...curve.map((p) => p.quality)) - 0.02) * 10) / 10,
     );
-    const x = (cost: number) => margin.left + ((Math.log10(cost) - lo) / (hi - lo)) * innerW;
-    const y = (quality: number) => margin.top + (1 - (quality - floor) / (1 - floor)) * innerH;
+    // Rounded to hundredths: Node and the browser can disagree on the last bit of log10,
+    // and the server-rendered SVG must match the client's exactly or hydration fails.
+    const r2 = (v: number) => Math.round(v * 100) / 100;
+    const x = (cost: number) => r2(margin.left + ((Math.log10(cost) - lo) / (hi - lo)) * innerW);
+    const y = (quality: number) => r2(margin.top + (1 - (quality - floor) / (1 - floor)) * innerH);
     const yTicks: number[] = [];
     for (let t = floor; t <= 1.0001; t += 0.1) yTicks.push(Math.round(t * 10) / 10);
     const xTicks = X_TICKS.filter((t) => Math.log10(t) >= lo && Math.log10(t) <= hi);
 
-    // Greedy label placement: try right, left, above, below; keep the first that hits nothing.
+    // Label placement. Labels are plain words ("Sonnet, medium effort"), which are long, and
+    // the expensive arms crowd into one corner. So each label tries spots next to its point
+    // first, then further out along eight directions, keeping the first that is inside the
+    // plot and hits no marker, no router dot, and no other label. A label placed away from
+    // its point gets a thin leader line. Crowded points are placed first.
+    const charW = compact ? 5.5 : 6.1;
+    const labelH = compact ? 11 : 12;
     const points = arms.map((arm) => ({ arm, px: x(arm.cost), py: y(arm.quality) }));
-    const taken: Box[] = points.map((p) => ({ x: p.px - 7, y: p.py - 7, w: 14, h: 14 }));
-    const labels = points.map((p) => {
-      const text = armCode(p.arm.key);
-      const w = text.length * 6.1 + 2;
-      const right: Box = { x: p.px + 10, y: p.py - 6, w, h: 12 };
-      const left: Box = { x: p.px - 10 - w, y: p.py - 6, w, h: 12 };
-      const above: Box = { x: p.px - w / 2, y: p.py - 22, w, h: 12 };
-      const below: Box = { x: p.px - w / 2, y: p.py + 10, w, h: 12 };
-      // The frontier climbs to the upper right, so below-right of a frontier point is clear.
-      const belowRight: Box = { x: p.px + 8, y: p.py + 4, w, h: 12 };
-      const options: Box[] = p.arm.frontier
-        ? [belowRight, right, left, below, above]
-        : [right, left, below, above];
-      // Vertical bounds matter for an arm at or near 100%: a label above it would be cut off.
-      const inside = (b: Box) =>
-        b.x >= margin.left && b.x + b.w <= width - 2 && b.y >= 0 && b.y + b.h <= height - margin.bottom;
+    const markers: Box[] = points.map((p) => ({ x: p.px - 8, y: p.py - 8, w: 16, h: 16 }));
+    const taken: Box[] = [
+      ...markers,
+      ...curve.map((p) => ({ x: x(p.cost) - 4, y: y(p.quality) - 4, w: 8, h: 8 })),
+    ];
+    const inside = (b: Box) =>
+      b.x >= margin.left && b.x + b.w <= width - 2 && b.y >= margin.top - 10 && b.y + b.h <= height - margin.bottom;
+    const near = (p: (typeof points)[number]) =>
+      points.filter((q) => q !== p && Math.hypot(q.px - p.px, q.py - p.py) < 60).length;
+    const order = [...points.keys()].sort((a, b) => near(points[b]) - near(points[a]) || a - b);
+    const labels: { text: string; x: number; y: number; leader: [number, number, number, number] | null }[] =
+      new Array(points.length);
+    for (const i of order) {
+      const p = points[i];
+      const text = compact ? armName(p.arm.key).replace(" effort", "") : armName(p.arm.key);
+      const w = text.length * charW + 4;
+      const h = labelH;
+      const options: Box[] = [];
+      for (const d of [0, 10, 22, 36, 52, 70]) {
+        const k = d * 0.75;
+        const right: Box = { x: p.px + 10 + d, y: p.py - h / 2, w, h };
+        const left: Box = { x: p.px - 10 - d - w, y: p.py - h / 2, w, h };
+        const belowRight: Box = { x: p.px + 7 + k, y: p.py + 5 + k, w, h };
+        const aboveLeft: Box = { x: p.px - 7 - k - w, y: p.py - 5 - h - k, w, h };
+        const belowLeft: Box = { x: p.px - 7 - k - w, y: p.py + 5 + k, w, h };
+        const aboveRight: Box = { x: p.px + 7 + k, y: p.py - 5 - h - k, w, h };
+        const below: Box = { x: p.px - w / 2, y: p.py + 10 + d, w, h };
+        const above: Box = { x: p.px - w / 2, y: p.py - 10 - h - d, w, h };
+        // The frontier climbs to the upper right, so below-right of a frontier point is usually clear.
+        options.push(
+          ...(p.arm.frontier
+            ? [belowRight, right, aboveLeft, left, below, above, belowLeft, aboveRight]
+            : [right, belowRight, left, below, above, belowLeft, aboveLeft, aboveRight]),
+        );
+      }
       const chosen =
-        options.find((b) => inside(b) && !taken.some((t) => t !== taken[points.indexOf(p)] && overlaps(b, t))) ??
-        options[0];
+        options.find((b) => inside(b) && !taken.some((t) => t !== markers[i] && overlaps(b, t))) ?? options[0];
       taken.push(chosen);
-      return { text, x: chosen.x, y: chosen.y + 9.5 };
-    });
+      // A leader runs from the marker's edge to the nearest point of a label that is not touching it.
+      const cx = Math.min(Math.max(p.px, chosen.x), chosen.x + chosen.w);
+      const cy = Math.min(Math.max(p.py, chosen.y), chosen.y + chosen.h);
+      const gap = Math.hypot(cx - p.px, cy - p.py);
+      const leader: [number, number, number, number] | null =
+        gap > 16 ? [p.px + ((cx - p.px) / gap) * 8, p.py + ((cy - p.py) / gap) * 8, cx, cy] : null;
+      labels[i] = { text, x: chosen.x + 2, y: chosen.y + h - 2.5, leader };
+    }
     return { x, y, xTicks, yTicks, points, labels, taken };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [arms, curve, width, height]);
@@ -121,7 +154,7 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
 
   // The router's marker moves with the threshold, so its label looks for a free corner each time.
   const routerLabel = (() => {
-    const w = 38;
+    const w = 46;
     const h = 12;
     const corners: Box[] = [
       { x: ox - 12 - w, y: oy - 20, w, h },
@@ -142,10 +175,10 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
       return {
         px: ox,
         py: oy,
-        title: `Router at ${operating.threshold.toFixed(2)}`,
+        title: `Cascade at ${pct(operating.threshold, 0)} sure`,
         rows: [
-          ["pass rate", pct(operating.quality)],
-          ["per 1k requests", usd(operating.cost)],
+          ["tasks passed", pct(operating.quality)],
+          ["per 1,000 requests", usd(operating.cost)],
         ],
       };
     }
@@ -155,12 +188,13 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
     return {
       px: point.px,
       py: point.py,
-      title: armLabel(a.key),
+      title: armName(a.key),
       rows: [
-        ["pass rate", `${pct(a.quality)} (${pct(a.ci[0], 0)} to ${pct(a.ci[1], 0)})`],
-        ["per 1k requests", usd(a.cost)],
-        ["p50 latency", duration(a.p50)],
-        ["frontier", a.frontier ? "yes" : "dominated"],
+        ["tasks passed", pct(a.quality)],
+        ["likely range", `${pct(a.ci[0], 0)} to ${pct(a.ci[1], 0)}`],
+        ["per 1,000 requests", usd(a.cost)],
+        ["typical wait", duration(a.p50)],
+        ["best value", a.frontier ? "yes" : "no, beaten"],
       ],
     };
   })();
@@ -174,7 +208,7 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
           viewBox={`0 0 ${width} ${height}`}
           className="block h-auto max-w-full font-mono"
           role="group"
-          aria-label="Pass rate against cost per 1,000 requests for every model and effort level, with the router's operating curve"
+          aria-label="Share of tasks passed against cost per 1,000 requests for every Claude model and effort setting, with Cascade's curve"
         >
           {yTicks.map((t) => (
             <g key={`y${t}`}>
@@ -212,7 +246,10 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
             stroke="var(--border)"
           />
           <text x={margin.left + innerW / 2} y={height - 6} textAnchor="middle" fontSize="10" fill="var(--muted)">
-            cost per 1,000 requests, log scale
+            cost per 1,000 requests (log scale) →
+          </text>
+          <text x={margin.left - (compact ? 30 : 38)} y={11} fontSize="10" fill="var(--muted)">
+            ↑ tasks passed
           </text>
 
           {/* 95% intervals: how far each arm's pass rate could move with a different task sample. */}
@@ -240,7 +277,7 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
               transform={`translate(${p.px.toFixed(1)},${p.py.toFixed(1)})`}
               tabIndex={0}
               role="img"
-              aria-label={`${armLabel(p.arm.key)}: ${pct(p.arm.quality)} pass rate at ${usd(p.arm.cost)} per 1,000 requests${p.arm.frontier ? ", on the frontier" : ", dominated"}`}
+              aria-label={`${armName(p.arm.key)}: ${pct(p.arm.quality)} of tasks passed at ${usd(p.arm.cost)} per 1,000 requests${p.arm.frontier ? ", on the best-value line" : ", beaten by a cheaper or better option"}`}
               onMouseEnter={() => setActive(p.arm.key)}
               onFocus={() => setActive(p.arm.key)}
               onBlur={() => setActive(null)}
@@ -257,7 +294,7 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
             style={{ transform: `translate(${ox.toFixed(1)}px, ${oy.toFixed(1)}px)` }}
             tabIndex={0}
             role="img"
-            aria-label={`Router at threshold ${operating.threshold.toFixed(2)}: ${pct(operating.quality)} pass rate at ${usd(operating.cost)} per 1,000 requests`}
+            aria-label={`Cascade at ${pct(operating.threshold, 0)} sure: ${pct(operating.quality)} of tasks passed at ${usd(operating.cost)} per 1,000 requests`}
             onMouseEnter={() => setActive("router")}
             onFocus={() => setActive("router")}
             onBlur={() => setActive(null)}
@@ -274,17 +311,31 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
               strokeWidth={3}
               paintOrder="stroke"
             >
-              router
+              Cascade
             </text>
           </g>
 
           <g aria-hidden pointerEvents="none">
+            {points.map((p, i) =>
+              labels[i].leader ? (
+                <line
+                  key={`leader-${p.arm.key}`}
+                  x1={labels[i].leader[0]}
+                  y1={labels[i].leader[1]}
+                  x2={labels[i].leader[2]}
+                  y2={labels[i].leader[3]}
+                  stroke="var(--muted)"
+                  strokeOpacity={0.6}
+                  strokeWidth={0.75}
+                />
+              ) : null,
+            )}
             {points.map((p, i) => (
               <text
                 key={p.arm.key}
                 x={labels[i].x}
                 y={labels[i].y}
-                fontSize="10"
+                fontSize={compact ? 9 : 10}
                 fill={p.arm.frontier ? "var(--fg)" : "var(--muted)"}
                 stroke="var(--bg)"
                 strokeWidth={3}
@@ -320,24 +371,24 @@ export function ParetoChart({ arms, curve, selected, synthetic }: Props) {
       <figcaption className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-muted">
         <span className="inline-flex items-center gap-1">
           <ArmGlyph model="haiku" effort="high" /> Haiku
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <ArmGlyph model="sonnet" effort="high" /> Sonnet
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <ArmGlyph model="opus" effort="high" /> Opus
+          <ArmGlyph model="sonnet" effort="high" className="ml-1" /> Sonnet
+          <ArmGlyph model="opus" effort="high" className="ml-1" /> Opus
+          <span className="ml-0.5">(smallest to largest)</span>
         </span>
         <span className="inline-flex items-center gap-1">
           <ArmGlyph model="haiku" effort="low" />
           <ArmGlyph model="haiku" effort="medium" />
-          <ArmGlyph model="haiku" effort="high" /> effort low, medium, high
+          <ArmGlyph model="haiku" effort="high" /> low, medium, high effort
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span aria-hidden className="inline-block h-px w-5 bg-fg" /> Pareto frontier
+          <span aria-hidden className="inline-block h-px w-5 bg-fg" /> best value: nothing beats it on both
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span aria-hidden className="inline-block w-5 border-t-2 border-dotted border-accent" /> router at each
-          threshold
+          <span aria-hidden className="inline-block w-5 border-t-2 border-dotted border-accent" /> Cascade at each
+          slider setting
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span aria-hidden className="inline-block h-3 w-px bg-muted opacity-60" /> likely range
         </span>
       </figcaption>
     </figure>

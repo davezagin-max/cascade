@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { KeyProvider } from "@/components/kit/KeyProvider";
 import { THEME_INIT_SCRIPT } from "@/components/kit/theme-script";
-import { SiteFooter, SiteHeader, SyntheticBanner } from "@/components/SiteChrome";
-import { RUN, SYNTHETIC } from "@/lib/run";
+import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
+import { RUN } from "@/lib/run";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   title: { default: "Cascade: model router and eval lab", template: "%s · Cascade" },
   description:
-    "Route every request to the cheapest Claude model and effort level that can handle it, and prove it with evals.",
+    "Not every request needs the most expensive model. Cascade picks the cheapest Claude model and effort setting that can handle each request, and tests that choice.",
 };
 
 export const viewport: Viewport = {
@@ -37,7 +37,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        {SYNTHETIC && <SyntheticBanner />}
         <KeyProvider>
           <SiteHeader />
           {children}

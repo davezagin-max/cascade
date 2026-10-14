@@ -1,18 +1,28 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/kit/ThemeToggle";
 import { NavLinks } from "./NavLinks";
+import { SimTag } from "./SimTag";
 
-/** Shown on every page while the committed run is the simulator's. */
-export function SyntheticBanner() {
+/**
+ * The synthetic-data notice. Rendered near the top of each results page while the
+ * committed run is the simulator's. It is calm on purpose (a note, not an alarm) but
+ * never dismissible, and it carries the same "simulated" tag that marks every
+ * simulated number, so the tag explains itself.
+ */
+export function SyntheticNotice({ className = "" }: { className?: string }) {
   return (
     <div
-      role="status"
+      role="note"
+      aria-label="About this data"
       data-testid="synthetic-banner"
-      className="sticky top-0 z-40 border-b border-accent bg-accent px-4 py-1.5 text-center font-mono text-[11px] leading-snug text-accent-fg sm:text-xs"
+      className={`flex flex-col gap-x-3 gap-y-1 border border-border border-l-2 border-l-accent bg-surface px-3 py-2 text-[13px] leading-snug sm:flex-row sm:items-baseline ${className}`}
     >
-      <strong className="font-semibold uppercase tracking-wider">Synthetic placeholder data.</strong>{" "}
-      These are not measured results. Run <code className="font-semibold">uv run cascade run</code>{" "}
-      with an API key to replace them.
+      <SimTag show className="shrink-0 self-start sm:self-auto" />
+      <p>
+        <strong className="font-semibold">Synthetic placeholder data.</strong> These are not measured results. Run{" "}
+        <code className="whitespace-nowrap font-mono text-[12px]">uv run cascade run</code> with an API key to replace
+        them.
+      </p>
     </div>
   );
 }

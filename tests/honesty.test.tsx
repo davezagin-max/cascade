@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SimTag } from "@/components/SimTag";
 import { simulatedNote } from "@/components/tasks/TaskExplorer";
-import { SyntheticBanner } from "@/components/SiteChrome";
+import { SyntheticNotice } from "@/components/SiteChrome";
 import summaryJson from "@/data/summary.json";
 
 vi.mock("next/link", () => ({
@@ -49,10 +49,17 @@ afterEach(() => {
  * stop saying "simulated" the moment a real run is loaded, with no code change.
  */
 describe("synthetic data is labelled from the run's own flag", () => {
-  it("shows the exact warning the banner is required to carry", () => {
-    expect(text(renderToStaticMarkup(<SyntheticBanner />))).toBe(
+  it("shows the exact warning the notice is required to carry, under the same tag as the numbers", () => {
+    const html = renderToStaticMarkup(<SyntheticNotice />);
+    expect(html).toContain(">simulated<");
+    expect(text(html).replace(/^simulated/, "")).toBe(
       "Synthetic placeholder data. These are not measured results. Run uv run cascade run with an API key to replace them.",
     );
+  });
+
+  it("puts the notice on the first screen only while the run is synthetic", async () => {
+    expect(await renderHome(true)).toContain('data-testid="synthetic-banner"');
+    expect(await renderHome(false)).not.toContain('data-testid="synthetic-banner"');
   });
 
   it("renders the tag only when asked to", () => {
@@ -63,8 +70,8 @@ describe("synthetic data is labelled from the run's own flag", () => {
   it("tags the headline and every results section when the run is synthetic", async () => {
     const html = await renderHome(true);
     const tags = html.match(/>simulated</g) ?? [];
-    // Headline, run facts, arms, categories, latency, router, and caching when the run has it.
-    expect(tags.length).toBeGreaterThanOrEqual(summaryJson.caching ? 7 : 6);
+    // Notice, headline result, chart, run facts, arms, categories, latency, router, and caching when the run has it.
+    expect(tags.length).toBeGreaterThanOrEqual(summaryJson.caching ? 9 : 8);
     expect(text(html)).toContain("No real run exists yet");
     expect(text(html)).toContain("Not a measurement");
     // Simulated numbers are never described as measured.
@@ -96,7 +103,8 @@ describe("synthetic data is labelled from the run's own flag", () => {
     expect(words).not.toContain("simulat");
     expect(words).not.toContain("synthetic");
     expect(words).not.toContain("no real run exists");
-    expect(words).toContain("the router saves");
+    expect(words).toContain("lower cost");
+    expect(words).toContain("of the quality kept");
     expect(words).toContain("what was measured");
     expect(words).toContain("measured by");
   });
@@ -106,12 +114,12 @@ describe("synthetic data is labelled from the run's own flag", () => {
     for (const synthetic of [true, false]) {
       const words = text(await renderHome(synthetic));
       // The easy win (versus always Opus) never stands alone: the best affordable arm is named too.
-      expect(words).toContain("against the best single arm at this cost or less");
+      expect(words).toContain("Tougher comparison: the best single setting that costs no more");
       if (fixed) {
         const delta = summaryJson.router.headline.quality - fixed.quality;
         const points = Math.abs(delta * 100).toFixed(1);
         const expected = points === "0.0" ? "level with" : `${points} points ${delta > 0 ? "ahead of" : "behind"}`;
-        expect(words).toContain(`The router is ${expected} always using`);
+        expect(words).toContain(`Cascade is ${expected} always using`);
       }
     }
   });

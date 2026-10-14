@@ -35,6 +35,12 @@ export function armLabel(key: string): string {
   return `${MODEL_NAMES[model] ?? model} · ${effort}`;
 }
 
+/** "opus-high" becomes "Opus, high effort": the plain form for headlines, the chart, and anywhere a stranger reads first. */
+export function armName(key: string): string {
+  const [model, effort] = key.split("-");
+  return `${MODEL_NAMES[model] ?? model}, ${effort} effort`;
+}
+
 /** "opus-high" becomes "O·high", for tight table headers. */
 export function armCode(key: string): string {
   const [model, effort] = key.split("-");

@@ -5,7 +5,7 @@ import { HeroLab } from "@/components/dashboard/HeroLab";
 import { LatencyChart } from "@/components/dashboard/LatencyChart";
 import { ConfusionMatrix, FeatureWeights, RouterFacts } from "@/components/dashboard/RouterPanel";
 import { SimTag } from "@/components/SimTag";
-import { Section } from "@/components/SiteChrome";
+import { Section, SyntheticNotice } from "@/components/SiteChrome";
 import { armLabel, count, pct, usd } from "@/lib/format";
 import { RUN, SYNTHETIC } from "@/lib/run";
 
@@ -31,28 +31,31 @@ export default function Home() {
   ];
 
   return (
-    <main id="main" className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 pb-4 pt-6 sm:pt-8">
-      <HeroLab
-        synthetic={SYNTHETIC}
-        arms={arms.map((arm) => ({
-          key: arm.key,
-          model: arm.model_short,
-          effort: arm.effort,
-          cost: arm.cost_per_1k,
-          quality: arm.quality,
-          ci: arm.ci,
-          frontier: arm.on_frontier,
-          p50: arm.latency_p50_ms,
-        }))}
-        armOrder={router.confusion.predicted}
-        sweep={router.sweep}
-        defaultThreshold={router.threshold}
-        baselineKey={router.baseline_arm}
-        baseline={router.baseline}
-        nTasks={router.n_tasks}
-        suiteTasks={meta.n_tasks}
-        folds={router.folds}
-      />
+    <main id="main" className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-10 px-4 pb-4 pt-5 sm:pt-6">
+      <div className="flex flex-col gap-6 sm:gap-8">
+        {SYNTHETIC && <SyntheticNotice />}
+        <HeroLab
+          synthetic={SYNTHETIC}
+          arms={arms.map((arm) => ({
+            key: arm.key,
+            model: arm.model_short,
+            effort: arm.effort,
+            cost: arm.cost_per_1k,
+            quality: arm.quality,
+            ci: arm.ci,
+            frontier: arm.on_frontier,
+            p50: arm.latency_p50_ms,
+          }))}
+          armOrder={router.confusion.predicted}
+          sweep={router.sweep}
+          defaultThreshold={router.threshold}
+          baselineKey={router.baseline_arm}
+          baseline={router.baseline}
+          nTasks={router.n_tasks}
+          suiteTasks={meta.n_tasks}
+          folds={router.folds}
+        />
+      </div>
 
       <Section
         id="run"
