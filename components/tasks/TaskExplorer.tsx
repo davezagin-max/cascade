@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArmGlyph } from "@/components/ArmGlyph";
 import { SimTag } from "@/components/SimTag";
-import { armCode, armLabel, armParts, count, duration, usd } from "@/lib/format";
+import { armLabel, armName, armParts, count, duration, usd } from "@/lib/format";
 import { scrollBehavior } from "@/lib/motion";
 import type { TaskDetail, TaskIndexEntry } from "@/lib/run-schema";
 
@@ -101,7 +101,21 @@ export function TaskExplorer({ tasks, arms, categories, synthetic }: Props) {
         {categories.map((c) => chip(c.key, c.label, c.n_tasks))}
       </div>
 
-      <div className="mt-4 border border-border">
+      <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-muted">
+        <span className="inline-flex items-center gap-1">
+          <PassCell rate={1} /> every try passed
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <PassCell rate={0.5} /> some passed
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <PassCell rate={0} /> none passed
+        </span>
+        <span>
+          one square per setting, in order: Haiku, Sonnet, Opus, each at low, medium, high effort
+        </span>
+      </p>
+      <div className="mt-2 border border-border">
         <div className="flex items-end gap-2 border-b border-border bg-surface px-2 py-1.5 font-mono text-[10px] text-muted">
           <span className="min-w-0 flex-1">task</span>
           <span className="flex gap-px sm:gap-0.5" aria-hidden>
@@ -111,7 +125,7 @@ export function TaskExplorer({ tasks, arms, categories, synthetic }: Props) {
               </span>
             ))}
           </span>
-          <span className="hidden w-16 text-right sm:block">router</span>
+          <span className="hidden w-28 text-right sm:block">Cascade picks</span>
         </div>
         <ul>
           {visible.map((task) => {
@@ -143,10 +157,10 @@ export function TaskExplorer({ tasks, arms, categories, synthetic }: Props) {
                       <PassCell key={key} rate={task.cells[key]?.pass_rate} />
                     ))}
                   </span>
-                  <span className="hidden w-16 justify-end font-mono text-[10px] text-muted sm:flex">
+                  <span className="hidden w-28 justify-end font-mono text-[10px] text-muted sm:flex">
                     {pick ? (
-                      <span className="inline-flex items-center gap-1" title={`Router chose ${armLabel(pick)}`}>
-                        <ArmGlyph {...armParts(pick)} size={10} /> {armCode(pick)}
+                      <span className="inline-flex items-center gap-1 whitespace-nowrap" title={`Cascade picks ${armName(pick)}`}>
+                        <ArmGlyph {...armParts(pick)} size={10} /> {armName(pick).replace(" effort", "")}
                       </span>
                     ) : (
                       "n/a"
@@ -163,10 +177,6 @@ export function TaskExplorer({ tasks, arms, categories, synthetic }: Props) {
           })}
         </ul>
       </div>
-      <p className="mt-2 font-mono text-[11px] text-muted">
-        Each square is one arm: solid when every trial passed, empty when none did. Select a task to read its prompt,
-        its grader, and every arm&apos;s answer.
-      </p>
     </div>
   );
 }
@@ -343,8 +353,8 @@ function Detail({
       </div>
 
       <div className="min-w-0 space-y-3">
-        <Block label="Arm">
-          <div className="flex flex-wrap gap-1" role="group" aria-label="Choose an arm">
+        <Block label="Model and effort (tries passed)">
+          <div className="flex flex-wrap gap-1" role="group" aria-label="Choose a model and effort setting">
             {arms.map((key) => {
               const passed = detail.cells.filter((cell) => cell.arm === key && cell.passed).length;
               const total = detail.cells.filter((cell) => cell.arm === key).length;
@@ -360,7 +370,7 @@ function Detail({
                   }`}
                 >
                   <ArmGlyph {...armParts(key)} size={10} />
-                  {armCode(key)}
+                  {armName(key).replace(" effort", "").replace("medium", "med")}
                   <span className="tabular">
                     {passed}/{total}
                   </span>
@@ -369,13 +379,13 @@ function Detail({
             })}
           </div>
           <p className="mt-1.5 font-mono text-[11px] text-muted">
-            {task.router_pick && <>router chose {armLabel(task.router_pick)}</>}
-            {task.oracle_arm && task.oracle_arm !== "none" && <> · cheapest that did best: {armLabel(task.oracle_arm)}</>}
-            {task.oracle_arm === "none" && <> · no arm passed this task</>}
+            {task.router_pick && <>Cascade chose {armName(task.router_pick)}</>}
+            {task.oracle_arm && task.oracle_arm !== "none" && <> · cheapest that did best: {armName(task.oracle_arm)}</>}
+            {task.oracle_arm === "none" && <> · no setting passed this task</>}
           </p>
         </Block>
 
-        <Block label={`${armLabel(arm)}: ${cells.length} trial${cells.length === 1 ? "" : "s"}`}>
+        <Block label={`${armName(arm)}: ${cells.length} tr${cells.length === 1 ? "y" : "ies"}`}>
           <ul className="space-y-2">
             {cells.map((cell) => {
               const simulated = cell.details.simulated as { pass_probability: number; answer: string } | undefined;
