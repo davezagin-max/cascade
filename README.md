@@ -1,29 +1,47 @@
 # Cascade
 
-> Route every request to the cheapest Claude model and effort level that can handle it, and prove it with evals.
+Not every request needs the most expensive AI model. Cascade picks the cheapest Claude model and effort setting that can handle each request, and tests that choice on 63 graded tasks.
 
 [![CI](https://github.com/davezagin-max/cascade/actions/workflows/ci.yml/badge.svg)](https://github.com/davezagin-max/cascade/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Live demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://cascade.vercel.app)
+[![Live demo: coming soon](https://img.shields.io/badge/live%20demo-coming%20soon-lightgrey.svg)](#run-locally)
 
-![Cascade dashboard: the router headline, the threshold control, and the quality-versus-cost Pareto chart](docs/hero.png)
+![Cascade's first screen: the headline, a one-click demo button, the result against always using the top model, and a chart placing every Claude model and effort setting by cost and tasks passed](docs/hero.png)
+
+*The first screen. Each shape on the chart is one Claude model at one effort setting: further right costs more, higher passes more tasks. The orange ring is Cascade, and the slider on the left moves it. The numbers are simulated and labelled as such (see below).*
+
+## What it does
+
+- **Picks a model for each request.** Claude comes in three sizes (Haiku, Sonnet, Opus), and each can think briefly or at length (its effort setting). Cascade reads a prompt and sends it to the cheapest option predicted to get it right, so easy requests stop paying for the biggest model.
+- **Explains every choice.** The playground shows which model it picked, how likely each option was to succeed, and which clues in the prompt pushed the decision. The choice is plain arithmetic that runs in your browser.
+- **Tests itself.** 63 hand-written tasks (classifying, pulling data out of text, math, code, writing) are graded automatically, and the dashboard compares Cascade with simply always using one model, including the best single model it could afford instead.
+- **Is honest about its data.** No paid run has been made yet, so the dashboard's numbers come from a clearly labelled simulator. One command replaces them with a real run.
 
 > **Synthetic placeholder data. These are not measured results. Run `uv run cascade run` with an API key to replace them.**
-> No real eval run exists in this commit. Every number in the screenshots comes from a labelled, deterministic simulator, and the app says so on every page.
+> In plain words: no real test run exists in this commit. Every number in the screenshots comes from a labelled, deterministic simulator, and the app tags each one "simulated".
 
-## Try it in 10 seconds
+## Try it
 
-**[Open the live demo](https://cascade.vercel.app)**: no key, no sign-up. Drag the confidence threshold and watch the router slide along its cost and quality curve. Then open the Playground and click "Solve a probability problem" to see a routing decision explained feature by feature.
+The live demo is coming soon. Here is the one-click tour: the slider trades cost for quality, then **Try it on a sample prompt** sends a sample support ticket through Cascade, shows which model it picks and why, and plays the answer.
 
-Demo data in this commit is hand-written sample output; `pnpm record` replaces it with real runs of whichever Claude model the router picks. The routing decision itself is never canned: it is computed in your browser for any text you type. Add your own Anthropic key in the app to get any prompt answered live.
+![A short tour: moving the slider, then one click routes a sample prompt and plays its answer](docs/demo.gif)
 
-![A short tour: moving the threshold, then routing and answering a preset in the playground](docs/demo.gif)
+To run it yourself with no key (details in [Run locally](#run-locally)):
+
+```bash
+pnpm install
+pnpm dev        # then open http://localhost:3150
+```
+
+The playground's answers in this commit are hand-written examples; `pnpm record` replaces them with real runs of whichever Claude model Cascade picks. The model choice itself is never canned: it is computed in your browser for any text you type. Add your own Anthropic key in the app to get any prompt answered live.
 
 ## Why it's interesting
 
+For engineers. Vocabulary: an *arm* is one model at one effort setting (Opus at high effort, say; there are nine), the *threshold* is how sure the router must be before it picks a cheaper arm, and the *Pareto frontier* is the set of arms that no other arm beats on both cost and quality.
+
 - **The router has to beat a harder baseline than "always Opus".** Any cheaper arm saves money against Opus at high effort, so that headline is easy to win. Every threshold is also compared with the strongest single arm that costs no more than the router does there, and that sentence sits next to the headline. On the sample data the router loses that comparison at the default threshold, and the page says so instead of hiding it. The penalty on the router's weights is chosen by nested cross-validation, so when the prompt features carry no signal it shrinks toward "one arm for everything" instead of routing on noise.
 - **One router, two languages, bit-identical.** The router is trained in Python (numpy logistic regression) and served in TypeScript, in the API route and in the browser. Features are defined once in a JSON spec that both sides interpret. Every feature value is an integer count through one addition and one division, and routing compares logits against a precomputed threshold, so there is no `log` or `exp` on the serving path whose last bit could differ. 80 exported vectors (every task prompt plus emoji, CRLF, CJK and a 5,000-character string) are checked for exact equality by both test suites.
-- **Placeholder data that cannot pass for a measurement.** With no API key there is no real run, so `cascade simulate` writes one in exactly the real schema with `synthetic: true`. The banner, every "simulated" tag, and the words "measured" and "simulated" all follow that one flag, and a test renders the dashboard in both states. A full run was also made with a fake API client and exported into the repo to prove the same dashboard shows a real run with no code change, then reverted.
+- **Placeholder data that cannot pass for a measurement.** With no API key there is no real run, so `cascade simulate` writes one in exactly the real schema with `synthetic: true`. The notice, every "simulated" tag, and the words "measured" and "simulated" all follow that one flag, and a test renders the dashboard in both states. A full run was also made with a fake API client and exported into the repo to prove the same dashboard shows a real run with no code change, then reverted.
 
 ## Results
 
@@ -125,13 +143,13 @@ pnpm check                                    # lint, typecheck, unit tests, pro
 cd evals && uv run ruff check . && uv run mypy && uv run pytest -q
 ```
 
-222 tests pass: 94 in Vitest and 128 in pytest. Four more are live smoke tests that are skipped when no key is set.
+223 tests pass: 95 in Vitest and 128 in pytest. Four more are live smoke tests that are skipped when no key is set.
 
 - **Graders are tested against the suite itself.** For all 57 deterministic tasks the reference answer must score full marks and a hand-written plausible mistake must fail, which catches a wrong answer key, a bad hidden test, and a grader that is too lenient.
 - **Parity.** Both suites assert exact equality with the 80 exported router vectors.
 - **The runner, with a fake API client.** Batch results returned in reverse order, failed, expired and missing items, refusals, truncation, resume, the budget gate, and an interrupted run that must stop sending.
 - **Honesty.** The dashboard is rendered synthetic and real, and every fixture is checked against its own placeholder flag, so the tests keep passing once real data is recorded.
-- **Demo-mode smoke test** of the playground route, plus `pnpm interactions` and `pnpm overflow` (headless Chromium: Stop sends nothing further, no sideways scroll at 360 and 390 px).
+- **Demo-mode smoke test** of the playground route, plus `pnpm interactions` and `pnpm overflow` (headless Chromium: Stop sends nothing further, the main button plays a sample with one request, no sideways scroll at 360 and 390 px).
 
 CI runs the same checks plus a gitleaks secret scan on every push.
 

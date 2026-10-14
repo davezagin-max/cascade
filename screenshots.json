@@ -47,7 +47,7 @@
           "waitFor": "[data-testid=response]"
         },
         {
-          "scroll": 215
+          "scroll": 236
         },
         {
           "wait": 400
@@ -90,7 +90,7 @@
           "wait": 300
         },
         {
-          "scroll": 640
+          "scroll": 430
         },
         {
           "wait": 400
@@ -101,6 +101,7 @@
   "gif": {
     "path": "/",
     "theme": "dark",
+    "viewport": "tall",
     "actions": [
       {
         "wait": 900
@@ -160,22 +161,16 @@
         "wait": 900
       },
       {
-        "click": "text=Try the router on a prompt"
+        "click": "text=Try it on a sample prompt"
       },
       {
-        "waitFor": "text=Presets: no key needed"
-      },
-      {
-        "wait": 500
-      },
-      {
-        "click": "text=Solve a probability problem"
+        "waitFor": "text=Cascade picked"
       },
       {
         "waitFor": "[data-testid=response]"
       },
       {
-        "wait": 1500
+        "wait": 1800
       }
     ]
   }

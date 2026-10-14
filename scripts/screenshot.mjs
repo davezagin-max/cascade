@@ -28,6 +28,8 @@ mkdirSync(out, { recursive: true });
 
 const VIEWPORTS = {
   desktop: { width: 1280, height: 800 },
+  // For a GIF that needs a control just below an 800px fold without scrolling the page.
+  tall: { width: 1280, height: 1000 },
   mobile: { width: 390, height: 844 },
 };
 
