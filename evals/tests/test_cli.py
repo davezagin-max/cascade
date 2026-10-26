@@ -268,6 +268,13 @@ def test_tasks_and_estimate_commands() -> None:
     assert cli.cmd_tasks(parse("tasks", "--category", "reasoning"), log=lines.append) == 0
     assert lines[-1] == "16 tasks"
     lines.clear()
+    # A misspelt category is named as one, not reported as an empty suite.
+    assert cli.cmd_tasks(parse("tasks", "--category", "reasonng"), log=lines.append) == 1
+    assert lines == [
+        "No category named reasonng. Categories: classification, code, extraction, "
+        "open_ended, reasoning."
+    ]
+    lines.clear()
     assert (
         cli.cmd_estimate(parse("estimate", "--models", "haiku", "--trials", "1"), log=lines.append)
         == 0
@@ -290,3 +297,29 @@ def test_regrading_a_synthetic_run_changes_nothing(tmp_path: Path) -> None:
         == 0
     )
     assert store.read_rows(store.results_path("sim-regrade", root)) == before
+
+
+def test_commands_on_a_missing_run_say_so_in_one_line(tmp_path: Path) -> None:
+    """A run name that does not exist gets a plain message and exit 1, never a traceback."""
+    root = tmp_path / "runs"
+    assert (
+        cli.cmd_simulate(
+            parse("simulate", "--trials", "1", "--run-id", "real-one", "--no-export"),
+            log=lambda _m: None,
+            root=root,
+            out=tmp_path,
+        )
+        == 0
+    )
+    for argv, handler in (
+        (("grade", "nope"), cli.cmd_grade),
+        (("train-router", "nope"), cli.cmd_train_router),
+        (("export", "nope", "--out", str(tmp_path / "site")), cli.cmd_export),
+        (("caching", "nope", "--simulate"), cli.cmd_caching),
+    ):
+        lines: list[str] = []
+        assert handler(parse(*argv), log=lines.append, root=root) == 1, argv
+        assert lines == [f"No run named nope in {root}. Runs found: real-one."], argv
+    # Nothing was written for the missing run, so no empty folder is left behind.
+    assert not (root / "nope").exists()
+    assert not (tmp_path / "site").exists()

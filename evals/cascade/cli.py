@@ -189,6 +189,10 @@ def finish(
 def cmd_tasks(args: argparse.Namespace, log: Log = print) -> int:
     tasks = load_tasks()
     if args.category:
+        known = sorted({task.category for task in tasks})
+        if args.category not in known:
+            log(f"No category named {args.category}. Categories: {', '.join(known)}.")
+            return 1
         tasks = [task for task in tasks if task.category == args.category]
     for task in tasks:
         log(
@@ -433,8 +437,23 @@ def _load_run(run_id: str, root: Path) -> tuple[list[store.Row], dict[str, Any],
     )
 
 
+def _has_run(run_id: str, root: Path, log: Log) -> bool:
+    """True when the run has results. Otherwise say so in one line, naming the runs that exist."""
+    if store.results_path(run_id, root).exists():
+        return True
+    known = (
+        sorted(p.name for p in root.iterdir() if store.results_path(p.name, root).exists())
+        if root.is_dir()
+        else []
+    )
+    log(f"No run named {run_id} in {root}. Runs found: {', '.join(known) or 'none'}.")
+    return False
+
+
 def cmd_grade(args: argparse.Namespace, log: Log = print, *, root: Path = store.RUNS_DIR) -> int:
     """Re-run the deterministic graders. The judge's verdicts are kept unless --rejudge is given."""
+    if not _has_run(args.run, root, log):
+        return 1
     rows, meta, tasks = _load_run(args.run, root)
     needs_judge = args.rejudge or any(
         row["grader"] == "judge"
@@ -470,6 +489,8 @@ def cmd_grade(args: argparse.Namespace, log: Log = print, *, root: Path = store.
 def cmd_train_router(
     args: argparse.Namespace, log: Log = print, *, root: Path = store.RUNS_DIR
 ) -> int:
+    if not _has_run(args.run, root, log):
+        return 1
     rows, meta, tasks = _load_run(args.run, root)
     model = train_router(
         rows,
@@ -518,6 +539,10 @@ def cmd_train_router(
 
 
 def cmd_caching(args: argparse.Namespace, log: Log = print, *, root: Path = store.RUNS_DIR) -> int:
+    # Checked first: the report is written into the run's folder, and a missing run must not
+    # get a folder of its own.
+    if not _has_run(args.run, root, log):
+        return 1
     if args.simulate:
         report = simulate_caching(args.calls)
     else:
@@ -540,6 +565,8 @@ def cmd_caching(args: argparse.Namespace, log: Log = print, *, root: Path = stor
 
 
 def cmd_export(args: argparse.Namespace, log: Log = print, *, root: Path = store.RUNS_DIR) -> int:
+    if not _has_run(args.run, root, log):
+        return 1
     rows, meta, tasks = _load_run(args.run, root)
     directory = store.run_dir(args.run, root)
     router_path = directory / "router.json"
