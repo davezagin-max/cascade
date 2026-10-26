@@ -143,13 +143,14 @@ pnpm check                                    # lint, typecheck, unit tests, pro
 cd evals && uv run ruff check . && uv run mypy && uv run pytest -q
 ```
 
-223 tests pass: 95 in Vitest and 128 in pytest. Four more are live smoke tests that are skipped when no key is set.
+224 tests pass: 95 in Vitest and 129 in pytest. Four more are live smoke tests that are skipped when no key is set.
 
 - **Graders are tested against the suite itself.** For all 57 deterministic tasks the reference answer must score full marks and a hand-written plausible mistake must fail, which catches a wrong answer key, a bad hidden test, and a grader that is too lenient.
 - **Parity.** Both suites assert exact equality with the 80 exported router vectors.
 - **The runner, with a fake API client.** Batch results returned in reverse order, failed, expired and missing items, refusals, truncation, resume, the budget gate, and an interrupted run that must stop sending.
 - **Honesty.** The dashboard is rendered synthetic and real, and every fixture is checked against its own placeholder flag, so the tests keep passing once real data is recorded.
 - **Demo-mode smoke test** of the playground route, plus `pnpm interactions` and `pnpm overflow` (headless Chromium: Stop sends nothing further, the main button plays a sample with one request, no sideways scroll at 360 and 390 px).
+- **Functional pass** (`pnpm functional`) checks every visitor-facing control against a production build on port 3150 (`pnpm build`, then `pnpm exec next start -p 3150`): the threshold moves the headline and chart, every task opens with its tries, each preset routes and answers, Stop and replacement behave, the key dialog validates, the API route's error paths return their documented statuses, and nothing scrolls sideways at 360 or 390 px. It makes no call to Claude: a guard aborts any request that leaves the app.
 
 CI runs the same checks plus a gitleaks secret scan on every push.
 
