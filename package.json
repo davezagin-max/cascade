@@ -15,7 +15,8 @@
     "record": "node scripts/record.mjs --port 3150",
     "screenshots": "node scripts/screenshot.mjs",
     "overflow": "node scripts/overflow.mjs",
-    "interactions": "node scripts/interactions.mjs"
+    "interactions": "node scripts/interactions.mjs",
+    "functional": "node scripts/functional.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",
