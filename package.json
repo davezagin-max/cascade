@@ -19,10 +19,10 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",
-    "next": "16.4.0",
+    "next": "16.4.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
@@ -30,7 +30,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.0",
+    "eslint-config-next": "16.4.1",
     "playwright": "^1.64.0",
     "prettier": "^3.9.10",
     "tailwindcss": "^4",
